@@ -18,12 +18,23 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+
+    "knex": "knex --knexfile knexfile.ts",
+    "migrate": "npm run knex migrate:latest",
+    "migrate:make": "npm run knex migrate:make -- -x ts",
+    "seed": "npm run knex seed:run",
+    "seed:make": "npm run knex seed:make -- -x ts"
   },
   "dependencies": {
     "@nestjs/common": "^7.0.0",
     "@nestjs/core": "^7.0.0",
     "@nestjs/platform-express": "^7.0.0",
+    "@types/dotenv": "^8.2.0",
+    "dotenv": "^8.2.0",
+    "knex": "^0.20.13",
+    "objection": "^2.1.3",
+    "pg": "^7.18.2",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.5.4"
