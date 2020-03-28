@@ -1,13 +1,19 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param, UsePipes, ParseIntPipe } from '@nestjs/common';
 import { UserService } from './user.service';
-import { User } from './user.interface';
+import { UserModel } from '../database/models/user.model';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get()
-  hello(): User {
-    return this.userService.get();
+  @Get("portal/:id")
+  async getByPortal(@Param('id') id: string): Promise<UserModel> {
+    return await this.userService.getByPortalId(id);
+  }
+
+  @UsePipes(ParseIntPipe)
+  @Get(':id')
+  getById(@Param('id') id: number): Promise<UserModel> {
+    return this.userService.getById(id);
   }
 }
