@@ -10,12 +10,10 @@ module.exports = {
     database: process.env.DATABASE_NAME
   },
   migrations: {
-    directory: './src/database/migrations',
-    stub: './src/database/migration.stub'
+    directory: './src/database/migrations'
   },
   seeds: {
-    directory: './src/database/seeds',
-    stub: './src/database/seed.stub'
+    directory: './src/database/seeds'
   },
   ...knexSnakeCaseMappers()
 } as Knex.Config;
