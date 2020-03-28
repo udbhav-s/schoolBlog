@@ -8,11 +8,22 @@ export class UserService {
     @Inject('UserModel') private userModel: ModelClass<UserModel>
   ) {}
 
-  getById(id: number) {
-    return this.userModel.query().findById(id);
+  async getById(id: number): Promise<UserModel> {
+    return await this.userModel.query().findById(id);
   }
 
-  getByPortalId(id: string) {
-    return this.userModel.query().where({ portalId: id }).first();
+  async getByPortalId(id: string): Promise<UserModel> {
+    return await this.userModel.query().where({ portalId: id }).first();
+  }
+
+  async createFromPortalUser(user: any): Promise<UserModel> {
+    return await this.userModel
+      .query()
+      .insert({
+        name: user.name,
+        type: user.type,
+        level: user.level,
+        portalId: user.id
+      });
   }
 }
