@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import { ModelClass } from 'objection';
 import { PostModel } from '../database/models/post.model';
 import { PostGetOptionsDto } from './dto/postGetOptions.dto';
+import { PostCreateDto } from './dto/postCreate.dto';
 
 @Injectable()
 export class PostService {
@@ -32,5 +33,16 @@ export class PostService {
     // add user 
     query.withGraphFetched('[user]');
     return await query;
+  }
+
+  async create(data: PostCreateDto): Promise<PostModel> {
+    return await this.postModel.query().insert(data).returning("*").withGraphFetched("[user]");
+  }
+
+  async update(id: number, data: PostCreateDto): Promise<PostModel> {
+    return await this.postModel
+      .query()
+      .patchAndFetchById(id, data)
+      .withGraphFetched("[user]");
   }
 }
