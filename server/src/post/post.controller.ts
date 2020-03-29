@@ -8,14 +8,17 @@ import {
   Request, 
   Param, 
   ParseIntPipe, 
-  Post, 
-  Req } from '@nestjs/common';
+  Post 
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { PostService } from './post.service';
 import { AuthenticatedGuard } from '../common/guards/authenticated.guard';
 import { PostGetOptionsDto } from './dto/postGetOptions.dto';
 import { PostCreateDto } from './dto/postCreate.dto';
 import { PostModel } from '../database/models/post.model';
+import { Level } from '../common/decorators/level.decorator';
+import { LevelGuard } from '../common/guards/level.guard';
+import { Levels } from '../common/level.enum';
 
 @ApiTags("post")
 @UseGuards(AuthenticatedGuard)
@@ -56,5 +59,21 @@ export class PostController {
   @Post("/update/:id")
   async update(@Body() data: PostCreateDto, @Param('id') id: number): Promise<PostModel> {
     return await this.postService.update(id, data);
+  }
+
+  @UsePipes(ParseIntPipe)
+  @UseGuards(LevelGuard)
+  @Level(Levels.Moderator)
+  @Post("/verify/:id")
+  async verify(@Param('id') id: number): Promise<PostModel> {
+    return await this.postService.verify(id);
+  }
+
+  @UsePipes(ParseIntPipe)
+  @UseGuards(LevelGuard)
+  @Level(Levels.Moderator)
+  @Post("/unverify/:id")
+  async unverify(@Param('id') id: number): Promise<PostModel> {
+    return await this.postService.unverify(id);
   }
 }

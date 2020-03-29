@@ -8,7 +8,8 @@ import {
   ParseIntPipe, 
   ValidationPipe, 
   Body, 
-  Request } from '@nestjs/common';
+  Request 
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { UserModel } from '../database/models/user.model';

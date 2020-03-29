@@ -45,4 +45,18 @@ export class PostService {
       .patchAndFetchById(id, data)
       .withGraphFetched("[user]");
   }
+
+  async verify(id: number): Promise<PostModel> {
+    return await this
+      .postModel.query()
+      .patchAndFetchById(id, { verified: true })
+      .withGraphFetched("[user]");
+  }
+
+  async unverify(id: number): Promise<PostModel> {
+    return await this
+      .postModel.query()
+      .patchAndFetchById(id, { verified: false })
+      .withGraphFetched("[user]");
+  }
 }
