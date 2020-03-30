@@ -93,7 +93,7 @@ export class FileService {
 
   imagePathToBase64(location: string, filename: string): string {
     // get file type
-    let type = filename.substring(filename.indexOf("."));
+    let type = filename.substring(filename.indexOf(".")+1);
     // read data
     let data = fs.readFileSync(
       path.join(location, filename),

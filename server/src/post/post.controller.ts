@@ -132,16 +132,17 @@ export class PostController {
       throw new ForbiddenException();
     }
 
-    // if new thumbnail update it
-    if (data.thumbnail) {
-      // delete the old thumbnail
-      if (post.thumbnail) this.fileService.removeThumbnail(post.thumbnail);
-      // upload new thumbnail
-			data.thumbnail = this.fileService.uploadThumbnail(data.thumbnail);
-    }
+    // delete the old thumbnail (even if new thumbnail is not present in request data)
+    if (post.thumbnail) this.fileService.removeThumbnail(post.thumbnail);
+    // upload new thumbnail if present
+    if (data.thumbnail) data.thumbnail = this.fileService.uploadThumbnail(data.thumbnail);
+    else data.thumbnail = "";
 
     // new body
     let files: any[] = [];
+    // if old post had images delete them
+    if (post.body) this.fileService.removePostFiles(post.id);
+    // process the new body
     if (data.body) {
       // sanitize 
       data.body = this.postService.sanitizeBody(data.body);
@@ -149,7 +150,7 @@ export class PostController {
       let { html, filenames } = this.fileService.separateAndStoreImages(data.body);
       data.body = html;
       // add filenames to files for graph insert
-      files = filenames.map(filename => { filename });
+      files = filenames.map(filename => ({ filename }));
     }
     // add the new files 
     if (files.length > 0) data.files = files;
