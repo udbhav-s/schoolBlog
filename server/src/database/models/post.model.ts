@@ -2,6 +2,7 @@ import { BaseModel } from './base.model';
 import { Model, QueryBuilder } from 'objection';
 import { UserModel } from './user.model';
 import { FileModel } from './file.model';
+import { CommentModel } from './comment.model';
 
 export class PostModel extends BaseModel {
   static tableName = 'posts';
@@ -29,6 +30,16 @@ export class PostModel extends BaseModel {
         to: 'users.id',
       },
     },
+
+    comments: {
+      modelClass: CommentModel,
+      relation: Model.HasManyRelation,
+      join: {
+        from: 'posts.id',
+        to: 'comments.postId'
+      }
+    },
+
     files: {
       modelClass: FileModel,
       relation: Model.HasManyRelation,
