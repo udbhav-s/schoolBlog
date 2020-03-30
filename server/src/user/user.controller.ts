@@ -46,6 +46,14 @@ export class UserController {
   }
 
   @UseGuards(AuthenticatedGuard)
+  @Get('/logout')
+  logout(
+    @Request() req
+  ) {
+    req.logout();
+  }
+
+  @UseGuards(AuthenticatedGuard)
   @UsePipes(ParseIntPipe)
   @Get(':id')
   getById(@Param('id') id: number): Promise<UserModel> {

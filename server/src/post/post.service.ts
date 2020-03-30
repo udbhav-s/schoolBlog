@@ -105,4 +105,12 @@ export class PostService {
       .returning('*')
       .first();
   }
+
+  // for image requests
+  async getByThumbnail(thumbnail: string): Promise<PostModel> {
+    return await this.postModel
+      .query()
+      .where({ thumbnail })
+      .first();
+  }
 }
