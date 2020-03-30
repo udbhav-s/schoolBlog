@@ -6,10 +6,13 @@ import { PostModel } from './post.model';
 export class CommentModel extends BaseModel {
   static tableName = 'comments';
 
-  body: string;
-  edited: boolean;
-  userId: number;
-  postId: number;
+  body!: string;
+  edited!: boolean;
+  userId!: number;
+  postId!: number;
+
+  post?: PostModel;
+  user?: UserModel;
 
   static modifiers = {
     ...BaseModel.modifiers,

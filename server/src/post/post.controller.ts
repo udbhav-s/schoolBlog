@@ -45,9 +45,9 @@ export class PostController {
   ): Promise<PostModel[]> {
     // set options
     options = {
-      userId: req.user.id,
-      verifiedOrCurrentUser: req.user.level < Levels.Moderator,
       ...options,
+      userId: req.user.id,
+      verifiedOrCurrentUser: req.user.level < Levels.Moderator
     } as PostGetOptionsDto;
     // return result
     return await this.postService.getAll(options);
@@ -61,9 +61,9 @@ export class PostController {
   ): Promise<PostModel[]> {
     // set options
     options = {
+      ...options,
       verifiedOrCurrentUser: req.user.level < Levels.Moderator,
       userId: req.user.id,
-      ...options,
     } as PostGetOptionsDto;
     // return result
     return await this.postService.getByUser(id, options);
@@ -76,9 +76,9 @@ export class PostController {
     @Request() req,
   ): Promise<PostModel> {
     const post = {
+      ...data,
       userId: req.user.id,
       verified: req.user.level >= Levels.Author,
-      ...data,
     } as PostCreateDto;
 
     // sanitize the post html
@@ -113,14 +113,8 @@ export class PostController {
     const post = await this.postService.getById(id);
     if (!post) throw new NotFoundException();
 
-    // if unverified post is not by the user and user is not a moderator
-    if (
-      post.verified === false &&
-      post.userId !== req.user.id &&
-      req.user.level < Levels.Moderator
-    ) {
-      throw new ForbiddenException();
-    }
+    // check if user can access post
+    if (!post.canAccess(req.user)) throw new ForbiddenException();
 
     // get post files
     const files = await this.fileService.getByPost(post.id);
@@ -152,7 +146,7 @@ export class PostController {
   ): Promise<PostModel> {
     // get post to be updated
     const post = await this.postService.getById(id);
-    if (!post) throw new BadRequestException();
+    if (!post) throw new NotFoundException();
 
     // check if post is by user
     if (post.userId !== req.user.id) {
@@ -199,7 +193,9 @@ export class PostController {
   @Level(Levels.Moderator)
   @Post('/verify/:id')
   async verify(@Param('id') id: number): Promise<PostModel> {
-    return await this.postService.verify(id);
+    let post = await this.postService.verify(id);
+    if (!post) throw new NotFoundException();
+    return post;
   }
 
   @UsePipes(ParseIntPipe)
@@ -207,21 +203,17 @@ export class PostController {
   @Level(Levels.Moderator)
   @Post('/unverify/:id')
   async unverify(@Param('id') id: number): Promise<PostModel> {
-    return await this.postService.unverify(id);
+    let post = await this.postService.unverify(id);
+    if (!post) throw new NotFoundException();
+    return post;
   }
 
   @UsePipes(ParseIntPipe)
   @Get('/:id')
   async getById(@Param('id') id: number, @Request() req): Promise<PostModel> {
     const post = await this.postService.getById(id);
-    // if unverified post is not by the user and user is not a moderator
-    if (
-      post.verified === false &&
-      post.userId !== req.user.id &&
-      req.user.level < Levels.Moderator
-    ) {
-      throw new ForbiddenException();
-    }
+    // check if user can access
+    if (!post.canAccess(req.user)) throw new ForbiddenException();
     // return the post
     return post;
   }

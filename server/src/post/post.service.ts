@@ -15,7 +15,7 @@ export class PostService {
     return await this.postModel
       .query()
       .findById(id)
-      .withGraphFetched('[user]');
+      .withGraphFetched('user');
   }
 
   async getByUser(
@@ -25,7 +25,7 @@ export class PostService {
     const query = this.postModel
       .query()
       .where({ userId })
-      .withGraphFetched('[user]');
+      .withGraphFetched('user');
     // apply options if any
     if (options) {
       query.modify(GET_OPTIONS, options);
@@ -49,7 +49,7 @@ export class PostService {
       }
     }
     // add user
-    query.withGraphFetched('[user]');
+    query.withGraphFetched('user');
     return await query;
   }
 
@@ -60,40 +60,49 @@ export class PostService {
   async create(data: PostCreateDto): Promise<PostModel> {
     const post = await this.postModel
       .query()
-      .allowGraph('[files]')
+      .allowGraph('files')
       .insertGraph(data);
 
     return await this.postModel
       .query()
       .where({ id: post.id })
       .first()
-      .withGraphFetched('[user]');
+      .withGraphFetched('user');
   }
 
   async update(data: PostCreateDto): Promise<PostModel> {
     const post = await this.postModel
       .query()
-      .allowGraph('[files]')
+      .allowGraph('files')
       .upsertGraph(data);
 
     return await this.postModel
       .query()
       .where({ id: post.id })
       .first()
-      .withGraphFetched('[user]');
+      .withGraphFetched('user');
   }
 
   async verify(id: number): Promise<PostModel> {
     return await this.postModel
       .query()
       .patchAndFetchById(id, { verified: true })
-      .withGraphFetched('[user]');
+      .withGraphFetched('user');
   }
 
   async unverify(id: number): Promise<PostModel> {
     return await this.postModel
       .query()
       .patchAndFetchById(id, { verified: false })
-      .withGraphFetched('[user]');
+      .withGraphFetched('user');
+  }
+
+  async del(id: number): Promise<PostModel> {
+    return await this.postModel
+      .query()
+      .where({ id })
+      .del()
+      .returning('*')
+      .first();
   }
 }

@@ -5,8 +5,10 @@ import { PostModel } from './post.model';
 export class FileModel extends BaseModel {
   static tableName = 'files';
 
-  filename: string;
-  postId: number;
+  filename!: string;
+  postId!: number;
+
+  post: PostModel;
 
   static relationMappings = () => ({
     post: {

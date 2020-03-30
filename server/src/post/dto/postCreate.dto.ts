@@ -17,10 +17,7 @@ export class PostCreateDto {
   category: string;
 
   // provided by controller to service
-  @IsOptional()
   userId: number;
-
-  @IsOptional()
   files: object[];
 }
 

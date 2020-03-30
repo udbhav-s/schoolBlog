@@ -7,6 +7,7 @@ import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './auth/auth.module';
 import { PostModule } from './post/post.module';
 import { FileModule } from './file/file.module';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { FileModule } from './file/file.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    CommentModule,
   ],
   controllers: [AppController],
   providers: [AppService],
