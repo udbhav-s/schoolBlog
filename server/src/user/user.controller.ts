@@ -1,14 +1,14 @@
-import { 
+import {
   Controller,
   Get,
   Post,
-  UseGuards, 
-  Param, 
-  UsePipes, 
-  ParseIntPipe, 
-  ValidationPipe, 
-  Body, 
-  Request 
+  UseGuards,
+  Param,
+  UsePipes,
+  ParseIntPipe,
+  ValidationPipe,
+  Body,
+  Request,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
@@ -17,8 +17,8 @@ import { LoginGuard } from '../common/guards/login.guard';
 import { AuthenticatedGuard } from '../common/guards/authenticated.guard';
 import { LoginDto } from './dto/login.dto';
 
-@ApiTags("user")
-@Controller('user')
+@ApiTags('user')
+@Controller('api/user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -30,14 +30,14 @@ export class UserController {
   }
 
   @UseGuards(AuthenticatedGuard)
-  @Get("/current")
+  @Get('/current')
   async getCurrent(@Request() req): Promise<UserModel> {
     return await this.userService.getById(req.user.id);
   }
 
   @UseGuards(AuthenticatedGuard)
   @UsePipes(ParseIntPipe)
-  @Get("portal/:id")
+  @Get('portal/:id')
   async getByPortal(@Param('id') id: string): Promise<UserModel> {
     return await this.userService.getByPortalId(id);
   }

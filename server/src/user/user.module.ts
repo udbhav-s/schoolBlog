@@ -6,6 +6,6 @@ import { PortalService } from './portal.mock.service';
 @Module({
   providers: [UserService, PortalService],
   controllers: [UserController],
-  exports: [UserService, PortalService]
+  exports: [UserService, PortalService],
 })
 export class UserModule {}

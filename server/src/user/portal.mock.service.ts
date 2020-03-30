@@ -29,21 +29,20 @@ export class PortalService {
         name: 'Christian Bale',
         type: 'teacher',
         password: 'imbatman',
-      }
-    ]
+      },
+    ];
   }
 
   async getById(id: string): Promise<any> {
-    return Promise.resolve()
-    .then(() => {
-      let user = this.users.find((user) => user.id === id);
+    return Promise.resolve().then(() => {
+      const user = this.users.find(user => user.id === id);
       if (user) return user;
       return null;
     });
   }
 
   async validate(portalId: string, password: string): Promise<boolean> {
-    let user = await this.getById(portalId);
-    return (user && user.password === password);
+    const user = await this.getById(portalId);
+    return user && user.password === password;
   }
 }

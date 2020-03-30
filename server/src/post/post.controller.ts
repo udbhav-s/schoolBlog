@@ -1,17 +1,17 @@
-import { 
+import {
   Controller,
   UseGuards,
   Get,
-  UsePipes, 
-  ValidationPipe, 
-  Body, 
-  Request, 
-  Param, 
-  ParseIntPipe, 
+  UsePipes,
+  ValidationPipe,
+  Body,
+  Request,
+  Param,
+  ParseIntPipe,
   Post,
   BadRequestException,
-  ForbiddenException, 
-  NotFoundException
+  ForbiddenException,
+  NotFoundException,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { PostService } from './post.service';
@@ -24,64 +24,69 @@ import { LevelGuard } from '../common/guards/level.guard';
 import { Levels } from '../common/util/level.enum';
 import { FileService } from '../file/file.service';
 
-@ApiTags("post")
+@ApiTags('post')
 @UseGuards(AuthenticatedGuard)
-@Controller('post')
+@Controller('api/post')
 export class PostController {
   constructor(
     private postService: PostService,
-    private fileService: FileService
+    private fileService: FileService,
   ) {}
-  
+
   @UsePipes(ValidationPipe)
-  @Post("/all")
+  @Post('/all')
   async getAll(
     @Body() opts: PostGetOptionsDto,
-    @Request() req
+    @Request() req,
   ): Promise<PostModel[]> {
-    let options = { 
-      userId: req.user.id, 
+    const options = {
+      userId: req.user.id,
       verifiedOrCurrentUser: req.user.level < Levels.Moderator,
-      ...opts
+      ...opts,
     } as PostGetOptionsDto;
     return await this.postService.getAll(options);
   }
 
   @UsePipes(ParseIntPipe)
-  @Get("/user/:id")
+  @Get('/user/:id')
   async getByUser(@Param('id') id: number): Promise<PostModel[]> {
     return await this.postService.getByUser(id);
   }
-  
+
   @UsePipes(ParseIntPipe)
-  @Get("/:id")
+  @Get('/:id')
   async getById(@Param('id') id: number): Promise<PostModel> {
     return await this.postService.getById(id);
-  } 
+  }
 
   @UsePipes(ValidationPipe)
-  @Post("/create")
-  async create(@Body() data: PostCreateDto, @Request() req): Promise<PostModel> {
-    let post = { 
-      userId: req.user.id, 
+  @Post('/create')
+  async create(
+    @Body() data: PostCreateDto,
+    @Request() req,
+  ): Promise<PostModel> {
+    const post = {
+      userId: req.user.id,
       verified: req.user.level >= Levels.Author,
-      ...data 
+      ...data,
     } as PostCreateDto;
 
     // sanitize the post html
     post.body = this.postService.sanitizeBody(post.body);
-    // upload thumbnail if present 
+    // upload thumbnail if present
     if (post.thumbnail) {
       post.thumbnail = this.fileService.uploadThumbnail(post.thumbnail);
     }
     // separate images from post
-    const { html, filenames } = this.fileService.separateAndStoreImages(post.body);
+    const { html, filenames } = this.fileService.separateAndStoreImages(
+      post.body,
+    );
     post.body = html;
 
     // turn filenames into object to store using query
     const files: any[] = filenames.map(filename => ({ filename }));
     // add files to post body to insert as graph
-    if (files.length >  0) post.files = files;
+    if (files.length > 0) post.files = files;
 
     // create the post
     return await this.postService.create(post);
@@ -89,26 +94,26 @@ export class PostController {
 
   // Returns post with images & thumbnail paths replaced by base64
   // Since update request deletes all old images and uploads new ones
-  @Get("/edit/:id")
-  async getEditMode(
-    @Param('id', ParseIntPipe) id: number
-  ): Promise<PostModel> {
-    // get the post 
-    let post = await this.postService.getById(id);
+  @Get('/edit/:id')
+  async getEditMode(@Param('id', ParseIntPipe) id: number): Promise<PostModel> {
+    // get the post
+    const post = await this.postService.getById(id);
     if (!post) throw new NotFoundException();
 
     // get post files
-    let files = await this.fileService.getByPost(post.id);
-    let filenames = files.map(({ filename }) => filename);
+    const files = await this.fileService.getByPost(post.id);
+    const filenames = files.map(({ filename }) => filename);
 
-    // change the image urls to base64 
+    // change the image urls to base64
     if (post.body) {
       post.body = this.fileService.joinImages(filenames, post.body);
     }
 
     // change the thumbnail to base64
     if (post.thumbnail) {
-      post.thumbnail = await this.fileService.getBase64Thumbnail(post.thumbnail);
+      post.thumbnail = await this.fileService.getBase64Thumbnail(
+        post.thumbnail,
+      );
     }
 
     // return the post
@@ -117,26 +122,27 @@ export class PostController {
 
   // the update method in the post service uses upsertGraph
   // any properties which are not specified in the update request will be DELETED
-  @Post("/update/:id")
+  @Post('/update/:id')
   async update(
-    @Body(ValidationPipe) data: PostUpdateDto, 
+    @Body(ValidationPipe) data: PostUpdateDto,
     @Param('id', ParseIntPipe) id: number,
-    @Request() req
+    @Request() req,
   ): Promise<PostModel> {
     // get post to be updated
-    let post = await this.postService.getById(id);
+    const post = await this.postService.getById(id);
     if (!post) throw new BadRequestException();
 
     // check if post is by user
-    if (post.userId !== req.user.id)  {
+    if (post.userId !== req.user.id) {
       throw new ForbiddenException();
     }
 
     // delete the old thumbnail (even if new thumbnail is not present in request data)
     if (post.thumbnail) this.fileService.removeThumbnail(post.thumbnail);
     // upload new thumbnail if present
-    if (data.thumbnail) data.thumbnail = this.fileService.uploadThumbnail(data.thumbnail);
-    else data.thumbnail = "";
+    if (data.thumbnail)
+      data.thumbnail = this.fileService.uploadThumbnail(data.thumbnail);
+    else data.thumbnail = '';
 
     // new body
     let files: any[] = [];
@@ -144,18 +150,20 @@ export class PostController {
     if (post.body) this.fileService.removePostFiles(post.id);
     // process the new body
     if (data.body) {
-      // sanitize 
+      // sanitize
       data.body = this.postService.sanitizeBody(data.body);
-      // separate and store new images 
-      let { html, filenames } = this.fileService.separateAndStoreImages(data.body);
+      // separate and store new images
+      const { html, filenames } = this.fileService.separateAndStoreImages(
+        data.body,
+      );
       data.body = html;
       // add filenames to files for graph insert
       files = filenames.map(filename => ({ filename }));
     }
-    // add the new files 
+    // add the new files
     if (files.length > 0) data.files = files;
 
-    // set the userId to the current user 
+    // set the userId to the current user
     data.userId = req.user.id;
     // set the post id to be updated (since service uses upsertGraph)
     data.id = post.id;
@@ -167,7 +175,7 @@ export class PostController {
   @UsePipes(ParseIntPipe)
   @UseGuards(LevelGuard)
   @Level(Levels.Moderator)
-  @Post("/verify/:id")
+  @Post('/verify/:id')
   async verify(@Param('id') id: number): Promise<PostModel> {
     return await this.postService.verify(id);
   }
@@ -175,7 +183,7 @@ export class PostController {
   @UsePipes(ParseIntPipe)
   @UseGuards(LevelGuard)
   @Level(Levels.Moderator)
-  @Post("/unverify/:id")
+  @Post('/unverify/:id')
   async unverify(@Param('id') id: number): Promise<PostModel> {
     return await this.postService.unverify(id);
   }

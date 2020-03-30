@@ -7,6 +7,6 @@ import { FileService } from '../file/file.service';
 @Module({
   imports: [FileModule],
   controllers: [PostController],
-  providers: [PostService, FileService]
+  providers: [PostService, FileService],
 })
 export class PostModule {}

@@ -13,22 +13,22 @@ export class PostModel extends BaseModel {
   verified: boolean;
   userId: number;
 
-  static relationMappings = () => ({  
+  static relationMappings = () => ({
     user: {
       modelClass: UserModel,
       relation: Model.BelongsToOneRelation,
       join: {
         from: 'posts.userId',
-        to: 'users.id'
-      }
+        to: 'users.id',
+      },
     },
     files: {
       modelClass: FileModel,
       relation: Model.HasManyRelation,
       join: {
         from: 'posts.id',
-        to: 'files.postId'
-      }
-    }
+        to: 'files.postId',
+      },
+    },
   });
 }

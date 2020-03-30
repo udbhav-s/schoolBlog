@@ -2,12 +2,12 @@ import { IsEnum, IsInt, IsBoolean, IsOptional } from 'class-validator';
 
 export class PostGetOptionsDto {
   @IsOptional()
-  @IsEnum(["createdAt", "updatedAt"])
+  @IsEnum(['createdAt', 'updatedAt'])
   orderBy?: string;
 
   @IsOptional()
-  @IsEnum(["asc", "desc"])
-  order?: string; 
+  @IsEnum(['asc', 'desc'])
+  order?: string;
 
   @IsOptional()
   @IsInt()

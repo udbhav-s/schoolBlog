@@ -14,8 +14,8 @@ export class FileModel extends BaseModel {
       relation: Model.BelongsToOneRelation,
       join: {
         from: 'files.postId',
-        to: 'posts.id'
-      }
-    }
+        to: 'posts.id',
+      },
+    },
   });
 }

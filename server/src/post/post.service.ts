@@ -8,31 +8,35 @@ import { PostCreateDto } from './dto/postCreate.dto';
 
 @Injectable()
 export class PostService {
-  constructor(
-    @Inject('PostModel') private postModel: ModelClass<PostModel>
-  ) {}
+  constructor(@Inject('PostModel') private postModel: ModelClass<PostModel>) {}
 
   async getById(id: number): Promise<PostModel> {
-    return await this.postModel.query().findById(id).withGraphFetched('[user]');
+    return await this.postModel
+      .query()
+      .findById(id)
+      .withGraphFetched('[user]');
   }
 
   async getByUser(userId: number): Promise<PostModel[]> {
-    return await this.postModel.query().where({ userId }).withGraphFetched('[user]');
+    return await this.postModel
+      .query()
+      .where({ userId })
+      .withGraphFetched('[user]');
   }
 
   async getAll(options: PostGetOptionsDto | undefined): Promise<PostModel[]> {
-    let query = this.postModel.query();
+    const query = this.postModel.query();
     // options for pagination
     if (options.limit) query.limit(options.limit);
     if (options.offset) query.offset(options.offset);
     if (options.verifiedOrCurrentUser) {
-      query.where({ verified: true }).orWhere({ userId: options.userId});
+      query.where({ verified: true }).orWhere({ userId: options.userId });
     }
     // order options
     if (options.orderBy && options.order) {
       query.toKnexQuery().orderBy(options.orderBy, options.order);
     }
-    // add user 
+    // add user
     query.withGraphFetched('[user]');
     return await query;
   }
@@ -45,29 +49,29 @@ export class PostService {
     return await this.postModel
       .query()
       .insertGraph(data)
-      .returning("*")
-      .withGraphFetched("[user]");
+      .returning('*')
+      .withGraphFetched('[user]');
   }
 
   async update(data: PostCreateDto): Promise<PostModel> {
     return await this.postModel
       .query()
       .upsertGraph(data)
-      .returning("*")
-      .withGraphFetched("[user]");
+      .returning('*')
+      .withGraphFetched('[user]');
   }
 
   async verify(id: number): Promise<PostModel> {
-    return await this
-      .postModel.query()
+    return await this.postModel
+      .query()
       .patchAndFetchById(id, { verified: true })
-      .withGraphFetched("[user]");
+      .withGraphFetched('[user]');
   }
 
   async unverify(id: number): Promise<PostModel> {
-    return await this
-      .postModel.query()
+    return await this.postModel
+      .query()
       .patchAndFetchById(id, { verified: false })
-      .withGraphFetched("[user]");
+      .withGraphFetched('[user]');
   }
 }

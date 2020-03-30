@@ -8,12 +8,14 @@ import * as passport from 'passport';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // set up passport 
-  app.use(session({
-    secret: 'ok',
-    resave: false,
-    saveUninitialized: false
-  }));
+  // set up passport
+  app.use(
+    session({
+      secret: 'ok',
+      resave: false,
+      saveUninitialized: false,
+    }),
+  );
   app.use(passport.initialize());
   app.use(passport.session());
 
@@ -22,10 +24,10 @@ async function bootstrap() {
     .setTitle('School Blog')
     .setDescription('API Documentation for the School Blog server')
     .setVersion('1.0')
-    .addTag("user")
-    .addTag("post")
-    .addTag("comment")
-    .addTag("reply")
+    .addTag('user')
+    .addTag('post')
+    .addTag('comment')
+    .addTag('reply')
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('apidoc', app, document);

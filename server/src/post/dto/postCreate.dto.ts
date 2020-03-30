@@ -16,7 +16,7 @@ export class PostCreateDto {
   @IsString()
   category: string;
 
-  // provided by controller to service 
+  // provided by controller to service
   @IsOptional()
   userId: number;
 

@@ -10,11 +10,11 @@ import * as KnexConfig from '../../knexfile';
 
 const models = [UserModel, PostModel, FileModel];
 
-const modelProviders = models.map((model) => {
+const modelProviders = models.map(model => {
   return {
     provide: model.name,
-    useValue: model
-  }
+    useValue: model,
+  };
 });
 
 const providers = [
@@ -26,13 +26,13 @@ const providers = [
 
       Model.knex(knex);
       return knex;
-    }
-  }
+    },
+  },
 ];
 
 @Global()
 @Module({
   providers: [...providers] as Provider<any>[],
-  exports: [...providers] as Provider<any>[]
+  exports: [...providers] as Provider<any>[],
 })
 export class DatabaseModule {}

@@ -10,14 +10,14 @@ import { FileModule } from './file/file.module';
 
 @Module({
   imports: [
-    UserModule, 
-    DatabaseModule, 
-    AuthModule, 
-    PostModule, 
+    UserModule,
+    DatabaseModule,
+    AuthModule,
+    PostModule,
     FileModule,
     ConfigModule.forRoot({
-      isGlobal: true
-    })
+      isGlobal: true,
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],

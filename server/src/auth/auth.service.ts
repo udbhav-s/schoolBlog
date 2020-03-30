@@ -7,15 +7,18 @@ import { UserModel } from '../database/models/user.model';
 export class AuthService {
   constructor(
     private readonly userService: UserService,
-    private readonly portalService: PortalService
+    private readonly portalService: PortalService,
   ) {}
 
-  async validateUser(portal: string, password: string): Promise<UserModel | null> {
-    let validated = await this.portalService.validate(portal, password);
+  async validateUser(
+    portal: string,
+    password: string,
+  ): Promise<UserModel | null> {
+    const validated = await this.portalService.validate(portal, password);
     if (validated) {
       let user = await this.userService.getByPortalId(portal);
       if (!user) {
-        let portalUser = await this.portalService.getById(portal);
+        const portalUser = await this.portalService.getById(portal);
         user = await this.userService.createFromPortalUser(portalUser);
       }
       return user;
