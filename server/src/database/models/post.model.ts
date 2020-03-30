@@ -1,6 +1,7 @@
 import { BaseModel } from './base.model';
-import { UserModel } from './user.model';
 import { Model } from 'objection';
+import { UserModel } from './user.model';
+import { FileModel } from './file.model';
 
 export class PostModel extends BaseModel {
   static tableName = 'posts';
@@ -12,9 +13,7 @@ export class PostModel extends BaseModel {
   verified: boolean;
   userId: number;
 
-  user: UserModel;
-
-  static relationMappings = {
+  static relationMappings = () => ({  
     user: {
       modelClass: UserModel,
       relation: Model.BelongsToOneRelation,
@@ -22,6 +21,14 @@ export class PostModel extends BaseModel {
         from: 'posts.userId',
         to: 'users.id'
       }
+    },
+    files: {
+      modelClass: FileModel,
+      relation: Model.HasManyRelation,
+      join: {
+        from: 'posts.id',
+        to: 'files.postId'
+      }
     }
-  }
+  });
 }

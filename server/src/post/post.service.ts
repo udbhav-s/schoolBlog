@@ -1,5 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { ModelClass } from 'objection';
+import * as sanitizeHtml from 'sanitize-html';
+import sanitizeHtmlOptions from '../common/util/sanitizeHtmlOptions';
 import { PostModel } from '../database/models/post.model';
 import { PostGetOptionsDto } from './dto/postGetOptions.dto';
 import { PostCreateDto } from './dto/postCreate.dto';
@@ -35,14 +37,23 @@ export class PostService {
     return await query;
   }
 
-  async create(data: PostCreateDto): Promise<PostModel> {
-    return await this.postModel.query().insert(data).returning("*").withGraphFetched("[user]");
+  sanitizeBody(body: string): string {
+    return sanitizeHtml(body, sanitizeHtmlOptions);
   }
 
-  async update(id: number, data: PostCreateDto): Promise<PostModel> {
+  async create(data: PostCreateDto): Promise<PostModel> {
     return await this.postModel
       .query()
-      .patchAndFetchById(id, data)
+      .insertGraph(data)
+      .returning("*")
+      .withGraphFetched("[user]");
+  }
+
+  async update(data: PostCreateDto): Promise<PostModel> {
+    return await this.postModel
+      .query()
+      .upsertGraph(data)
+      .returning("*")
       .withGraphFetched("[user]");
   }
 
