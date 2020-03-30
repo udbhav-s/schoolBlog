@@ -5,6 +5,7 @@ import sanitizeHtmlOptions from '../common/util/sanitizeHtmlOptions';
 import { PostModel } from '../database/models/post.model';
 import { PostGetOptionsDto } from './dto/postGetOptions.dto';
 import { PostCreateDto } from './dto/postCreate.dto';
+import { GET_OPTIONS, VERIFIED_OR_BY_USER } from '../database/modifiers';
 
 @Injectable()
 export class PostService {
@@ -17,24 +18,35 @@ export class PostService {
       .withGraphFetched('[user]');
   }
 
-  async getByUser(userId: number): Promise<PostModel[]> {
-    return await this.postModel
+  async getByUser(
+    userId: number,
+    options: PostGetOptionsDto | undefined,
+  ): Promise<PostModel[]> {
+    const query = this.postModel
       .query()
       .where({ userId })
       .withGraphFetched('[user]');
+    // apply options if any
+    if (options) {
+      query.modify(GET_OPTIONS, options);
+      // get only posts which are verified or by current user
+      if (options.verifiedOrCurrentUser && options.userId) {
+        query.modify(VERIFIED_OR_BY_USER, options.userId);
+      }
+    }
+    // return result
+    return await query;
   }
 
   async getAll(options: PostGetOptionsDto | undefined): Promise<PostModel[]> {
     const query = this.postModel.query();
-    // options for pagination
-    if (options.limit) query.limit(options.limit);
-    if (options.offset) query.offset(options.offset);
-    if (options.verifiedOrCurrentUser) {
-      query.where({ verified: true }).orWhere({ userId: options.userId });
-    }
-    // order options
-    if (options.orderBy && options.order) {
-      query.toKnexQuery().orderBy(options.orderBy, options.order);
+    if (options) {
+      // options for pagination and sorting
+      query.modify(GET_OPTIONS, options);
+      // get only posts which are verified or by current user
+      if (options.verifiedOrCurrentUser && options.userId) {
+        query.modify(VERIFIED_OR_BY_USER, options.userId);
+      }
     }
     // add user
     query.withGraphFetched('[user]');
@@ -46,18 +58,28 @@ export class PostService {
   }
 
   async create(data: PostCreateDto): Promise<PostModel> {
+    const post = await this.postModel
+      .query()
+      .allowGraph('[files]')
+      .insertGraph(data);
+
     return await this.postModel
       .query()
-      .insertGraph(data)
-      .returning('*')
+      .where({ id: post.id })
+      .first()
       .withGraphFetched('[user]');
   }
 
   async update(data: PostCreateDto): Promise<PostModel> {
+    const post = await this.postModel
+      .query()
+      .allowGraph('[files]')
+      .upsertGraph(data);
+
     return await this.postModel
       .query()
-      .upsertGraph(data)
-      .returning('*')
+      .where({ id: post.id })
+      .first()
       .withGraphFetched('[user]');
   }
 

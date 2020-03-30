@@ -9,15 +9,18 @@ import {
   ValidationPipe,
   Body,
   Request,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { UserModel } from '../database/models/user.model';
 import { LoginGuard } from '../common/guards/login.guard';
 import { AuthenticatedGuard } from '../common/guards/authenticated.guard';
+import { FormatResponseInterceptor } from '../common/interceptors/formatResponse.interceptor';
 import { LoginDto } from './dto/login.dto';
 
 @ApiTags('user')
+@UseInterceptors(FormatResponseInterceptor)
 @Controller('api/user')
 export class UserController {
   constructor(private readonly userService: UserService) {}

@@ -1,22 +1,7 @@
-import { IsEnum, IsInt, IsBoolean, IsOptional } from 'class-validator';
+import { IsBoolean, IsOptional } from 'class-validator';
+import { GetOptionsDto } from '../../common/dto/getOptions.dto';
 
-export class PostGetOptionsDto {
-  @IsOptional()
-  @IsEnum(['createdAt', 'updatedAt'])
-  orderBy?: string;
-
-  @IsOptional()
-  @IsEnum(['asc', 'desc'])
-  order?: string;
-
-  @IsOptional()
-  @IsInt()
-  limit?: number;
-
-  @IsOptional()
-  @IsInt()
-  offset?: number;
-
+export class PostGetOptionsDto extends GetOptionsDto {
   @IsOptional()
   @IsBoolean()
   verifiedOrCurrentUser?: boolean;

@@ -1,5 +1,5 @@
 import { BaseModel } from './base.model';
-import { Model } from 'objection';
+import { Model, QueryBuilder } from 'objection';
 import { UserModel } from './user.model';
 import { FileModel } from './file.model';
 
@@ -12,6 +12,13 @@ export class PostModel extends BaseModel {
   thumbnail: string;
   verified: boolean;
   userId: number;
+
+  static modifiers = {
+    verifiedOrByUser(query: QueryBuilder<PostModel>, userId: number) {
+      query.where({ verified: true }).orWhere({ userId });
+    },
+    ...BaseModel.modifiers,
+  };
 
   static relationMappings = () => ({
     user: {

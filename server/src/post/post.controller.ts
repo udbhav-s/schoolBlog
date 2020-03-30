@@ -12,20 +12,25 @@ import {
   BadRequestException,
   ForbiddenException,
   NotFoundException,
+  UseInterceptors,
+  Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { PostService } from './post.service';
 import { AuthenticatedGuard } from '../common/guards/authenticated.guard';
-import { PostGetOptionsDto } from './dto/postGetOptions.dto';
-import { PostCreateDto, PostUpdateDto } from './dto/postCreate.dto';
 import { PostModel } from '../database/models/post.model';
 import { Level } from '../common/decorators/level.decorator';
 import { LevelGuard } from '../common/guards/level.guard';
 import { Levels } from '../common/util/level.enum';
+import { FormatResponseInterceptor } from '../common/interceptors/formatResponse.interceptor';
 import { FileService } from '../file/file.service';
+import { GetOptionsDto } from '../common/dto/getOptions.dto';
+import { PostGetOptionsDto } from './dto/postGetOptions.dto';
+import { PostCreateDto, PostUpdateDto } from './dto/postCreate.dto';
 
 @ApiTags('post')
 @UseGuards(AuthenticatedGuard)
+@UseInterceptors(FormatResponseInterceptor)
 @Controller('api/post')
 export class PostController {
   constructor(
@@ -33,30 +38,35 @@ export class PostController {
     private fileService: FileService,
   ) {}
 
-  @UsePipes(ValidationPipe)
-  @Post('/all')
+  @Get('/all')
   async getAll(
-    @Body() opts: PostGetOptionsDto,
+    @Query(new ValidationPipe({ transform: true })) options: GetOptionsDto,
     @Request() req,
   ): Promise<PostModel[]> {
-    const options = {
+    // set options
+    options = {
       userId: req.user.id,
       verifiedOrCurrentUser: req.user.level < Levels.Moderator,
-      ...opts,
+      ...options,
     } as PostGetOptionsDto;
+    // return result
     return await this.postService.getAll(options);
   }
 
-  @UsePipes(ParseIntPipe)
   @Get('/user/:id')
-  async getByUser(@Param('id') id: number): Promise<PostModel[]> {
-    return await this.postService.getByUser(id);
-  }
-
-  @UsePipes(ParseIntPipe)
-  @Get('/:id')
-  async getById(@Param('id') id: number): Promise<PostModel> {
-    return await this.postService.getById(id);
+  async getByUser(
+    @Param('id', ParseIntPipe) id: number,
+    @Request() req,
+    @Query(new ValidationPipe({ transform: true })) options: GetOptionsDto,
+  ): Promise<PostModel[]> {
+    // set options
+    options = {
+      verifiedOrCurrentUser: req.user.level < Levels.Moderator,
+      userId: req.user.id,
+      ...options,
+    } as PostGetOptionsDto;
+    // return result
+    return await this.postService.getByUser(id, options);
   }
 
   @UsePipes(ValidationPipe)
@@ -95,10 +105,22 @@ export class PostController {
   // Returns post with images & thumbnail paths replaced by base64
   // Since update request deletes all old images and uploads new ones
   @Get('/edit/:id')
-  async getEditMode(@Param('id', ParseIntPipe) id: number): Promise<PostModel> {
+  async getEditMode(
+    @Param('id', ParseIntPipe) id: number,
+    @Request() req,
+  ): Promise<PostModel> {
     // get the post
     const post = await this.postService.getById(id);
     if (!post) throw new NotFoundException();
+
+    // if unverified post is not by the user and user is not a moderator
+    if (
+      post.verified === false &&
+      post.userId !== req.user.id &&
+      req.user.level < Levels.Moderator
+    ) {
+      throw new ForbiddenException();
+    }
 
     // get post files
     const files = await this.fileService.getByPost(post.id);
@@ -186,5 +208,21 @@ export class PostController {
   @Post('/unverify/:id')
   async unverify(@Param('id') id: number): Promise<PostModel> {
     return await this.postService.unverify(id);
+  }
+
+  @UsePipes(ParseIntPipe)
+  @Get('/:id')
+  async getById(@Param('id') id: number, @Request() req): Promise<PostModel> {
+    const post = await this.postService.getById(id);
+    // if unverified post is not by the user and user is not a moderator
+    if (
+      post.verified === false &&
+      post.userId !== req.user.id &&
+      req.user.level < Levels.Moderator
+    ) {
+      throw new ForbiddenException();
+    }
+    // return the post
+    return post;
   }
 }
