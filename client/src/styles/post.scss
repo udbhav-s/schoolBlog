@@ -1,0 +1,55 @@
+@import './_variables.scss';
+
+.post {
+	font-size: 1.8rem;
+
+	> * {
+		margin-bottom: 4rem;
+	}
+}
+
+.post .body {
+	overflow-wrap: break-word;
+
+	p {
+		margin-top: 1rem;
+		margin-bottom: 1rem;
+	}
+
+	img {
+		max-width: 100%;
+		height: auto;
+	}
+}
+
+.post .post-thumbnail {
+	width: 100%;
+	height: auto;
+	margin-bottom: 3rem;
+}
+
+.post .title {
+	text-align: center;
+	font-size: 4rem;
+}
+
+.post .meta {
+	font-size: 1.3rem;
+	padding: 0.8rem 0;
+	margin-bottom: 3rem;
+}
+
+.meta .buttons {
+	margin-top: 1rem;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+
+.meta .button {
+	margin-right: 0.5rem;
+}
+
+.add-comment-container {
+	box-shadow: $box-shadow-light;
+}

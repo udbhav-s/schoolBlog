@@ -1,0 +1,64 @@
+@import './_variables.scss';
+
+header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 1;
+	user-select: none;
+	// flex container
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	// text
+	font-size: 1.5rem;
+	font-weight: bold;
+	box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
+	background-color: $primary-background;
+	color: $primary-text;
+}
+
+header .header-left {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+header .header-right {
+	// disabled by default
+	display: none;
+}
+
+header .active {
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+}
+
+header .header-item {
+	padding: 1rem;
+	transition: 0.2s;
+	// on hover 
+	&:hover {
+		color: $primary-background;
+		background-color: $primary-text;
+	}
+}
+
+@media only screen and (min-width: 700px) {
+	// make navbar visible
+	header .header-right {
+		display: flex;
+		flex-direction: row;
+	}
+	// hide navbar mobile toggle
+	header #navigation-button {
+		display: none;
+	}
+	// keep header in one row
+	header {
+		flex-direction: row;
+		justify-content: space-between;
+	}
+}

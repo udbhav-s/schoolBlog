@@ -1,0 +1,54 @@
+@import './_variables.scss';
+
+.post-card {
+	@include cardMixin;
+	margin-bottom: 3rem;
+	background-color: $primary-card-background;
+	// flex container
+	display: flex;
+	flex-wrap: wrap;
+	// on hover
+	transition: 0.2s;
+	box-shadow: $box-shadow-light;
+	&:hover {
+		box-shadow: $box-shadow-heavy;
+	}
+}
+
+.post-card .thumbnail-container {
+	margin: 0 auto;
+}
+
+.thumbnail-container .thumbnail {
+	min-width: 10rem;
+	width: 100%;
+}
+
+.post-card .text-container {
+	padding: 1rem;
+	margin: auto;
+	text-align: center;
+}
+
+.post-card .info {
+	color: $secondary-text;
+	font-size: 1.3rem;
+	padding-top: 0.5rem;
+
+	> span {
+		margin: 0.5rem;
+	}
+}
+
+@media only screen and (min-width: 700px) {
+	.post-card {
+		flex-wrap: nowrap;
+	}
+	.post-card .thumbnail-container {
+		align-self: stretch;
+	}
+	.post-card .thumbnail {
+		object-fit: cover;
+		height: 100%;
+	}
+}
