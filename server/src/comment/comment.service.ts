@@ -1,6 +1,7 @@
-import { Injectable, Inject, ForbiddenException } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { ModelClass } from 'objection';
-import { CommentModel } from 'src/database/models/comment.model';
+import { CommentModel } from '../database/models/comment.model';
+import { PostModel } from '../database/models/post.model';
 import { CommentCreateDto, CommentUpdateDto } from './dto/commentCreate.dto';
 
 @Injectable()
@@ -9,23 +10,16 @@ export class CommentService {
     @Inject('CommentModel') private commentModel: ModelClass<CommentModel>,
   ) {}
 
-  async getById(id: number, verified?: boolean): Promise<CommentModel> {
-    // get the comment with post attached
-    let comment = await this.commentModel
+  async getById(id: number): Promise<CommentModel> {
+    return await this.commentModel
       .query()
       .findById(id)
-      .withGraphFetched('[post, user]');
-    // only get comments on verified posts
-    if (verified && comment.post.verified === false) {
-      throw new ForbiddenException();
-    }
-    // return result
-    return comment;
+      .withGraphFetched('user');
   }
 
   async getByUser(userId: number, verified: boolean): Promise<CommentModel[]> {
     // get comment
-    let query = this.commentModel
+    const query = this.commentModel
       .query()
       .where({ userId })
       .withGraphFetched('user');
@@ -40,6 +34,13 @@ export class CommentService {
       .query()
       .where({ postId })
       .withGraphFetched('user');
+  }
+
+  async getPost(id: number): Promise<PostModel> {
+    return await this.commentModel
+      .relatedQuery('post')
+      .for(id)
+      .first();
   }
 
   async create(data: CommentCreateDto): Promise<CommentModel> {

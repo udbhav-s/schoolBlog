@@ -49,7 +49,7 @@ export class CommentController {
     @Request() req,
   ): Promise<CommentModel[]> {
     // get the post
-    let post = await this.postService.getById(id);
+    const post = await this.postService.getById(id);
     if (!post) throw new NotFoundException();
     // check if user can access
     if (!post.canAccess(req.user)) throw new ForbiddenException();
@@ -62,10 +62,14 @@ export class CommentController {
     @Param('id', ParseIntPipe) id: number,
     @Request() req,
   ): Promise<CommentModel> {
-    return await this.commentService.getById(
-      id,
-      req.user.level < Levels.Moderator,
-    );
+    // get comment and post
+    const comment = await this.commentService.getById(id);
+    if (!comment) throw new NotFoundException();
+    const post = await this.postService.getById(comment.postId);
+    // check if user can access post
+    if (!post.canAccess(req.user)) throw new ForbiddenException();
+    // return the comment
+    return comment;
   }
 
   @Post('/create')
@@ -73,7 +77,7 @@ export class CommentController {
     @Body(ValidationPipe) data: CommentCreateDto,
     @Request() req,
   ): Promise<CommentModel> {
-    let post = await this.postService.getById(data.postId);
+    const post = await this.postService.getById(data.postId);
     if (!post) throw new NotFoundException();
     // check if user can comment on post
     if (!post.canAccess(req.user)) throw new ForbiddenException();
@@ -89,7 +93,7 @@ export class CommentController {
     @Request() req,
   ): Promise<CommentModel> {
     // check if comment exists and is by user
-    let comment = await this.commentService.getById(id);
+    const comment = await this.commentService.getById(id);
     if (!comment) throw new NotFoundException();
     if (comment.userId !== req.user.id) throw new ForbiddenException();
     // update comment (only body is changed)
@@ -97,7 +101,7 @@ export class CommentController {
       ...data,
       edited: true,
       userId: req.user.id,
-      postId: comment.postId
+      postId: comment.postId,
     };
     return await this.commentService.update(data);
   }
@@ -108,7 +112,7 @@ export class CommentController {
     @Request() req,
   ): Promise<CommentModel> {
     // check if comment exists and is by user
-    let comment = await this.commentService.getById(id);
+    const comment = await this.commentService.getById(id);
     if (!comment) throw new NotFoundException();
     if (comment.userId !== req.user.id) throw new ForbiddenException();
     // delete comment

@@ -1,0 +1,124 @@
+import {
+  Controller,
+  UseGuards,
+  UseInterceptors,
+  Param,
+  ParseIntPipe,
+  Request,
+  Get,
+  Post,
+  ForbiddenException,
+  Body,
+  ValidationPipe,
+  Delete,
+  NotFoundException,
+} from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { AuthenticatedGuard } from 'src/common/guards/authenticated.guard';
+import { FormatResponseInterceptor } from 'src/common/interceptors/formatResponse.interceptor';
+import { ReplyService } from './reply.service';
+import { CommentService } from '../comment/comment.service';
+import { ReplyModel } from 'src/database/models/reply.model';
+import { Levels } from 'src/common/util/level.enum';
+import { ReplyCreateDto, ReplyUpdateDto } from './dto/replyCreate.dto';
+
+@ApiTags('reply')
+@UseGuards(AuthenticatedGuard)
+@UseInterceptors(FormatResponseInterceptor)
+@Controller('api/reply')
+export class ReplyController {
+  constructor(
+    private replyService: ReplyService,
+    private commentService: CommentService,
+  ) {}
+
+  @Get('user/:id')
+  async getByUser(
+    @Param('id', ParseIntPipe) id: number,
+    @Request() req,
+  ): Promise<ReplyModel[]> {
+    return await this.replyService.getByUser(
+      id,
+      req.user.level < Levels.Moderator,
+    );
+  }
+
+  @Get('comment/:id')
+  async getByComment(
+    @Param('id', ParseIntPipe) id: number,
+    @Request() req,
+  ): Promise<ReplyModel[]> {
+    // get the comment and post, check if comment exists
+    const comment = await this.commentService.getById(id);
+    if (!comment) throw new NotFoundException();
+    // check if user can access post
+    const post = await this.commentService.getPost(id);
+    if (!post.canAccess(req.user)) throw new ForbiddenException();
+    // return reply
+    return await this.replyService.getByComment(id);
+  }
+
+  @Get('/:id')
+  async getById(
+    @Param('id', ParseIntPipe) id: number,
+    @Request() req,
+  ): Promise<ReplyModel> {
+    // get reply, comment & post
+    const reply = await this.replyService.getById(id);
+    if (!reply) throw new NotFoundException();
+    // get post and check if user can access
+    const post = await this.commentService.getPost(reply.commentId);
+    if (!post.canAccess(req.user)) throw new ForbiddenException();
+    // return the reply
+    return reply;
+  }
+
+  @Post('/create')
+  async create(
+    @Body(ValidationPipe) data: ReplyCreateDto,
+    @Request() req,
+  ): Promise<ReplyModel> {
+    // check if comment exists
+    const comment = await this.commentService.getById(data.commentId);
+    if (!comment) throw new NotFoundException();
+    // check if user can comment on post
+    const post = await this.commentService.getPost(data.commentId);
+    if (!post.canAccess(req.user)) throw new ForbiddenException();
+    // create the comment
+    data.userId = req.user.id;
+    return await this.replyService.create(data);
+  }
+
+  @Post('/update/:id')
+  async update(
+    @Body(ValidationPipe) data: ReplyUpdateDto,
+    @Param('id', ParseIntPipe) id: number,
+    @Request() req,
+  ): Promise<ReplyModel> {
+    // check if reply exists and is by user
+    const reply = await this.replyService.getById(id);
+    if (!reply) throw new NotFoundException();
+    if (reply.userId !== req.user.id) throw new ForbiddenException();
+    // update reply (only body is changed)
+    data = {
+      ...data,
+      edited: true,
+      userId: req.user.id,
+      commentId: reply.commentId,
+    };
+    return await this.replyService.update(data);
+  }
+
+  @Delete('/:id')
+  async del(
+    @Param('id', ParseIntPipe) id: number,
+    @Request() req,
+  ): Promise<ReplyModel> {
+    // check if reply exists and is by user
+    const reply = await this.commentService.getById(id);
+    if (!reply) throw new NotFoundException();
+    if (reply.userId !== req.user.id) throw new ForbiddenException();
+    // delete reply
+    return await this.replyService.del(id);
+  }
+}

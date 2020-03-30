@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { PostModule } from './post/post.module';
 import { FileModule } from './file/file.module';
 import { CommentModule } from './comment/comment.module';
+import { ReplyModule } from './reply/reply.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { CommentModule } from './comment/comment.module';
       isGlobal: true,
     }),
     CommentModule,
+    ReplyModule,
   ],
   controllers: [AppController],
   providers: [AppService],

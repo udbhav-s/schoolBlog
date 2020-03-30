@@ -2,6 +2,7 @@ import { BaseModel } from './base.model';
 import { Model } from 'objection';
 import { UserModel } from './user.model';
 import { PostModel } from './post.model';
+import { ReplyModel } from './reply.model';
 
 export class CommentModel extends BaseModel {
   static tableName = 'comments';
@@ -13,6 +14,7 @@ export class CommentModel extends BaseModel {
 
   post?: PostModel;
   user?: UserModel;
+  replies?: ReplyModel[];
 
   static modifiers = {
     ...BaseModel.modifiers,
@@ -34,6 +36,15 @@ export class CommentModel extends BaseModel {
       join: {
         from: 'comments.postId',
         to: 'posts.id',
+      },
+    },
+
+    replies: {
+      modelClass: ReplyModel,
+      relation: Model.HasManyRelation,
+      join: {
+        from: 'comments.id',
+        to: 'replies.commentId',
       },
     },
   });

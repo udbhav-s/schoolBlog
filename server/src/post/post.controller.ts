@@ -9,7 +9,6 @@ import {
   Param,
   ParseIntPipe,
   Post,
-  BadRequestException,
   ForbiddenException,
   NotFoundException,
   UseInterceptors,
@@ -47,7 +46,7 @@ export class PostController {
     options = {
       ...options,
       userId: req.user.id,
-      verifiedOrCurrentUser: req.user.level < Levels.Moderator
+      verifiedOrCurrentUser: req.user.level < Levels.Moderator,
     } as PostGetOptionsDto;
     // return result
     return await this.postService.getAll(options);
@@ -193,7 +192,7 @@ export class PostController {
   @Level(Levels.Moderator)
   @Post('/verify/:id')
   async verify(@Param('id') id: number): Promise<PostModel> {
-    let post = await this.postService.verify(id);
+    const post = await this.postService.verify(id);
     if (!post) throw new NotFoundException();
     return post;
   }
@@ -203,7 +202,7 @@ export class PostController {
   @Level(Levels.Moderator)
   @Post('/unverify/:id')
   async unverify(@Param('id') id: number): Promise<PostModel> {
-    let post = await this.postService.unverify(id);
+    const post = await this.postService.unverify(id);
     if (!post) throw new NotFoundException();
     return post;
   }

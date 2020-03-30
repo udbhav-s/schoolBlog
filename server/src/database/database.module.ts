@@ -6,10 +6,11 @@ import { UserModel } from './models/user.model';
 import { PostModel } from './models/post.model';
 import { FileModel } from './models/file.model';
 import { CommentModel } from './models/comment.model';
+import { ReplyModel } from './models/reply.model';
 
 import * as KnexConfig from '../../knexfile';
 
-const models = [UserModel, PostModel, FileModel, CommentModel];
+const models = [UserModel, PostModel, FileModel, CommentModel, ReplyModel];
 
 const modelProviders = models.map(model => {
   return {
