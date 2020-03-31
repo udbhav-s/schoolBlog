@@ -22,7 +22,5 @@ export class PostCreateDto {
 }
 
 export class PostUpdateDto extends PostCreateDto {
-  @IsOptional()
-  @IsInt()
   id: number;
 }

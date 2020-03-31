@@ -20,7 +20,7 @@ export class PostService {
 
   async getByUser(
     userId: number,
-    options: PostGetOptionsDto | undefined,
+    options?: PostGetOptionsDto,
   ): Promise<PostModel[]> {
     const query = this.postModel
       .query()
@@ -38,7 +38,7 @@ export class PostService {
     return await query;
   }
 
-  async getAll(options: PostGetOptionsDto | undefined): Promise<PostModel[]> {
+  async getAll(options?: PostGetOptionsDto): Promise<PostModel[]> {
     const query = this.postModel.query();
     if (options) {
       // options for pagination and sorting

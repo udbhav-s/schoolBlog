@@ -8,7 +8,7 @@ import { PostService } from 'src/post/post.service';
 
 @ApiTags('file')
 @UseGuards(AuthenticatedGuard)
-@Controller('file')
+@Controller('api/file')
 export class FileController {
   constructor(
     private fileService: FileService,

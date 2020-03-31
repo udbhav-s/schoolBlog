@@ -88,7 +88,7 @@ export class CommentController {
 
   @Post('/update/:id')
   async update(
-    @Body(ValidationPipe) data: CommentUpdateDto,
+    @Body(ValidationPipe) data: CommentCreateDto,
     @Param('id', ParseIntPipe) id: number,
     @Request() req,
   ): Promise<CommentModel> {
@@ -97,13 +97,13 @@ export class CommentController {
     if (!comment) throw new NotFoundException();
     if (comment.userId !== req.user.id) throw new ForbiddenException();
     // update comment (only body is changed)
-    data = {
+    let updateData = {
       ...data,
       edited: true,
       userId: req.user.id,
       postId: comment.postId,
-    };
-    return await this.commentService.update(data);
+    } as CommentUpdateDto;
+    return await this.commentService.update(updateData);
   }
 
   @Delete('/:id')
@@ -114,7 +114,7 @@ export class CommentController {
     // check if comment exists and is by user
     const comment = await this.commentService.getById(id);
     if (!comment) throw new NotFoundException();
-    if (comment.userId !== req.user.id) throw new ForbiddenException();
+    if (!comment.canDelete(req.user)) throw new ForbiddenException();
     // delete comment
     return await this.commentService.del(id);
   }

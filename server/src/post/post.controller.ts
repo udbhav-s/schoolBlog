@@ -139,7 +139,7 @@ export class PostController {
   // any properties which are not specified in the update request will be DELETED
   @Post('/update/:id')
   async update(
-    @Body(ValidationPipe) data: PostUpdateDto,
+    @Body(ValidationPipe) data: PostCreateDto,
     @Param('id', ParseIntPipe) id: number,
     @Request() req,
   ): Promise<PostModel> {
@@ -178,10 +178,12 @@ export class PostController {
     // add the new files
     if (files.length > 0) data.files = files;
 
-    // set the userId to the current user
-    data.userId = req.user.id;
-    // set the post id to be updated (since service uses upsertGraph)
-    data.id = post.id;
+    // set post id and user id 
+    data = {
+      ...data,
+      id: post.id,
+      userId: req.user.id
+    } as PostUpdateDto;
 
     // update post
     return await this.postService.update(data);

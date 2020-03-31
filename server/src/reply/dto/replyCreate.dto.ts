@@ -14,7 +14,5 @@ export class ReplyCreateDto {
 }
 
 export class ReplyUpdateDto extends ReplyCreateDto {
-  @IsOptional()
-  @IsInt()
   id: number;
 }

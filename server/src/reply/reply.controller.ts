@@ -52,7 +52,7 @@ export class ReplyController {
     const comment = await this.commentService.getById(id);
     if (!comment) throw new NotFoundException();
     // check if user can access post
-    const post = await this.commentService.getPost(id);
+    const post = await this.commentService.getPost(comment.id);
     if (!post.canAccess(req.user)) throw new ForbiddenException();
     // return reply
     return await this.replyService.getByComment(id);
@@ -91,7 +91,7 @@ export class ReplyController {
 
   @Post('/update/:id')
   async update(
-    @Body(ValidationPipe) data: ReplyUpdateDto,
+    @Body(ValidationPipe) data: ReplyCreateDto,
     @Param('id', ParseIntPipe) id: number,
     @Request() req,
   ): Promise<ReplyModel> {
@@ -100,13 +100,14 @@ export class ReplyController {
     if (!reply) throw new NotFoundException();
     if (reply.userId !== req.user.id) throw new ForbiddenException();
     // update reply (only body is changed)
-    data = {
+    let updateData = {
       ...data,
+      id,
       edited: true,
       userId: req.user.id,
       commentId: reply.commentId,
-    };
-    return await this.replyService.update(data);
+    } as ReplyUpdateDto;
+    return await this.replyService.update(updateData);
   }
 
   @Delete('/:id')
@@ -117,7 +118,7 @@ export class ReplyController {
     // check if reply exists and is by user
     const reply = await this.commentService.getById(id);
     if (!reply) throw new NotFoundException();
-    if (reply.userId !== req.user.id) throw new ForbiddenException();
+    if (!reply.canDelete(req.user)) throw new ForbiddenException();
     // delete reply
     return await this.replyService.del(id);
   }

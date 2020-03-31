@@ -2,6 +2,7 @@ import { BaseModel } from './base.model';
 import { Model } from 'objection';
 import { UserModel } from './user.model';
 import { CommentModel } from './comment.model';
+import { Levels } from 'src/common/util/level.enum';
 
 export class ReplyModel extends BaseModel {
   static tableName = 'replies';
@@ -13,6 +14,12 @@ export class ReplyModel extends BaseModel {
 
   comment?: CommentModel;
   user?: UserModel;
+
+  canDelete(user: UserModel): boolean {
+    return (
+      this.userId == user.id || user.level >= Levels.Moderator
+    );
+  }
 
   static modifiers = {
     ...BaseModel.modifiers,

@@ -14,7 +14,5 @@ export class CommentCreateDto {
 }
 
 export class CommentUpdateDto extends CommentCreateDto {
-  @IsOptional()
-  @IsInt()
   id: number;
 }

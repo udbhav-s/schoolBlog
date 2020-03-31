@@ -3,6 +3,7 @@ import { Model } from 'objection';
 import { UserModel } from './user.model';
 import { PostModel } from './post.model';
 import { ReplyModel } from './reply.model';
+import { Levels } from 'src/common/util/level.enum';
 
 export class CommentModel extends BaseModel {
   static tableName = 'comments';
@@ -15,6 +16,12 @@ export class CommentModel extends BaseModel {
   post?: PostModel;
   user?: UserModel;
   replies?: ReplyModel[];
+
+  canDelete(user: UserModel): boolean {
+    return (
+      this.userId == user.id || user.level >= Levels.Moderator
+    );
+  }
 
   static modifiers = {
     ...BaseModel.modifiers,
