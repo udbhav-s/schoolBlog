@@ -14,7 +14,7 @@ import {
   UseInterceptors,
   Query,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiBasicAuth, ApiOperation } from '@nestjs/swagger';
 import { PostService } from './post.service';
 import { AuthenticatedGuard } from '../common/guards/authenticated.guard';
 import { PostModel } from '../database/models/post.model';
@@ -28,6 +28,7 @@ import { PostGetOptionsDto } from './dto/postGetOptions.dto';
 import { PostCreateDto, PostUpdateDto } from './dto/postCreate.dto';
 
 @ApiTags('post')
+@ApiBasicAuth()
 @UseGuards(AuthenticatedGuard)
 @UseInterceptors(FormatResponseInterceptor)
 @Controller('api/post')
@@ -37,6 +38,7 @@ export class PostController {
     private fileService: FileService,
   ) {}
 
+  @ApiOperation({ summary: 'Get all posts with pagination options' })
   @Get('/all')
   async getAll(
     @Query(new ValidationPipe({ transform: true })) options: GetOptionsDto,
@@ -52,6 +54,7 @@ export class PostController {
     return await this.postService.getAll(options);
   }
 
+  @ApiOperation({ summary: 'Get all posts by user (will only get verified for < moderator)' })
   @Get('/user/:id')
   async getByUser(
     @Param('id', ParseIntPipe) id: number,
@@ -68,6 +71,7 @@ export class PostController {
     return await this.postService.getByUser(id, options);
   }
 
+  @ApiOperation({ summary: 'Create a post' })
   @UsePipes(ValidationPipe)
   @Post('/create')
   async create(
@@ -103,6 +107,7 @@ export class PostController {
 
   // Returns post with images & thumbnail paths replaced by base64
   // Since update request deletes all old images and uploads new ones
+  @ApiOperation({ summary: 'Get a post with base64 embedded images instead of file URLs for editing' })
   @Get('/edit/:id')
   async getEditMode(
     @Param('id', ParseIntPipe) id: number,
@@ -137,6 +142,7 @@ export class PostController {
 
   // the update method in the post service uses upsertGraph
   // any properties which are not specified in the update request will be DELETED
+  @ApiOperation({ summary: 'Update a post' })
   @Post('/update/:id')
   async update(
     @Body(ValidationPipe) data: PostCreateDto,
@@ -189,6 +195,7 @@ export class PostController {
     return await this.postService.update(data);
   }
 
+  @ApiOperation({ summary: 'Verify a post' })
   @UsePipes(ParseIntPipe)
   @UseGuards(LevelGuard)
   @Level(Levels.Moderator)
@@ -199,6 +206,7 @@ export class PostController {
     return post;
   }
 
+  @ApiOperation({ summary: 'Unverify a post' })
   @UsePipes(ParseIntPipe)
   @UseGuards(LevelGuard)
   @Level(Levels.Moderator)
@@ -209,6 +217,7 @@ export class PostController {
     return post;
   }
 
+  @ApiOperation({ summary: 'Get a post by id' })
   @UsePipes(ParseIntPipe)
   @Get('/:id')
   async getById(@Param('id') id: number, @Request() req): Promise<PostModel> {

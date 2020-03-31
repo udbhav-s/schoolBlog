@@ -13,7 +13,7 @@ import {
   Delete,
   NotFoundException,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiBasicAuth, ApiOperation } from '@nestjs/swagger';
 import { AuthenticatedGuard } from 'src/common/guards/authenticated.guard';
 import { FormatResponseInterceptor } from 'src/common/interceptors/formatResponse.interceptor';
 import { ReplyService } from './reply.service';
@@ -23,6 +23,7 @@ import { Levels } from 'src/common/util/level.enum';
 import { ReplyCreateDto, ReplyUpdateDto } from './dto/replyCreate.dto';
 
 @ApiTags('reply')
+@ApiBasicAuth()
 @UseGuards(AuthenticatedGuard)
 @UseInterceptors(FormatResponseInterceptor)
 @Controller('api/reply')
@@ -32,6 +33,7 @@ export class ReplyController {
     private commentService: CommentService,
   ) {}
 
+  @ApiOperation({ summary: 'Get replies by user' })
   @Get('user/:id')
   async getByUser(
     @Param('id', ParseIntPipe) id: number,
@@ -42,7 +44,8 @@ export class ReplyController {
       req.user.level < Levels.Moderator,
     );
   }
-
+  
+  @ApiOperation({ summary: 'Get reply by comment' })
   @Get('comment/:id')
   async getByComment(
     @Param('id', ParseIntPipe) id: number,
@@ -58,6 +61,7 @@ export class ReplyController {
     return await this.replyService.getByComment(id);
   }
 
+  @ApiOperation({ summary: 'Get reply by id' })
   @Get('/:id')
   async getById(
     @Param('id', ParseIntPipe) id: number,
@@ -73,6 +77,7 @@ export class ReplyController {
     return reply;
   }
 
+  @ApiOperation({ summary: 'Create reply' })
   @Post('/create')
   async create(
     @Body(ValidationPipe) data: ReplyCreateDto,
@@ -89,6 +94,7 @@ export class ReplyController {
     return await this.replyService.create(data);
   }
 
+  @ApiOperation({ summary: 'Update reply' })
   @Post('/update/:id')
   async update(
     @Body(ValidationPipe) data: ReplyCreateDto,
@@ -110,6 +116,7 @@ export class ReplyController {
     return await this.replyService.update(updateData);
   }
 
+  @ApiOperation({ summary: 'Delete reply' })
   @Delete('/:id')
   async del(
     @Param('id', ParseIntPipe) id: number,

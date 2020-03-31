@@ -11,7 +11,6 @@ import {
   Request,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { UserModel } from '../database/models/user.model';
 import { LoginGuard } from '../common/guards/login.guard';
@@ -19,32 +18,39 @@ import { AuthenticatedGuard } from '../common/guards/authenticated.guard';
 import { FormatResponseInterceptor } from '../common/interceptors/formatResponse.interceptor';
 import { LoginDto } from './dto/login.dto';
 
+import { ApiTags, ApiOperation, ApiBasicAuth } from '@nestjs/swagger';
+
 @ApiTags('user')
 @UseInterceptors(FormatResponseInterceptor)
 @Controller('api/user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @UsePipes(new ValidationPipe())
+  @ApiOperation({ summary: 'Log in with st number and password' })
   @UseGuards(LoginGuard)
   @Post('/login')
-  login(@Body() body: LoginDto, @Request() req): number {
+  login(@Body(ValidationPipe) body: LoginDto, @Request() req): number {
     return req.user.id;
   }
 
+  @ApiOperation({ summary: 'Get the current logged in user' })
+  @ApiBasicAuth()
   @UseGuards(AuthenticatedGuard)
   @Get('/current')
   async getCurrent(@Request() req): Promise<UserModel> {
     return await this.userService.getById(req.user.id);
   }
 
+  @ApiOperation({ summary: 'Get a user by portal id' })
+  @ApiBasicAuth()
   @UseGuards(AuthenticatedGuard)
-  @UsePipes(ParseIntPipe)
   @Get('portal/:id')
-  async getByPortal(@Param('id') id: string): Promise<UserModel> {
+  async getByPortal(@Param('id', ParseIntPipe) id: string): Promise<UserModel> {
     return await this.userService.getByPortalId(id);
   }
 
+  @ApiOperation({ summary: 'Log out' })
+  @ApiBasicAuth()
   @UseGuards(AuthenticatedGuard)
   @Get('/logout')
   logout(
@@ -53,6 +59,8 @@ export class UserController {
     req.logout();
   }
 
+  @ApiOperation({ summary: 'Get user by id' })
+  @ApiBasicAuth()
   @UseGuards(AuthenticatedGuard)
   @UsePipes(ParseIntPipe)
   @Get(':id')
