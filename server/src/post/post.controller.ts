@@ -72,6 +72,8 @@ export class PostController {
   }
 
   @ApiOperation({ summary: 'Create a post' })
+  @UseGuards(LevelGuard)
+  @Level(Levels.Member)
   @UsePipes(ValidationPipe)
   @Post('/create')
   async create(

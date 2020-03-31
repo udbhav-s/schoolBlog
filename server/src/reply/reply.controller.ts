@@ -21,6 +21,8 @@ import { CommentService } from '../comment/comment.service';
 import { ReplyModel } from 'src/database/models/reply.model';
 import { Levels } from 'src/common/util/level.enum';
 import { ReplyCreateDto, ReplyUpdateDto } from './dto/replyCreate.dto';
+import { LevelGuard } from 'src/common/guards/level.guard';
+import { Level } from 'src/common/decorators/level.decorator';
 
 @ApiTags('reply')
 @ApiBasicAuth()
@@ -78,6 +80,8 @@ export class ReplyController {
   }
 
   @ApiOperation({ summary: 'Create reply' })
+  @UseGuards(LevelGuard)
+  @Level(Levels.Member)
   @Post('/create')
   async create(
     @Body(ValidationPipe) data: ReplyCreateDto,

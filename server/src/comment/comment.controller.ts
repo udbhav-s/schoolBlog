@@ -21,6 +21,8 @@ import { CommentModel } from 'src/database/models/comment.model';
 import { Levels } from 'src/common/util/level.enum';
 import { PostService } from 'src/post/post.service';
 import { CommentCreateDto, CommentUpdateDto } from './dto/commentCreate.dto';
+import { LevelGuard } from 'src/common/guards/level.guard';
+import { Level } from 'src/common/decorators/level.decorator';
 
 @ApiTags('comment')
 @ApiBasicAuth()
@@ -77,6 +79,8 @@ export class CommentController {
   }
 
   @ApiOperation({ summary: 'Create a comment' })
+  @UseGuards(LevelGuard)
+  @Level(Levels.Member)
   @Post('/create')
   async create(
     @Body(ValidationPipe) data: CommentCreateDto,
