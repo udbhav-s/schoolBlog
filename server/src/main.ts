@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
+import { json } from 'body-parser';
 import * as session from 'express-session';
 import * as passport from 'passport';
 
@@ -18,6 +19,9 @@ async function bootstrap() {
   );
   app.use(passport.initialize());
   app.use(passport.session());
+
+  // request size limit 
+  app.use(json({ limit: '80MB' }));
 
   // set up swagger for API documentation
   const options = new DocumentBuilder()
