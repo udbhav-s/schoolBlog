@@ -19,6 +19,9 @@ import { FormatResponseInterceptor } from '../common/interceptors/formatResponse
 import { LoginDto } from './dto/login.dto';
 
 import { ApiTags, ApiOperation, ApiBasicAuth } from '@nestjs/swagger';
+import { LevelGuard } from 'src/common/guards/level.guard';
+import { Level } from 'src/common/decorators/level.decorator';
+import { Levels } from 'src/common/util/level.enum';
 
 @ApiTags('user')
 @UseInterceptors(FormatResponseInterceptor)
@@ -66,5 +69,18 @@ export class UserController {
   @Get(':id')
   getById(@Param('id') id: number): Promise<UserModel> {
     return this.userService.getById(id);
+  }
+
+  @ApiOperation({ summary: 'Set user level (for admins)' })
+  @ApiBasicAuth()
+  @UseGuards(AuthenticatedGuard, LevelGuard)
+  @Level(Levels.Admin)
+  @UsePipes(ParseIntPipe)
+  @Post('/level/:id')
+  setLevel(
+    @Param('id') id: number,
+    @Body('level') level: number
+  ): Promise<UserModel> {
+    return this.userService.setLevel(id, level);
   }
 }

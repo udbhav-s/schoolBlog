@@ -25,4 +25,13 @@ export class UserService {
       portalId: user.id,
     });
   }
+
+  async setLevel(id: number, level: number): Promise<UserModel> {
+    return await this.userModel
+      .query()
+      .where({ id })
+      .patch({ level })
+      .returning('*')
+      .first();
+  }
 }
