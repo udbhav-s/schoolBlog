@@ -78,7 +78,7 @@ export default {
 			try {
 				// get post from server 
 				let result = (await postService.getById(id)).data;
-				if (!result.success) throw result.error;
+				if (!result.success) throw result.message;
 				// set form data to post
 				this.form.title = result.data.title;
 				this.editor.root.innerHTML = result.data.body;

@@ -4,10 +4,14 @@ import store from '@/store';
 import { UNSET_USER } from '@/store/mutations.type.js';
 
 // if the server logged a user out / restarted but the user object persists in the store
-// this will catch the AuthenticationError
+// this will catch the Unauthorized Error
 api.interceptors.response.use(
+  // on success
+  res => res,
+  // on error
 	res => {
-		if (res.data.loginRedirect) {
+    console.log({...res});
+		if (res.response.status === 401) {
 			// reset the user object in store
 			store.commit(UNSET_USER);
 			// redirect to login

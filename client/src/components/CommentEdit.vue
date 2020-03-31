@@ -8,6 +8,7 @@
 <script>
 
 import { commentService } from '@/services/dataService.js';
+import Vue from 'vue';
 
 export default {
 	name: 'CommentEdit',
@@ -17,7 +18,7 @@ export default {
 		return {
 			form: {
 				body: '',
-				post_id: null,
+				postId: null,
 			}
 		}
 	},
@@ -31,13 +32,13 @@ export default {
 		async setComment(id) {
 			// get comment 
 			let result = (await commentService.getById(id)).data;
-			if (!result.success) throw result.error;
+			if (!result.success) throw result.message;
 			else this.form.body = result.data.body;
 		},
 
 		async submitComment() {
-			// set postId prop to form data
-			this.form.post_id = this.postId;
+      // set postId prop to form data
+      Vue.set(this.form, "postId", this.postId);
 			// post comment 
 			let result;
 			if (this.editMode) {
@@ -46,7 +47,7 @@ export default {
 			else {
 				result = (await commentService.create(this.form)).data;
 			}
-			if (!result.success) throw result.error;
+			if (!result.success) throw result.message;
 			else {
 				// clear input
 				this.form.body = '';

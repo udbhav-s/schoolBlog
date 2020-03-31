@@ -17,7 +17,7 @@ export default {
 		return {
 			form: {
 				body: '',
-				comment_id: null,
+				commentId: null,
 			}
 		}
 	},
@@ -31,13 +31,13 @@ export default {
 		async setReply(id) {
 			// get reply 
 			let result = (await replyService.getById(id)).data;
-			if (!result.success) throw result.error;
+			if (!result.success) throw result.message;
 			else this.form.body = result.data.body;
 		},
 
 		async submitReply() {
 			// set postId prop to form data
-			this.form.comment_id = this.commentId;
+			this.form.commentId = this.commentId;
 			// post comment 
 			let result;
 			if (this.editMode) {
@@ -52,8 +52,8 @@ export default {
 				// clear input
 				this.form.body = '';
 				// emit event
-                if (this.editMode) this.$emit("replyEdited", result.data);
-                else this.$emit("replyAdded", result.data);
+        if (this.editMode) this.$emit("replyEdited", result.data);
+        else this.$emit("replyAdded", result.data);
 				console.log("success reply added");
 			}
 		}

@@ -4,9 +4,9 @@
             <p>{{ reply.body }}</p>
 			<div class="comment-meta">
 				<username
-					:name="reply.user_name"
-					:id="reply.user_id"
-					:level="reply.user_level"
+					:name="reply.user.name"
+					:id="reply.user.id"
+					:level="reply.user.level"
 				></username>
 				<button class="button small" @click="editReply = true">Edit</button>
 				<button class="button small" @click="deleteReply">Delete</button>
@@ -17,7 +17,7 @@
                 @replyEdited="replyEdited"
                 :editMode="true"
                 :editId="reply.id"
-                :commentId="reply.comment_id"
+                :commentId="reply.commentId"
             />
             <button class="button small" @click="editReply = false">Cancel</button>
         </div>
@@ -42,7 +42,7 @@ export default {
 	
 	computed: {
 		byCurrentUser() {
-			return (this.post.user_id === this.currentUser.id);
+			return (this.reply.userId === this.currentUser.id);
 		},
 
 		...mapGetters(["currentUser"])

@@ -5,9 +5,9 @@
 				<p>{{ comment.body }}</p>
 				<div class="comment-meta">
 					<username
-						:name="comment.user_name"
-						:id="comment.user_id"
-						:level="comment.user_level"
+						:name="comment.user.name"
+						:id="comment.user.id"
+						:level="comment.user.level"
 					></username>
 					<button class="button small" v-if="!addReply" @click="addReply = true">Reply</button>
 					<template v-if="byCurrentUser">
@@ -19,7 +19,7 @@
 			</div>
 
 			<div v-if="editComment">
-				<comment-edit @commentEdited="commentEdited" :comment="comment" :editMode="true" :editId="comment.id" />
+				<comment-edit @commentEdited="commentEdited" :comment="comment" :editMode="true" :editId="comment.id" :postId="comment.postId" />
 				<button class="button small" @click="editComment = false">Cancel</button>
 			</div>
 		</div>
@@ -59,7 +59,7 @@ export default {
 
 	computed: {
 		byCurrentUser() {
-			return (this.comment.user_id === this.currentUser.id);
+			return (this.comment.userId === this.currentUser.id);
 		},
 
 		...mapGetters(["currentUser"])
@@ -73,7 +73,7 @@ export default {
 		async loadReplies() {
 			// get replies 
 			let result = (await replyService.getByComment(this.comment.id)).data;
-			if (!result.success) throw result.error;
+			if (!result.success) throw result.message;
 			else this.replies = result.data;
 		},
 

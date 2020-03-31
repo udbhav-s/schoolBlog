@@ -4,9 +4,9 @@
 		<div class="meta">
 			<div class="post-user">
 				<username
-					:name="post.user_name"
-					:id="post.user_id"
-					:level="post.user_level"
+					:name="post.user.name"
+					:id="post.user.id"
+					:level="post.user.level"
 				></username>
 			</div>
 			<div class="post-date">{{ post.date }}</div>
@@ -68,18 +68,20 @@ export default {
 				title: "",
 				body: "",
 				category: "",
-				user_id: "",
+				userId: "",
 				verified: false,
-				date: ""
+        date: "",
+        user: {
+          name: ''
+        }
 			},
-			userName: "",
 			comments: [],
 		}
 	},
 
 	computed: {
 		byCurrentUser() {
-			return (this.post.user_id === this.currentUser.id);
+			return (this.post.userId === this.currentUser.id);
 		},
 
 		isModerator() {
@@ -96,7 +98,7 @@ export default {
 		])
 		.then(() => {
 			// change date string to date
-			Vue.set(this.post, "date", new Date(this.post.created_at).toDateString());
+			Vue.set(this.post, "date", new Date(this.post.createdAt).toDateString());
 		});
 	},
 	
@@ -105,7 +107,7 @@ export default {
 			// get post
 			let result = (await postService.getById(this.id)).data;
 			if (!result.success) {
-				if (result.error.status === 403) this.$router.push("/");
+				if (result.statusCode === 403) this.$router.push("/");
 				else throw error;
 			}
 			else this.post = result.data;
@@ -114,25 +116,25 @@ export default {
 		async loadComments() {
 			// load comments
 			let result = (await commentService.getByPost(this.id)).data;
-			if (!result.success) throw result.error;
+			if (!result.success) throw result.message;
 			else this.comments = result.data;
 		},
 
 		async deletePost() {
 			let result = (await postService.delete(this.id)).data;
-			if (!result.success) throw result.error;
+			if (!result.success) throw result.message;
 			else this.$router.push("/");
 		},
 
 		async verifyPost() {
 			let result = (await postService.verify(this.id)).data;
-			if (!result.success) throw result.error;
+			if (!result.success) throw result.message;
 			else this.post.verified = true;
 		},
 
 		async unverifyPost() {
 			let result = (await postService.unverify(this.id)).data;
-			if (!result.success) throw result.error;
+			if (!result.success) throw result.message;
 			else this.post.verified = false;
 		},
 
