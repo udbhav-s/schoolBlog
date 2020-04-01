@@ -6,18 +6,18 @@
 </template>
 
 <script>
-import 'normalize.css';
-import './styles/base.css';
-import './styles/style.scss';
-// import './styles/debug.css'; 
+import 'normalize.css'
+import './styles/base.css'
+import './styles/style.scss'
+// import './styles/debug.css';
 
-import AppHeader from '@/components/AppHeader.vue';
+import AppHeader from '@/components/AppHeader.vue'
 
 export default {
-	name: 'App',
-	components: {
-		AppHeader
-	}
+  name: 'App',
+  components: {
+    AppHeader
+  }
 }
 </script>
 

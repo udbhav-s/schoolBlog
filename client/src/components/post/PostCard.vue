@@ -1,10 +1,10 @@
 <template>
 	<div>
 		<router-link
-		:to="{ 
-			name: 'Post', 
-			params: { 
-				id: post.id 
+		:to="{
+			name: 'Post',
+			params: {
+				id: post.id
 			}
 		}">
 		<div class="post-card">
@@ -12,7 +12,7 @@
 				<img class="thumbnail" :src="`/api/file/thumbnail/${post.thumbnail}`">
 			</div>
 			<div class="text-container">
-				<div class="text"> 
+				<div class="text">
 					<h3 class="title">{{ post.title }}</h3>
 					<div class="info">
 						<span class="user">By {{ post.user.name }}</span>
@@ -28,12 +28,12 @@
 
 <script>
 export default {
-	name: 'PostCard',
-	props: ['post'],
-	data() {
-		return {
-			postDate: new Date(this.post.createdAt).toDateString(),
-		}
-	}
+  name: 'PostCard',
+  props: ['post'],
+  data () {
+    return {
+      postDate: new Date(this.post.createdAt).toDateString()
+    }
+  }
 }
 </script>

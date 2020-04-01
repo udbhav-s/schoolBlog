@@ -127,7 +127,7 @@ export class ReplyController {
     @Request() req,
   ): Promise<ReplyModel> {
     // check if reply exists and is by user
-    const reply = await this.commentService.getById(id);
+    const reply = await this.replyService.getById(id);
     if (!reply) throw new NotFoundException();
     if (!reply.canDelete(req.user)) throw new ForbiddenException();
     // delete reply

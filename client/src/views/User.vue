@@ -8,64 +8,51 @@
 				<button v-if="userId === currentUser.id" @click="logout" class="button">Log Out</button>
 			</div>
 		</div>
-		<div v-for="post in posts" :key="post.id">
-			<post-card :post="post" />
-		</div>
-		<div v-if="posts.length == 0">
-			<h2>No Posts</h2>
-		</div>
+
 	</div>
 </template>
 
 <script>
 
-import { postService, userService } from '@/services/dataService.js';
-import PostCard from '@/components/PostCard.vue';
-import { mapGetters } from 'vuex';
-import { LOGOUT } from '@/store/actions.type.js';
+import { userService } from '@/services/dataService.js'
+import { mapGetters } from 'vuex'
+import { LOGOUT } from '@/store/actions.type.js'
+import PostList from '@/components/post/PostList.vue'
 
 export default {
-	name: 'User',
-	props: ['userId'],
+  name: 'User',
+  props: ['userId'],
 
-	data() {
-		return {
-			user: {},
-			posts: [],
-		}
-	},
+  data () {
+    return {
+      user: {}
+    }
+  },
 
-	computed: {
-		...mapGetters(["currentUser"])
-	},
+  computed: {
+    ...mapGetters(['currentUser'])
+  },
 
-	mounted() {
-		this.loadUser();
-		this.loadPosts();
-	},
+  mounted () {
+    this.loadUser()
+  },
 
-	methods: {
-		async loadUser() {
-			let result = (await userService.getById(this.userId)).data;
-			if (!result.success) throw result.error;
-			else this.user = result.data;
-		},
+  methods: {
+    async loadUser () {
+      const result = await userService.getById(this.userId)
+      if (!result.success) throw result.error
+      else this.user = result.data
+    },
 
-		async loadPosts() {
-			let result = (await postService.getByUser(this.userId)).data;
-			if (!result.success) throw result.error;
-			else this.posts = result.data;
-		},
+    async logout () {
+      await this.$store.dispatch(LOGOUT)
+      this.$router.push('/login')
+    }
+  },
 
-		async logout() {
-			await this.$store.dispatch(LOGOUT);
-			this.$router.push("/login");
-		}
-	},
-
-	components: {
-		PostCard
-	}
+  components: {
+    PostList
+  }
 }
 
 </script>

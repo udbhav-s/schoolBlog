@@ -1,21 +1,27 @@
 <template>
 	<div class="user">
 		<router-link
-			:to="{ 
-				name: 'User', 
-				params: { id }
+			:to="{
+				name: 'User',
+				params: { id: user.id }
 			}"
 		>
-			{{ name }}
-			<span v-if="level == 3" class="mod">[M]</span>
-			<span v-if="level == 4" class="admin">[A]</span>
+			{{ user.name }}
+			<span v-if="user.level == 3" class="mod">[M]</span>
+			<span v-if="user.level == 4" class="admin">[A]</span>
 		</router-link>
 	</div>
 </template>
 
 <script>
 export default {
-	name: 'Username',
-	props: ['name', 'level', 'id']
+  name: 'Username',
+  props: {
+    user: {
+      name: String,
+      id: Number,
+      level: Number
+    }
+  }
 }
 </script>
