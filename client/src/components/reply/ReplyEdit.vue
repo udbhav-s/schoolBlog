@@ -31,7 +31,10 @@ export default {
     async setReply (id) {
       // get reply
       const result = await replyService.getById(id)
-      if (!result.success) throw result.message
+      if (!result.success) {
+        this.$toasted.error("Couldn't get reply data")
+        throw result.message
+      }
       else this.form.body = result.data.body
     },
 
@@ -45,14 +48,16 @@ export default {
       } else {
         result = await replyService.create(this.form)
       }
-      if (!result.success) throw result.error
+      if (!result.success) {
+        this.$toasted.error("Error while submitting reply")
+        throw result.error
+      }
       else {
         // clear input
         this.form.body = ''
         // emit event
         if (this.editMode) this.$emit('replyEdited', result.data)
         else this.$emit('replyAdded', result.data)
-        console.log('success reply added')
       }
     }
 

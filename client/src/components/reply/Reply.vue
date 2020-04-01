@@ -55,8 +55,12 @@ export default {
     async deleteReply () {
       // delete the reply
       const result = await replyService.delete(this.reply.id)
-      if (!result.success) throw result.error
+      if (!result.success) {
+        this.$toasted.error("Error deleting reply")
+        throw result
+      }
       else {
+        this.$toasted.success("Reply deleted")
         this.$emit('replyDeleted', result.data)
       }
     }

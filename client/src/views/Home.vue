@@ -11,6 +11,7 @@
 
 <script>
 import PostList from '@/components/post/PostList.vue'
+import { METHODS } from 'http'
 
 export default {
   name: 'Home',

@@ -3,11 +3,12 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import './registerServiceWorker'
+import './config/toasted';
+import './config/progressBar';
 
-Vue.config.productionTip = false
-
-new Vue({
+export default new Vue({
   router,
   store,
   render: h => h(App)
 }).$mount('#app')
+

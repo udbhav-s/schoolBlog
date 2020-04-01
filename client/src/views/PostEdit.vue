@@ -55,37 +55,38 @@ export default {
   methods: {
 
     async submitPost () {
-      try {
-        // set contents of body from editor
-        this.form.body = this.editor.root.innerHTML
-        let result
-        // post the form
-        if (this.editMode) {
-          result = await postService.update(this.editId, this.form)
-        } else {
-          result = await postService.create(this.form)
-        }
-        if (!result.success) throw result.error
-        else this.$router.push(`/post/${result.data.id}`)
-      } catch (err) {
-        console.log(err)
+      // set contents of body from editor
+      this.form.body = this.editor.root.innerHTML
+      let result
+      // post the form
+      if (this.editMode) {
+        result = await postService.update(this.editId, this.form)
+      } else {
+        result = await postService.create(this.form)
+      }
+      if (!result.success) {
+        this.$toasted.error(result.message)
+        throw result
+      }
+      else {
+        this.$toasted("Post edited!")
+        this.$router.push(`/post/${result.data.id}`)
       }
     },
 
     async setPost (id) {
-      try {
-        // get post from server
-        const result = await postService.getEditMode(id)
-        if (!result.success) throw result.message
-        // set form data to post
-        this.form.title = result.data.title
-        this.editor.root.innerHTML = result.data.body
-        // set thumbnail
-        if (result.data.thumbnail) {
-          Vue.set(this.form, 'thumbnail', result.data.thumbnail)
-        }
-      } catch (err) {
-        console.log(err)
+      // get post from server
+      const result = await postService.getEditMode(id)
+      if (!result.success) {
+        this.$toasted.error("Error loading post data")
+        throw result
+      }
+      // set form data to post
+      this.form.title = result.data.title
+      this.editor.root.innerHTML = result.data.body
+      // set thumbnail
+      if (result.data.thumbnail) {
+        Vue.set(this.form, 'thumbnail', result.data.thumbnail)
       }
     },
 

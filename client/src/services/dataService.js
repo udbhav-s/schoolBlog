@@ -2,12 +2,23 @@ import api from '@/services/apiService.js'
 import router from '@/router'
 import store from '@/store'
 import { UNSET_USER } from '@/store/mutations.type.js'
+import app from '../main'
+
+// start the progress bar 
+api.interceptors.request.use(config => {
+  app.$Progress.start(); 
+  return config;
+});
 
 // if the server logged a user out / restarted but the user object persists in the store
 // this will catch the Unauthorized Error
 api.interceptors.response.use(
   // on success
-  res => res.data,
+  res => {
+    app.$Progress.finish()
+    // return the data
+    return res.data
+  },
   // on error
   res => {
     console.log({ ...res })
@@ -16,6 +27,11 @@ api.interceptors.response.use(
       store.commit(UNSET_USER)
       // redirect to login
       router.push('/login').catch(console.log)
+      app.$Progress.finish()
+    }
+    else {
+      app.$Progress.fail()
+      app.$toasted.error("There was an error loading data")
     }
     return res
   }

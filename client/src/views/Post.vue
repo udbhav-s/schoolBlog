@@ -58,7 +58,7 @@ export default {
       const result = await postService.getById(this.id)
       if (!result.success) {
         if (result.statusCode === 403) this.$router.push('/')
-        else throw error
+        else this.$toasted.error("Couldn't load post data")
       } else this.post = result.data
     },
 

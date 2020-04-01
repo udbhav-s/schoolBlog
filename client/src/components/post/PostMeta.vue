@@ -34,6 +34,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import Username from '@/components/Username.vue'
+import { postService } from '@/services/dataService.js'
 
 export default {
   name: 'PostMeta',
@@ -53,21 +54,28 @@ export default {
 
   methods: {
     async deletePost () {
-      const result = await postService.delete(this.id)
-      if (!result.success) throw result.message
+      const result = await postService.delete(this.post.id)
+      if (!result.success) this.$toasted.error(result.message)
+      this.$toasted.success("Post deleted")
       this.$emit('postDeleted')
     },
 
     async verifyPost () {
-      const result = await postService.verify(this.id)
-      if (!result.success) throw result.message
-      else this.post.verified = true
+      const result = await postService.verify(this.post.id)
+      if (!result.success) this.$toasted.error(result.message)
+      else {
+        this.post.verified = true
+        this.$toasted.success("Post verified!")
+      }
     },
 
     async unverifyPost () {
-      const result = await postService.unverify(this.id)
-      if (!result.success) throw result.message
-      else this.post.verified = false
+      const result = await postService.unverify(this.post.id)
+      if (!result.success) this.$toasted.error(result.message)
+      else {
+        this.post.verified = false
+        this.$toasted.success("Post unverified")
+      }
     }
   },
 

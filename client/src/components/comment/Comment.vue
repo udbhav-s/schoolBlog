@@ -62,10 +62,14 @@ export default {
     },
 
     async deleteComment () {
-      // delete the reply
+      // delete the comment
       const result = await commentService.delete(this.comment.id)
-      if (!result.success) throw result.error
+      if (!result.success) {
+        this.$toasted.error("Error while deleting comment")
+        throw result.error
+      }
       else {
+        this.$toasted.success("Comment deleted")
         this.$emit('commentDeleted', result.data)
       }
     }

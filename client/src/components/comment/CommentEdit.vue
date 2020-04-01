@@ -32,7 +32,10 @@ export default {
     async setComment (id) {
       // get comment
       const result = await commentService.getById(id)
-      if (!result.success) throw result.message
+      if (!result.success) {
+        this.$toasted.error("Error while getting comment data")
+        throw result.message
+      }
       else this.form.body = result.data.body
     },
 
@@ -46,7 +49,10 @@ export default {
       } else {
         result = await commentService.create(this.form)
       }
-      if (!result.success) throw result.message
+      if (!result.success) {
+        this.$toasted.error(result.message)
+        throw result
+      }
       else {
         // clear input
         this.form.body = ''

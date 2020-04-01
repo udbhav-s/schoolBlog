@@ -99,9 +99,16 @@ export default {
     },
 
     async setUserLevel () {
-      const result = await userService.setLevel(this.user.id, this.user.level)
-      if (!result.success) throw result.error
-      else this.user = result.data
+      try {
+        const result = await userService.setLevel(this.user.id, this.user.level)
+        if (!result.success) throw result.message
+        this.user = result.data
+
+        this.$toasted.success("User level changed")
+      }
+      catch (err) {
+        this.$toasted.error("An error occured")
+      }
     }
   },
 

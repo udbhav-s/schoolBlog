@@ -27,7 +27,6 @@ export default {
         username: '',
         password: ''
       },
-      error: ''
     }
   },
   methods: {
@@ -35,7 +34,9 @@ export default {
       // dispatch request to store
       this.$store.dispatch(LOGIN, this.form)
         .then(() => this.$router.push('/'))
-        .catch(err => console.log(err))
+        .catch(err => {
+          this.$toasted.error("Couldn't log in")
+        })
     }
   }
 }
