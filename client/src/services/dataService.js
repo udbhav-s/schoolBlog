@@ -57,5 +57,6 @@ export const replyService = {
 
 export const userService = {
   getCurrent: () => api.get('/user/current'),
-  getById: (id) => api.get(`/user/${id}`)
+  getById: (id) => api.get(`/user/${id}`),
+  setLevel: (id, level) => api.post(`/user/level/${id}`, { level })
 }
