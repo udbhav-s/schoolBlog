@@ -1,7 +1,7 @@
 <template>
 	<div class="post">
 		<h1 class="title">{{ post.title }}</h1>
-		<post-meta :post="post" @postDeleted="postDeleted"/>
+		<post-meta :post="post" @postDeleted="postDeleted" :showOptions="true"/>
 
 		<div v-if="post.thumbnail" class="post-thumbnail-container">
 			<img class="post-thumbnail" :src="`/api/file/thumbnail/${post.thumbnail}`">

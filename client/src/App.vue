@@ -7,17 +7,17 @@
 </template>
 
 <script>
-import 'normalize.css'
-import './styles/base.css'
-import './styles/style.scss'
-// import './styles/debug.css';
-
+import '@/assets/styles/main.scss'
 import AppHeader from '@/components/AppHeader.vue'
 
 export default {
   name: 'App',
   components: {
     AppHeader
+  },
+  mounted() {
+    // class to add navbar spacing
+    document.body.classList.add("has-navbar-fixed-top")
   }
 }
 </script>

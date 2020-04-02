@@ -6,20 +6,15 @@
 			params: {
 				id: post.id
 			}
-		}">
-		<div class="post-card">
+		}" >
+		<div class="box is-paddingless post-card">
 			<div class="thumbnail-container" v-if="post.thumbnail" >
-				<img class="thumbnail" :src="`/api/file/thumbnail/${post.thumbnail}`">
+        <img class="thumbnail" :src="`/api/file/thumbnail/${post.thumbnail}`">
 			</div>
-			<div class="text-container">
-				<div class="text">
-					<h3 class="title">{{ post.title }}</h3>
-					<div class="info">
-						<span class="user">By {{ post.user.name }}</span>
-						<span class="date">{{ postDate }}</span>
-						<span v-if="!post.verified" class="unverified">Unverified</span>
-					</div>
-				</div>
+
+			<div class="content-container">
+        <h3 class="title is-4">{{ post.title }}</h3>
+        <post-meta :post="post" />
 			</div>
 		</div>
 		</router-link>
@@ -27,6 +22,8 @@
 </template>
 
 <script>
+import PostMeta from '@/components/post/PostMeta.vue'
+
 export default {
   name: 'PostCard',
   props: ['post'],
@@ -34,6 +31,9 @@ export default {
     return {
       postDate: new Date(this.post.createdAt).toDateString()
     }
+  },
+  components: {
+    PostMeta
   }
 }
 </script>

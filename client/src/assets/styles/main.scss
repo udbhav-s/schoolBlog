@@ -1,0 +1,15 @@
+@import 'bulma/bulma.sass';
+@import './post-card.scss';
+
+.fixed-column {
+  margin: auto 1rem;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+@include tablet {
+  .fixed-column {
+    width: ($tablet - 32px);
+    margin: auto;
+  }
+}

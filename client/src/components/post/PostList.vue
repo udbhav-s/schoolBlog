@@ -1,5 +1,5 @@
 <template>
-  <div class="posts">
+  <div class="section fixed-column">
     <div v-for="post in posts" :key="post.id">
 			<post-card :post="post" />
 		</div>
@@ -8,7 +8,9 @@
 			<h2>No Posts</h2>
 		</div>
 
-		<button v-if="hasMorePosts" class="button" @click="loadPosts">Load More</button>
+    <div class="has-text-centered">
+      <button v-if="hasMorePosts" class="button" @click="loadPosts">Load More</button>
+    </div>
   </div>
 </template>
 

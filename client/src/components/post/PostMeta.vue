@@ -5,9 +5,9 @@
     </div>
 
     <div class="post-date">{{ date }}</div>
-    <div v-if="!post.verified" class="unverified">Unverified</div>
+    <div v-if="!post.verified" class="has-text-danger">Unverified</div>
 
-    <div class="buttons">
+    <div class="buttons" v-if="showOptions">
       <router-link
       class="button"
         v-if="byCurrentUser"
@@ -38,7 +38,7 @@ import { postService } from '@/services/dataService.js'
 
 export default {
   name: 'PostMeta',
-  props: ['post'],
+  props: ['post', 'showOptions'],
 
   computed: {
     date () {

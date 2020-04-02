@@ -1,8 +1,10 @@
 <template>
-	<div class="container">
-		<div class="hero">
-			<div class="content">
-				<h1>THE HPS BLOG</h1>
+	<div>
+		<div class="hero is-info is-medium is-bold is-mobile">
+			<div class="hero-body">
+        <div class="container has-text-centered">
+          <h1 class="title">THE HPS BLOG</h1>
+        </div>
 			</div>
 		</div>
 		<post-list />

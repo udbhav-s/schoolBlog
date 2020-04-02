@@ -69,7 +69,7 @@ export default {
         throw result
       }
       else {
-        this.$toasted("Post edited!")
+        this.$toasted.success("Post edited!")
         this.$router.push(`/post/${result.data.id}`)
       }
     },

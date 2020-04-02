@@ -1,0 +1,40 @@
+.post-card {
+	margin-bottom: 3rem;
+	// flex container
+	display: flex;
+  flex-wrap: wrap;
+  
+  .thumbnail-container {
+    margin: 0 auto;
+
+    .thumbnail {
+      min-width: 10rem;
+      width: 100%;
+    }
+  }
+
+  .title {
+    margin-bottom: 0.5rem;
+  }
+
+  .content-container {
+    padding: 1rem;
+    margin: auto;
+    text-align: center;
+  }
+}
+
+@include tablet {
+	.post-card {
+    flex-wrap: nowrap;
+    
+    .thumbnail-container {
+      align-self: stretch;
+
+      .thumbnail {
+        object-fit: cover;
+        height: 100%;
+      }
+    }
+	}
+}
