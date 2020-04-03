@@ -1,26 +1,51 @@
 <template>
 	<div clas="post-edit-container">
-		<div class="hero">
-			<div class="content">
-				<h2>Create Post</h2>
+		<div class="hero is-info is-medium is-bold is-mobile">
+			<div class="hero-body">
+        <div class="container has-text-centered">
+          <h1 class="title">CREATE POST</h1>
+        </div>
 			</div>
 		</div>
 
-		<div class="post-edit">
-			<input type="text" name="title" v-model="form.title" placeholder="Title"/>
+		<div class="section fixed-column">
+      <div class="field">
+        <div class="label">
+          Title
+        </div>
+        <div class="control">
+          <input class="input" type="text" name="title" v-model="form.title" placeholder="Title"/>
+        </div>
+      </div>
 
-			<div class="thumbnail-upload">
-				<label class="button">
-					<input class="button" type="file" @change="setThumbnail" name="thumbnail" ref="thumbnail" accept=".png, .jpg, .jpeg, .gif">
-					Upload Thumbnail
+			<div class="field file">
+				<label class="file-label">
+					<input class="file-input" type="file" @change="setThumbnail" name="thumbnail" ref="thumbnail" accept=".png, .jpg, .jpeg, .gif">
+					<span class="file-cta">
+            Upload Thumbnail
+          </span>
 				</label>
-				<img v-if="form.thumbnail" class="thumbnail-preview" :src="form.thumbnail"/>
 			</div>
+      <div class="field">
+        <div class="image">
+          <img v-if="form.thumbnail" :src="form.thumbnail"/>
+        </div>
+      </div>
 
-			<div class="editor">
-				<div ref="editor"></div>
-			</div>
-			<button class="button" @click="submitPost">Submit</button>
+      <div class="field">
+        <label class="label">
+          Content
+        </label>
+        <div class="editor">
+          <div ref="editor"></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="control has-text-centered">
+          <button class="button is-primary" @click="submitPost">Submit</button>
+        </div>
+      </div>
 		</div>
 	</div>
 </template>
