@@ -40,8 +40,8 @@ api.interceptors.response.use(
 export const postService = {
   getById: (id) => api.get(`/post/${id}`),
   getEditMode: (id) => api.get(`/post/edit/${id}`),
-  getAll: (data) => api.get('/post/all', { params: data }),
-  getByUser: (id) => api.get(`/post/user/${id}`),
+  getAll: (options) => api.get('/post/all', { params: options }),
+  getByUser: (id, options) => api.get(`/post/user/${id}`, { params: options}),
 
   create: (data) => api.post('/post/create', data),
   update: (id, data) => api.post(`/post/update/${id}`, data),

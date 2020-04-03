@@ -1,5 +1,16 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
-  </div>
+  <hero-section>
+    <h1 class="title">About Page</h1>
+  </hero-section>
 </template>
+
+<script>
+import HeroSection from '@/components/HeroSection.vue'
+
+export default {
+  name: 'About',
+  components: {
+    HeroSection
+  }
+}
+</script>

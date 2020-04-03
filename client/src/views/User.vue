@@ -1,33 +1,50 @@
 <template>
 	<div class="user-page">
-		<div class="hero">
-			<div class="content user-details">
-				<h2 class="user-name">{{ user.name }}</h2>
-				<div class="user-portal">{{ user.portal_id }}</div>
-				<div class="type">{{ user.type }}</div>
+    <hero-section>
+      <h1 class="title">{{ user.name }}</h1>
+      <div class="subtitle">
+        <div>{{ user.portalId }}</div>
+        <div>{{ user.type }}</div>
+        </div>
+      <button v-if="isCurrentUser" @click="logout" class="button">Log Out</button>
+    </hero-section>
 
-        <template v-if="isAdminOrAbove && !isCurrentUser">
-          <select name="level-select" id="level-select" v-model="user.level">
-            <option value="0">Reader</option>
-            <option value="1">Member</option>
-            <option value="2">Author</option>
-            <option value="3">Moderator</option>
-            <option value="4">Admin</option>
-          </select>
+    <section class="section fixed-column">
+      <div class="container has-text-centered" v-if="isAdminOrAbove && !isCurrentUser">
+        <div class="field">
+          <label class="label">Level</label>
+          <div class="control has-text-centered">
+            <div class="select">
+              <select name="level-select" id="level-select" v-model="user.level">
+                <option value="0">Reader</option>
+                <option value="1">Member</option>
+                <option value="2">Author</option>
+                <option value="3">Moderator</option>
+                <option value="4">Admin</option>
+              </select>
+            </div>
+          </div>
+        </div>
 
-          <div class="levels-description" v-html="levelDescriptions[user.level]"></div>
-          <button class="button" @click="setUserLevel">Set Level</button>
-        </template>
+        <div class="field">
+          <div v-html="levelDescriptions[user.level]"></div>
+        </div>
 
-				<button v-if="isCurrentUser" @click="logout" class="button">Log Out</button>
-			</div>
-		</div>
+        <div class="field">
+          <button class="button is-primary" @click="setUserLevel">Set Level</button>
+        </div>
+      </div>
+    </section>
 
+    <div class="container has-text-centered">
+      <h3 class="title is-3">Posts</h3>
+    </div>
+    <post-list v-if="this.user.id" :userId="user.id" />
 	</div>
 </template>
 
 <script>
-
+import HeroSection from '@/components/HeroSection.vue'
 import { userService } from '@/services/dataService.js'
 import { mapGetters } from 'vuex'
 import { LOGOUT } from '@/store/actions.type.js'
@@ -113,7 +130,8 @@ export default {
   },
 
   components: {
-    PostList
+    PostList,
+    HeroSection
   }
 }
 

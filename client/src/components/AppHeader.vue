@@ -1,5 +1,5 @@
 <template>
-	<header class="navbar is-fixed-top">
+	<header class="navbar is-fixed-top is-unselectable">
 		<div class="navbar-brand">
 			<router-link class="navbar-item" to="/" @click.native="isActive = false">
 				HOME

@@ -4,7 +4,7 @@
 			<post-card :post="post" />
 		</div>
 
-    <div v-if="posts.length == 0">
+    <div v-if="posts.length == 0" class="has-text-centered">
 			<h2>No Posts</h2>
 		</div>
 
@@ -44,15 +44,14 @@ export default {
         offset: this.offset
       }
 
-      if (this.userId) result = await postService.getByUser(options)
+      if (this.userId) result = await postService.getByUser(this.userId, options)
       else result = await postService.getAll(options)
 
       if (!result.success) throw result.message
       if (result.data.length > 0) {
         result.data.forEach(post => this.posts.push(post))
+        this.offset += this.limit
       } else this.hasMorePosts = false
-
-      this.offset += this.limit
     }
   },
 

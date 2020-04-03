@@ -1,12 +1,9 @@
 <template>
 	<div clas="post-edit-container">
-		<div class="hero is-info is-medium is-bold is-mobile">
-			<div class="hero-body">
-        <div class="container has-text-centered">
-          <h1 class="title">CREATE POST</h1>
-        </div>
-			</div>
-		</div>
+		<hero-section>
+      <h1 class="title" v-if="editMode">Edit Post</h1>
+      <h1 class="title" v-else>Create Post</h1>
+    </hero-section>
 
 		<div class="section fixed-column">
       <div class="field">
@@ -51,7 +48,7 @@
 </template>
 
 <script>
-
+import HeroSection from '@/components/HeroSection.vue'
 import Quill from 'quill'
 import 'quill/dist/quill.snow.css'
 import { postService } from '@/services/dataService.js'
@@ -148,7 +145,9 @@ export default {
         Vue.set(this.form, 'thumbnail', data)
       }
     }
-
+  },
+  components: {
+    HeroSection
   }
 }
 
