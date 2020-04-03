@@ -1,72 +1,75 @@
 <template>
-	<div class="field">
+  <div class="field">
     <div class="control">
-      <textarea placeholder="Write a comment" class="textarea" v-model="form.body"></textarea>
+      <textarea
+        placeholder="Write a comment"
+        class="textarea"
+        v-model="form.body"
+      ></textarea>
     </div>
     <div class="control has-text-centered">
-      <button class="button is-primary is-outlined is-small" @click="submitComment">Submit</button>
+      <button
+        class="button is-primary is-outlined is-small"
+        @click="submitComment"
+      >
+        Submit
+      </button>
     </div>
-	</div>
+  </div>
 </template>
 
 <script>
-
-import { commentService } from '@/services/dataService.js'
-import Vue from 'vue'
+import { commentService } from "@/services/dataService.js";
+import Vue from "vue";
 
 export default {
-  name: 'CommentEdit',
-  props: ['editMode', 'editId', 'postId'],
+  name: "CommentEdit",
+  props: ["editMode", "editId", "postId"],
 
-  data () {
+  data() {
     return {
       form: {
-        body: '',
+        body: "",
         postId: null
       }
-    }
+    };
   },
 
-  mounted () {
-    if (this.editMode) this.setComment(this.editId)
+  mounted() {
+    if (this.editMode) this.setComment(this.editId);
   },
 
   methods: {
-
-    async setComment (id) {
+    async setComment(id) {
       // get comment
-      const result = await commentService.getById(id)
+      const result = await commentService.getById(id);
       if (!result.success) {
-        this.$toasted.error("Error while getting comment data")
-        throw result.message
-      }
-      else this.form.body = result.data.body
+        this.$toasted.error("Error while getting comment data");
+        throw result.message;
+      } else this.form.body = result.data.body;
     },
 
-    async submitComment () {
+    async submitComment() {
       // set postId prop to form data
-      Vue.set(this.form, 'postId', this.postId)
+      Vue.set(this.form, "postId", this.postId);
       // post comment
-      let result
+      let result;
       if (this.editMode) {
-        result = await commentService.update(this.editId, this.form)
+        result = await commentService.update(this.editId, this.form);
       } else {
-        result = await commentService.create(this.form)
+        result = await commentService.create(this.form);
       }
       if (!result.success) {
-        this.$toasted.error(result.message)
-        throw result
-      }
-      else {
+        this.$toasted.error(result.message);
+        throw result;
+      } else {
         // clear input
-        this.form.body = ''
+        this.form.body = "";
         // emit event
-        if (this.editMode) this.$emit('commentEdited', result.data)
-        else this.$emit('commentAdded', result.data)
+        if (this.editMode) this.$emit("commentEdited", result.data);
+        else this.$emit("commentAdded", result.data);
       }
     }
-
   }
-}
-
+};
 </script>

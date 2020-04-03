@@ -1,7 +1,7 @@
 .post-card {
-	margin-bottom: 3rem;
-	// flex container
-	display: flex;
+  margin-bottom: 3rem;
+  // flex container
+  display: flex;
   flex-wrap: wrap;
   
   .thumbnail-container {
@@ -25,7 +25,7 @@
 }
 
 @include tablet {
-	.post-card {
+  .post-card {
     flex-wrap: nowrap;
     
     .thumbnail-container {
@@ -36,5 +36,5 @@
         height: 100%;
       }
     }
-	}
+  }
 }

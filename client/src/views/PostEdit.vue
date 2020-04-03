@@ -1,31 +1,44 @@
 <template>
-	<div clas="post-edit-container">
-		<hero-section>
+  <div clas="post-edit-container">
+    <hero-section>
       <h1 class="title" v-if="editMode">Edit Post</h1>
       <h1 class="title" v-else>Create Post</h1>
     </hero-section>
 
-		<div class="section fixed-column">
+    <div class="section fixed-column">
       <div class="field">
         <div class="label">
           Title
         </div>
         <div class="control">
-          <input class="input" type="text" name="title" v-model="form.title" placeholder="Title"/>
+          <input
+            class="input"
+            type="text"
+            name="title"
+            v-model="form.title"
+            placeholder="Title"
+          />
         </div>
       </div>
 
-			<div class="field file">
-				<label class="file-label">
-					<input class="file-input" type="file" @change="setThumbnail" name="thumbnail" ref="thumbnail" accept=".png, .jpg, .jpeg, .gif">
-					<span class="file-cta">
+      <div class="field file">
+        <label class="file-label">
+          <input
+            class="file-input"
+            type="file"
+            @change="setThumbnail"
+            name="thumbnail"
+            ref="thumbnail"
+            accept=".png, .jpg, .jpeg, .gif"
+          />
+          <span class="file-cta">
             Upload Thumbnail
           </span>
-				</label>
-			</div>
+        </label>
+      </div>
       <div class="field">
         <div class="image">
-          <img v-if="form.thumbnail" :src="form.thumbnail"/>
+          <img v-if="form.thumbnail" :src="form.thumbnail" />
         </div>
       </div>
 
@@ -43,112 +56,118 @@
           <button class="button is-primary" @click="submitPost">Submit</button>
         </div>
       </div>
-		</div>
-	</div>
+    </div>
+  </div>
 </template>
 
 <script>
-import HeroSection from '@/components/HeroSection.vue'
-import Quill from 'quill'
-import 'quill/dist/quill.snow.css'
-import { postService } from '@/services/dataService.js'
-import Vue from 'vue'
+import HeroSection from "@/components/HeroSection.vue";
+import Quill from "quill";
+import "quill/dist/quill.snow.css";
+import { postService } from "@/services/dataService.js";
+import Vue from "vue";
 
 export default {
-  name: 'PostEdit',
-  props: ['editMode', 'editId'],
+  name: "PostEdit",
+  props: ["editMode", "editId"],
 
-  data () {
+  data() {
     return {
       editor: null,
       form: {
-        title: '',
-        thumbnail: '',
-        body: ''
+        title: "",
+        thumbnail: "",
+        body: ""
       }
-    }
+    };
   },
 
-  mounted () {
-    this.createEditor()
-    if (this.editMode) this.setPost(this.editId)
+  mounted() {
+    this.createEditor();
+    if (this.editMode) this.setPost(this.editId);
   },
 
   methods: {
-
-    async submitPost () {
+    async submitPost() {
       // set contents of body from editor
-      this.form.body = this.editor.root.innerHTML
-      let result
+      this.form.body = this.editor.root.innerHTML;
+      let result;
       // post the form
       if (this.editMode) {
-        result = await postService.update(this.editId, this.form)
+        result = await postService.update(this.editId, this.form);
       } else {
-        result = await postService.create(this.form)
+        result = await postService.create(this.form);
       }
       if (!result.success) {
-        this.$toasted.error(result.message)
-        throw result
-      }
-      else {
-        this.$toasted.success("Post edited!")
-        this.$router.push(`/post/${result.data.id}`)
+        this.$toasted.error(result.message);
+        throw result;
+      } else {
+        this.$toasted.success("Post edited!");
+        this.$router.push(`/post/${result.data.id}`);
       }
     },
 
-    async setPost (id) {
+    async setPost(id) {
       // get post from server
-      const result = await postService.getEditMode(id)
+      const result = await postService.getEditMode(id);
       if (!result.success) {
-        this.$toasted.error("Error loading post data")
-        throw result
+        this.$toasted.error("Error loading post data");
+        throw result;
       }
       // set form data to post
-      this.form.title = result.data.title
-      this.editor.root.innerHTML = result.data.body
+      this.form.title = result.data.title;
+      this.editor.root.innerHTML = result.data.body;
       // set thumbnail
       if (result.data.thumbnail) {
-        Vue.set(this.form, 'thumbnail', result.data.thumbnail)
+        Vue.set(this.form, "thumbnail", result.data.thumbnail);
       }
     },
 
-    createEditor () {
-      this.editor = new Quill(this.$refs.editor,
-        {
-          modules: {
-            toolbar: [
-              [{ header: [2, 3, 4, 5, 6, false] }],
-              ['bold', 'italic', 'underline'],
-              ['blockquote', 'code-block'],
-              [{ list: 'ordered' }, { list: 'bullet' }],
-              ['link', 'image']
-            ]
-          },
-          theme: 'snow',
-          formats: ['bold', 'underline', 'header', 'italic', 'blockquote', 'code-block', 'list', 'link', 'image']
-        })
+    createEditor() {
+      this.editor = new Quill(this.$refs.editor, {
+        modules: {
+          toolbar: [
+            [{ header: [2, 3, 4, 5, 6, false] }],
+            ["bold", "italic", "underline"],
+            ["blockquote", "code-block"],
+            [{ list: "ordered" }, { list: "bullet" }],
+            ["link", "image"]
+          ]
+        },
+        theme: "snow",
+        formats: [
+          "bold",
+          "underline",
+          "header",
+          "italic",
+          "blockquote",
+          "code-block",
+          "list",
+          "link",
+          "image"
+        ]
+      });
     },
 
-    fileToBase64 (file) {
+    fileToBase64(file) {
       return new Promise((resolve, reject) => {
-			    const reader = new FileReader()
-			    reader.readAsDataURL(file)
-			    reader.onload = () => resolve(reader.result)
-			    reader.onerror = error => reject(error)
-      })
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
     },
 
-    async setThumbnail () {
+    async setThumbnail() {
       // set thumbnail data from file
       if (this.$refs.thumbnail.files.length > 0) {
-        const data = await this.fileToBase64(this.$refs.thumbnail.files[0])
-        Vue.set(this.form, 'thumbnail', data)
+        const data = await this.fileToBase64(this.$refs.thumbnail.files[0]);
+        Vue.set(this.form, "thumbnail", data);
       }
     }
   },
   components: {
     HeroSection
   }
-}
-
+};
 </script>

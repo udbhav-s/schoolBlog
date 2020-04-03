@@ -1,71 +1,74 @@
 <template>
   <div class="field">
     <div class="control">
-      <textarea placeholder="Write a reply" class="textarea" v-model="form.body"></textarea>
+      <textarea
+        placeholder="Write a reply"
+        class="textarea"
+        v-model="form.body"
+      ></textarea>
     </div>
     <div class="control has-text-centered">
-      <button class="button is-primary is-outlined is-small" @click="submitReply">Submit</button>
+      <button
+        class="button is-primary is-outlined is-small"
+        @click="submitReply"
+      >
+        Submit
+      </button>
     </div>
-	</div>
+  </div>
 </template>
 
 <script>
-
-import { replyService } from '@/services/dataService.js'
+import { replyService } from "@/services/dataService.js";
 
 export default {
-  name: 'ReplyEdit',
-  props: ['editMode', 'editId', 'commentId'],
+  name: "ReplyEdit",
+  props: ["editMode", "editId", "commentId"],
 
-  data () {
+  data() {
     return {
       form: {
-        body: '',
+        body: "",
         commentId: null
       }
-    }
+    };
   },
 
-  mounted () {
-    if (this.editMode) this.setReply(this.editId)
+  mounted() {
+    if (this.editMode) this.setReply(this.editId);
   },
 
   methods: {
-
-    async setReply (id) {
+    async setReply(id) {
       // get reply
-      const result = await replyService.getById(id)
+      const result = await replyService.getById(id);
       if (!result.success) {
-        this.$toasted.error("Couldn't get reply data")
-        throw result.message
-      }
-      else this.form.body = result.data.body
+        this.$toasted.error("Couldn't get reply data");
+        throw result.message;
+      } else this.form.body = result.data.body;
     },
 
-    async submitReply () {
+    async submitReply() {
       // set postId prop to form data
-      this.form.commentId = this.commentId
+      this.form.commentId = this.commentId;
       // post comment
-      let result
+      let result;
       if (this.editMode) {
-        result = await replyService.update(this.editId, this.form)
+        result = await replyService.update(this.editId, this.form);
       } else {
-        result = await replyService.create(this.form)
+        result = await replyService.create(this.form);
       }
       if (!result.success) {
-        this.$toasted.error("Error while submitting reply")
-        throw result.error
-      }
-      else {
+        this.$toasted.error("Error while submitting reply");
+        throw result.error;
+      } else {
         // clear input
-        this.form.body = ''
+        this.form.body = "";
         // emit event
-        if (this.editMode) this.$emit('replyEdited', result.data)
-        else this.$emit('replyAdded', result.data)
+        if (this.editMode) this.$emit("replyEdited", result.data);
+        else this.$emit("replyAdded", result.data);
       }
     }
-
   }
-}
-
+};
 </script>

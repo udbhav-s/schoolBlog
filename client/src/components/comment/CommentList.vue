@@ -1,7 +1,7 @@
 <template>
   <div class="comments">
     <div v-if="showAddComment">
-      <comment-edit @commentAdded="commentAdded" :postId="postId"/>
+      <comment-edit @commentAdded="commentAdded" :postId="postId" />
     </div>
 
     <comment
@@ -15,50 +15,51 @@
 </template>
 
 <script>
-import { commentService } from '@/services/dataService.js'
-import Comment from '@/components/comment/Comment.vue'
-import CommentEdit from '@/components/comment/CommentEdit.vue'
-import Vue from 'vue'
+import { commentService } from "@/services/dataService.js";
+import Comment from "@/components/comment/Comment.vue";
+import CommentEdit from "@/components/comment/CommentEdit.vue";
+import Vue from "vue";
 
 export default {
-  name: 'CommentList',
+  name: "CommentList",
   props: {
     postId: Number,
     userId: Number,
     showAddComment: Boolean
   },
 
-  data () {
+  data() {
     return {
       comments: []
-    }
+    };
   },
 
-  created () {
-    this.loadComments()
+  created() {
+    this.loadComments();
   },
 
   methods: {
-    async loadComments () {
+    async loadComments() {
       // load comments
-      let result
-      if (this.postId) result = await commentService.getByPost(this.postId)
-      else if (this.userId) result = await commentService.getByUser(this.userId)
-      if (!result.success) throw result.message
-      else this.comments = result.data
+      let result;
+      if (this.postId) result = await commentService.getByPost(this.postId);
+      else if (this.userId)
+        result = await commentService.getByUser(this.userId);
+      if (!result.success) throw result.message;
+      else this.comments = result.data;
     },
 
-    commentAdded (comment) {
-      this.comments.push(comment)
+    commentAdded(comment) {
+      this.comments.push(comment);
     },
 
-    commentEdited (comment) {
-      const index = this.comments.findIndex(c => c.id === comment.id)
-      Vue.set(this.comments, index, comment)
+    commentEdited(comment) {
+      const index = this.comments.findIndex(c => c.id === comment.id);
+      Vue.set(this.comments, index, comment);
     },
 
-    commentDeleted (comment) {
-      this.comments = this.comments.filter(c => c.id !== comment.id)
+    commentDeleted(comment) {
+      this.comments = this.comments.filter(c => c.id !== comment.id);
     }
   },
 
@@ -66,5 +67,5 @@ export default {
     Comment,
     CommentEdit
   }
-}
+};
 </script>

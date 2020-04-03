@@ -1,69 +1,71 @@
 <template>
-	<div class="section fixed-column">
-		<h1 class="title">{{ post.title }}</h1>
-		<post-meta :post="post" @postDeleted="postDeleted" :showOptions="true"/>
+  <div class="section fixed-column">
+    <h1 class="title">{{ post.title }}</h1>
+    <post-meta :post="post" @postDeleted="postDeleted" :showOptions="true" />
 
-		<div v-if="post.thumbnail" class="image">
-			<img :src="`/api/file/thumbnail/${post.thumbnail}`">
-		</div>
+    <div v-if="post.thumbnail" class="image">
+      <img :src="`/api/file/thumbnail/${post.thumbnail}`" />
+    </div>
 
-		<div class="content" v-html="post.body"></div>
+    <div class="content" v-html="post.body"></div>
 
-		<div>
-			<h2 class="title is-4">Comments:</h2>
+    <div>
+      <h2 class="title is-4">Comments:</h2>
 
-      <comment-list v-if="post.id" :postId="post.id" :showAddComment="isMemberOrAbove" />
-		</div>
-	</div>
+      <comment-list
+        v-if="post.id"
+        :postId="post.id"
+        :showAddComment="isMemberOrAbove"
+      />
+    </div>
+  </div>
 </template>
 
 <script>
-
-import Vue from 'vue'
-import { postService, commentService } from '@/services/dataService.js'
-import PostMeta from '@/components/post/PostMeta.vue'
-import CommentList from '@/components/comment/CommentList.vue'
-import { mapGetters } from 'vuex'
+import { postService } from "@/services/dataService.js";
+import PostMeta from "@/components/post/PostMeta.vue";
+import CommentList from "@/components/comment/CommentList.vue";
+import { mapGetters } from "vuex";
 
 export default {
-  name: 'Post',
-  props: ['id'],
+  name: "Post",
+  props: ["id"],
 
-  data () {
+  data() {
     return {
       post: {
-        title: '',
-        body: '',
-        category: '',
+        title: "",
+        body: "",
+        category: "",
         verified: false,
-        date: '',
+        date: "",
         user: {
-          name: ''
+          name: ""
         }
       }
-    }
+    };
   },
 
   computed: {
-    ...mapGetters(['isMemberOrAbove'])
+    ...mapGetters(["isMemberOrAbove"])
   },
 
-  beforeMount () {
-    this.loadPost()
+  beforeMount() {
+    this.loadPost();
   },
 
   methods: {
-    async loadPost () {
+    async loadPost() {
       // get post
-      const result = await postService.getById(this.id)
+      const result = await postService.getById(this.id);
       if (!result.success) {
-        if (result.statusCode === 403) this.$router.push('/')
-        else this.$toasted.error("Couldn't load post data")
-      } else this.post = result.data
+        if (result.statusCode === 403) this.$router.push("/");
+        else this.$toasted.error("Couldn't load post data");
+      } else this.post = result.data;
     },
 
-    postDeleted () {
-      this.$router.push('/')
+    postDeleted() {
+      this.$router.push("/");
     }
   },
 
@@ -71,6 +73,5 @@ export default {
     PostMeta,
     CommentList
   }
-}
-
+};
 </script>

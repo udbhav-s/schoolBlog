@@ -1,4 +1,4 @@
-import Vue from 'vue'
-import VueProgressBar from 'vue-progressbar'
+import Vue from "vue";
+import VueProgressBar from "vue-progressbar";
 
-Vue.use(VueProgressBar)
+Vue.use(VueProgressBar);

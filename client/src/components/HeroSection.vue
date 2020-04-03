@@ -10,6 +10,6 @@
 
 <script>
 export default {
-  name: 'HeroSection'
-}
+  name: "HeroSection"
+};
 </script>

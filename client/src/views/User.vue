@@ -1,21 +1,30 @@
 <template>
-	<div class="user-page">
+  <div class="user-page">
     <hero-section>
       <h1 class="title">{{ user.name }}</h1>
       <div class="subtitle">
         <div>{{ user.portalId }}</div>
         <div>{{ user.type }}</div>
-        </div>
-      <button v-if="isCurrentUser" @click="logout" class="button">Log Out</button>
+      </div>
+      <button v-if="isCurrentUser" @click="logout" class="button">
+        Log Out
+      </button>
     </hero-section>
 
     <section class="section fixed-column">
-      <div class="container has-text-centered" v-if="isAdminOrAbove && !isCurrentUser">
+      <div
+        class="container has-text-centered"
+        v-if="isAdminOrAbove && !isCurrentUser"
+      >
         <div class="field">
           <label class="label">Level</label>
           <div class="control has-text-centered">
             <div class="select">
-              <select name="level-select" id="level-select" v-model="user.level">
+              <select
+                name="level-select"
+                id="level-select"
+                v-model="user.level"
+              >
                 <option value="0">Reader</option>
                 <option value="1">Member</option>
                 <option value="2">Author</option>
@@ -31,7 +40,9 @@
         </div>
 
         <div class="field">
-          <button class="button is-primary" @click="setUserLevel">Set Level</button>
+          <button class="button is-primary" @click="setUserLevel">
+            Set Level
+          </button>
         </div>
       </div>
     </section>
@@ -40,29 +51,29 @@
       <h3 class="title is-3">Posts</h3>
     </div>
     <post-list v-if="this.user.id" :userId="user.id" />
-	</div>
+  </div>
 </template>
 
 <script>
-import HeroSection from '@/components/HeroSection.vue'
-import { userService } from '@/services/dataService.js'
-import { mapGetters } from 'vuex'
-import { LOGOUT } from '@/store/actions.type.js'
-import PostList from '@/components/post/PostList.vue'
+import HeroSection from "@/components/HeroSection.vue";
+import { userService } from "@/services/dataService.js";
+import { mapGetters } from "vuex";
+import { LOGOUT } from "@/store/actions.type.js";
+import PostList from "@/components/post/PostList.vue";
 
 export default {
-  name: 'User',
-  props: ['userId'],
+  name: "User",
+  props: ["userId"],
 
-  data () {
+  data() {
     return {
       user: {},
       levelDescriptions: [
-        // Reader 
+        // Reader
         `
         Can see verified posts and comments. <br>
         Cannot submit posts and comments.
-        `, 
+        `,
         // Member
         `
         Can see verified posts and comments. <br>
@@ -88,43 +99,45 @@ export default {
         (Such as setting new moderators or authors, or demoting them).
         `
       ]
-    }
+    };
   },
 
   computed: {
     isCurrentUser() {
-      return this.user.id === this.currentUser.id
+      return this.user.id === this.currentUser.id;
     },
 
-    ...mapGetters(['currentUser', 'isAdminOrAbove'])
+    ...mapGetters(["currentUser", "isAdminOrAbove"])
   },
 
-  mounted () {
-    this.loadUser()
+  mounted() {
+    this.loadUser();
   },
 
   methods: {
-    async loadUser () {
-      const result = await userService.getById(this.userId)
-      if (!result.success) throw result.error
-      else this.user = result.data
+    async loadUser() {
+      const result = await userService.getById(this.userId);
+      if (!result.success) throw result.error;
+      else this.user = result.data;
     },
 
-    async logout () {
-      await this.$store.dispatch(LOGOUT)
-      this.$router.push('/login')
+    async logout() {
+      await this.$store.dispatch(LOGOUT);
+      this.$router.push("/login");
     },
 
-    async setUserLevel () {
+    async setUserLevel() {
       try {
-        const result = await userService.setLevel(this.user.id, this.user.level)
-        if (!result.success) throw result.message
-        this.user = result.data
+        const result = await userService.setLevel(
+          this.user.id,
+          this.user.level
+        );
+        if (!result.success) throw result.message;
+        this.user = result.data;
 
-        this.$toasted.success("User level changed")
-      }
-      catch (err) {
-        this.$toasted.error("An error occured")
+        this.$toasted.success("User level changed");
+      } catch (err) {
+        this.$toasted.error("An error occured");
       }
     }
   },
@@ -133,6 +146,5 @@ export default {
     PostList,
     HeroSection
   }
-}
-
+};
 </script>
