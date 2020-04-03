@@ -9,7 +9,8 @@
 		</div>
 
     <div class="has-text-centered">
-      <button v-if="hasMorePosts" class="button" @click="loadPosts">Load More</button>
+      <button v-if="hasMorePosts" class="button is-info" @click="loadPosts">Load More</button>
+      <div v-else>No more posts</div>
     </div>
   </div>
 </template>

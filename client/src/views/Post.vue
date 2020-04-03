@@ -1,16 +1,16 @@
 <template>
-	<div class="post">
+	<div class="section fixed-column">
 		<h1 class="title">{{ post.title }}</h1>
 		<post-meta :post="post" @postDeleted="postDeleted" :showOptions="true"/>
 
-		<div v-if="post.thumbnail" class="post-thumbnail-container">
-			<img class="post-thumbnail" :src="`/api/file/thumbnail/${post.thumbnail}`">
+		<div v-if="post.thumbnail" class="image">
+			<img :src="`/api/file/thumbnail/${post.thumbnail}`">
 		</div>
 
-		<div class="body" v-html="post.body"></div>
+		<div class="content" v-html="post.body"></div>
 
-		<div class="comments">
-			<h2 class="comments-head">Comments:</h2>
+		<div>
+			<h2 class="title is-4">Comments:</h2>
 
       <comment-list v-if="post.id" :postId="post.id" :showAddComment="isMemberOrAbove" />
 		</div>

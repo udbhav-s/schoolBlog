@@ -1,28 +1,31 @@
 <template>
-	<div class="comment">
-		<div class="comment-content">
-			<div v-if="!editComment">
-				<p>{{ comment.body }}</p>
-				<div class="comment-meta">
-					<username :user="comment.user"></username>
+	<div class="media comment">
+		<div class="media-content">
+			<div class="content">
+				<div class="">
+					<div class="">
+            <username :user="comment.user"></username>
+          </div>
 
-					<template v-if="!addReply">
-            <button class="button small" @click="addReply = true">Reply</button>
-						<button class="button small" v-if="byCurrentUser" @click="editComment = true">Edit</button>
-						<button class="button small" v-if="isModOrAbove" @click="deleteComment">Delete</button>
-					</template>
+          <div v-if="!editComment">{{ comment.body }}</div>
+          <div v-else>
+            <comment-edit @commentEdited="commentEdited" :comment="comment" :editMode="true" :editId="comment.id" :postId="comment.postId" />
+          </div>
 
-					<button class="button small" v-if="addReply" @click="addReply = false">Cancel</button>
+					<small>
+            <a v-if="!addReply" @click="addReply = true">Reply</a>
+            <a v-else @click="addReply = false">Cancel</a>
+
+						<a v-if="byCurrentUser && !editComment" @click="editComment = true">Edit</a>
+            <a v-if="editComment" @click="editComment = false">Cancel</a>
+
+						<a v-if="isModOrAbove" @click="deleteComment">Delete</a>
+					</small>
 				</div>
 			</div>
 
-			<div v-if="editComment">
-				<comment-edit @commentEdited="commentEdited" :comment="comment" :editMode="true" :editId="comment.id" :postId="comment.postId" />
-				<button class="button small" @click="editComment = false">Cancel</button>
-			</div>
+      <reply-list v-if="comment.id" :commentId="comment.id" :showAddReply="addReply" @replyAdded="addReply = false" />
 		</div>
-
-    <reply-list v-if="comment.id" :commentId="comment.id" :showAddReply="addReply" @replyAdded="addReply = false" />
 	</div>
 </template>
 

@@ -1,7 +1,11 @@
 <template>
-	<div class="reply-edit">
-		<textarea placeholder="Reply" v-model="form.body"></textarea>
-		<button class="button small" @click="submitReply">Submit</button>
+  <div class="field">
+    <div class="control">
+      <textarea placeholder="Write a reply" class="textarea" v-model="form.body"></textarea>
+    </div>
+    <div class="control has-text-centered">
+      <button class="button is-primary is-outlined is-small" @click="submitReply">Submit</button>
+    </div>
 	</div>
 </template>
 

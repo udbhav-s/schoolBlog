@@ -1,23 +1,27 @@
 <template>
-    <div class="reply">
-        <div v-if="!editReply">
-            <p>{{ reply.body }}</p>
-			<div class="comment-meta">
-				<username
-					:user="reply.user"
-				></username>
-				<button class="button small" @click="editReply = true">Edit</button>
-				<button class="button small" @click="deleteReply">Delete</button>
-			</div>
-        </div>
-        <div v-if="editReply">
-            <reply-edit
-                @replyEdited="replyEdited"
-                :editMode="true"
-                :editId="reply.id"
-                :commentId="reply.commentId"
-            />
-            <button class="button small" @click="editReply = false">Cancel</button>
+    <div class="media reply">
+        <div class="media-content">
+          <div class="content">
+            <username
+              :user="reply.user"
+            ></username>
+
+            <div v-if="!editReply">{{ reply.body }}</div>
+            <div v-else>
+              <reply-edit
+                  @replyEdited="replyEdited"
+                  :editMode="true"
+                  :editId="reply.id"
+                  :commentId="reply.commentId"
+              />
+            </div>
+
+            <small>
+              <a v-if="!editReply" @click="editReply = true">Edit</a>
+              <a v-else @click="editReply = false">Cancel</a>
+              <a @click="deleteReply">Delete</a>
+            </small>
+          </div>
         </div>
     </div>
 </template>

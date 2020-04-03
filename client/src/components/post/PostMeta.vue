@@ -1,15 +1,12 @@
 <template>
-  <div class="meta">
-    <div class="post-user">
-      <username :user="post.user"></username>
-    </div>
-
+  <div>
+    <username :user="post.user"></username>
     <div class="post-date">{{ date }}</div>
     <div v-if="!post.verified" class="has-text-danger">Unverified</div>
 
-    <div class="buttons" v-if="showOptions">
+    <div class="buttons are-small is-marginless" v-if="showOptions">
       <router-link
-      class="button"
+      class="button is-primary is-outlined"
         v-if="byCurrentUser"
         :to="{
           name: 'EditPost',
@@ -21,11 +18,11 @@
         Edit
       </router-link>
 
-      <button v-if="byCurrentUser || isModOrAbove" @click="deletePost" class="button">Delete</button>
+      <button v-if="byCurrentUser || isModOrAbove" @click="deletePost" class="button is-danger is-outlined">Delete</button>
 
       <template v-if="isModOrAbove">
-        <button v-if="!post.verified" @click="verifyPost" class="button">Verify</button>
-        <button v-if="post.verified" @click="unverifyPost" class="button">Unverify</button>
+        <button v-if="!post.verified" @click="verifyPost" class="button is-primary is-outlined">Verify</button>
+        <button v-if="post.verified" @click="unverifyPost" class="button is-danger is-outlined">Unverify</button>
       </template>
     </div>
   </div>
