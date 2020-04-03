@@ -45,10 +45,11 @@ export class ReplyService {
       .withGraphFetched('user');
   }
 
-  async update(data: ReplyUpdateDto): Promise<ReplyModel> {
+  async update(id: number, data: ReplyUpdateDto): Promise<ReplyModel> {
     return await this.replyModel
       .query()
-      .update(data)
+      .where({ id })
+      .patch(data)
       .returning('*')
       .first()
       .withGraphFetched('user');

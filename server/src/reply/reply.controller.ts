@@ -112,12 +112,11 @@ export class ReplyController {
     // update reply (only body is changed)
     let updateData = {
       ...data,
-      id,
       edited: true,
       userId: req.user.id,
       commentId: reply.commentId,
     } as ReplyUpdateDto;
-    return await this.replyService.update(updateData);
+    return await this.replyService.update(id, updateData);
   }
 
   @ApiOperation({ summary: 'Delete reply' })

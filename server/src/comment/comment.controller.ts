@@ -113,7 +113,7 @@ export class CommentController {
       userId: req.user.id,
       postId: comment.postId,
     } as CommentUpdateDto;
-    return await this.commentService.update(updateData);
+    return await this.commentService.update(id, updateData);
   }
 
   @ApiOperation({ summary: 'Delete comment' })

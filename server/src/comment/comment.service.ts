@@ -51,10 +51,11 @@ export class CommentService {
       .withGraphFetched('user');
   }
 
-  async update(data: CommentUpdateDto): Promise<CommentModel> {
+  async update(id: number, data: CommentUpdateDto): Promise<CommentModel> {
     return await this.commentModel
       .query()
-      .update(data)
+      .where({ id })
+      .patch(data)
       .returning('*')
       .first()
       .withGraphFetched('user');
