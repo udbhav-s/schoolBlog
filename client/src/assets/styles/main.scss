@@ -1,12 +1,15 @@
-@import 'bulma/bulma.sass';
-// @import 'bulmaswatch/sandstone/bulmaswatch.scss';
-// .navbar {
-//   border-radius: 0;
-// }
+$primary: hsl(171, 100%, 41%);
+// @import 'bulma/bulma.sass';
+@import 'bulmaswatch/superhero/bulmaswatch.scss';
+
+.navbar {
+  border-radius: 0;
+}
 
 @import './post-card.scss';
 @import './animations.scss';
 @import './comment-reply.scss';
+@import './post.scss';
 
 .fixed-column {
   margin: auto 1rem;
@@ -21,6 +24,10 @@
   }
 }
 
+.field input, .field textarea {
+  color: $grey-darker;
+}
+
 .ql-container {
   min-height: 10rem;
 }
@@ -31,4 +38,12 @@
 
 .navbar .navbar-menu .navbar-item {
   animation: 0.2s ease-in slideDown;
+}
+
+.navbar {
+  box-shadow: $box-shadow;
+}
+
+.navbar-menu {
+  box-shadow: none;
 }

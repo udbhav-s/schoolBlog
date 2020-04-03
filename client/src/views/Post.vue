@@ -3,7 +3,7 @@
     <h1 class="title">{{ post.title }}</h1>
     <post-meta :post="post" @postDeleted="postDeleted" :showOptions="true" />
 
-    <div v-if="post.thumbnail" class="image">
+    <div v-if="post.thumbnail" class="image post-thumbnail">
       <img :src="`/api/file/thumbnail/${post.thumbnail}`" />
     </div>
 

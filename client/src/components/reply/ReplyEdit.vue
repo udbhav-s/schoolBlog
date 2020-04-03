@@ -9,7 +9,7 @@
     </div>
     <div class="control has-text-centered">
       <button
-        class="button is-primary is-outlined is-small"
+        class="button is-primary is-small"
         @click="submitReply"
       >
         Submit
