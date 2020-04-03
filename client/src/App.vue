@@ -2,7 +2,9 @@
   <div id="app">
     <vue-progress-bar></vue-progress-bar>
     <app-header />
-    <router-view id="main" />
+    <transition name="fade" mode="out-in">
+      <router-view id="main" />
+    </transition>
   </div>
 </template>
 

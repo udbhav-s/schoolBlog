@@ -1,0 +1,11 @@
+.media.comment, .media.reply {  
+  small a {
+    margin-right: 5px;
+    font-weight: $weight-semibold;
+    color: $text;
+  }
+}
+
+.reply {
+  padding-left: 1rem;
+}
