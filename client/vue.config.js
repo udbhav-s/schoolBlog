@@ -1,4 +1,5 @@
 const path = require("path");
+const CompressionPlugin = require('compression-webpack-plugin');
 
 module.exports = {
   outputDir: path.resolve(__dirname, "../server/public"),
@@ -12,5 +13,8 @@ module.exports = {
   },
   configureWebpack: {
     devtool: "source-map"
+  },
+  chainWebpack(config) {
+    config.plugin('CompressionPlugin').use(CompressionPlugin);
   }
 };
