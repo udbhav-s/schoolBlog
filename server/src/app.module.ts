@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ServeStaticModule } from '@nestjs/serve-static';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
@@ -10,18 +11,23 @@ import { FileModule } from './file/file.module';
 import { CommentModule } from './comment/comment.module';
 import { ReplyModule } from './reply/reply.module';
 
+import { join } from 'path';
+
 @Module({
   imports: [
     UserModule,
     DatabaseModule,
     AuthModule,
     PostModule,
+    CommentModule,
+    ReplyModule,
     FileModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    CommentModule,
-    ReplyModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', '..', 'public')
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
