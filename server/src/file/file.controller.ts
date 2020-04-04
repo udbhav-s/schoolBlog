@@ -1,4 +1,13 @@
-import { Controller, UseGuards, Get, Param, Request, Response, NotFoundException, ForbiddenException } from '@nestjs/common';
+import {
+  Controller,
+  UseGuards,
+  Get,
+  Param,
+  Request,
+  Response,
+  NotFoundException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import * as path from 'path';
 import { AuthenticatedGuard } from 'src/common/guards/authenticated.guard';
@@ -13,22 +22,22 @@ export class FileController {
   constructor(
     private fileService: FileService,
     private configService: ConfigService,
-    private postService: PostService
+    private postService: PostService,
   ) {}
 
   @Get('image/:filename')
   async getImageByName(
     @Param('filename') filename: string,
     @Request() req,
-    @Response() res
+    @Response() res,
   ) {
     // check if file exists
-    let file = await this.fileService.getByFilename(filename);
+    const file = await this.fileService.getByFilename(filename);
     if (!file) throw new NotFoundException();
-    // check if user can access 
+    // check if user can access
     if (!file.post.canAccess(req.user)) throw new ForbiddenException();
-    // send the file 
-    let imagesPath = this.configService.get<string>('IMAGES_PATH');
+    // send the file
+    const imagesPath = this.configService.get<string>('IMAGES_PATH');
     res.sendFile(path.join(imagesPath, filename));
   }
 
@@ -36,14 +45,14 @@ export class FileController {
   async getThumbnailByName(
     @Param('filename') filename: string,
     @Request() req,
-    @Response() res
+    @Response() res,
   ) {
-    // get post 
-    let post = await this.postService.getByThumbnail(filename);
+    // get post
+    const post = await this.postService.getByThumbnail(filename);
     if (!post) throw new NotFoundException();
     if (!post.canAccess(req.user)) throw new ForbiddenException();
     // send the image
-    let thumbnailsPath = this.configService.get<string>('THUMBNAILS_PATH');
+    const thumbnailsPath = this.configService.get<string>('THUMBNAILS_PATH');
     res.sendFile(path.join(thumbnailsPath, filename));
   }
 }

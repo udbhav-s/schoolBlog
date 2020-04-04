@@ -46,7 +46,7 @@ export class ReplyController {
       req.user.level < Levels.Moderator,
     );
   }
-  
+
   @ApiOperation({ summary: 'Get reply by comment' })
   @Get('comment/:id')
   async getByComment(
@@ -110,7 +110,7 @@ export class ReplyController {
     if (!reply) throw new NotFoundException();
     if (reply.userId !== req.user.id) throw new ForbiddenException();
     // update reply (only body is changed)
-    let updateData = {
+    const updateData = {
       ...data,
       edited: true,
       userId: req.user.id,

@@ -8,5 +8,6 @@ export class AppController {
   @Get()
   @Redirect('/index')
   getPage() {
+    // redirects
   }
 }

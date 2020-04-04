@@ -1,4 +1,9 @@
-import { ExecutionContext, Injectable, CanActivate, UnauthorizedException } from '@nestjs/common';
+import {
+  ExecutionContext,
+  Injectable,
+  CanActivate,
+  UnauthorizedException,
+} from '@nestjs/common';
 
 @Injectable()
 export class AuthenticatedGuard implements CanActivate {

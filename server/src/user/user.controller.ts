@@ -56,9 +56,7 @@ export class UserController {
   @ApiBasicAuth()
   @UseGuards(AuthenticatedGuard)
   @Get('/logout')
-  logout(
-    @Request() req
-  ) {
+  logout(@Request() req) {
     req.logout();
   }
 
@@ -79,7 +77,7 @@ export class UserController {
   @Post('/level/:id')
   setLevel(
     @Param('id') id: number,
-    @Body('level') level: number
+    @Body('level') level: number,
   ): Promise<UserModel> {
     return this.userService.setLevel(id, level);
   }

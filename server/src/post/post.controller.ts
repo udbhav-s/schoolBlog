@@ -24,7 +24,6 @@ import { LevelGuard } from '../common/guards/level.guard';
 import { Levels } from '../common/util/level.enum';
 import { FormatResponseInterceptor } from '../common/interceptors/formatResponse.interceptor';
 import { FileService } from '../file/file.service';
-import { GetOptionsDto } from '../common/dto/getOptions.dto';
 import { PostGetOptionsDto } from './dto/postGetOptions.dto';
 import { PostCreateDto, PostUpdateDto } from './dto/postCreate.dto';
 
@@ -47,7 +46,7 @@ export class PostController {
   ): Promise<PostModel[]> {
     // set restrictions for < mod
     if (req.user.level < Levels.Moderator) {
-      // if user wants to get posts by a specific user 
+      // if user wants to get posts by a specific user
       // get only verified posts by that user
       if (options.userId) {
         options.verified = true;
@@ -101,7 +100,10 @@ export class PostController {
 
   // Returns post with images & thumbnail paths replaced by base64
   // Since update request deletes all old images and uploads new ones
-  @ApiOperation({ summary: 'Get a post with base64 embedded images instead of file URLs for editing' })
+  @ApiOperation({
+    summary:
+      'Get a post with base64 embedded images instead of file URLs for editing',
+  })
   @Get('/edit/:id')
   async getEditMode(
     @Param('id', ParseIntPipe) id: number,
@@ -178,11 +180,11 @@ export class PostController {
     // add the new files
     if (files.length > 0) data.files = files;
 
-    // set post id and user id 
+    // set post id and user id
     data = {
       ...data,
       id: post.id,
-      userId: req.user.id
+      userId: req.user.id,
     } as PostUpdateDto;
 
     // update post
@@ -222,7 +224,7 @@ export class PostController {
     return post;
   }
 
-  @ApiOperation({ summary: 'Delete a post'})
+  @ApiOperation({ summary: 'Delete a post' })
   @UsePipes(ParseIntPipe)
   @Delete('/:id')
   async del(@Param('id') id: number, @Request() req): Promise<PostModel> {

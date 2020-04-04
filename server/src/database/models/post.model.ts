@@ -31,9 +31,7 @@ export class PostModel extends BaseModel {
   }
 
   canDelete(user: UserModel): boolean {
-    return (
-      this.userId == user.id || user.level >= Levels.Moderator
-    );
+    return this.userId == user.id || user.level >= Levels.Moderator;
   }
 
   static modifiers = {

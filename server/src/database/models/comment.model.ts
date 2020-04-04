@@ -18,9 +18,7 @@ export class CommentModel extends BaseModel {
   replies?: ReplyModel[];
 
   canDelete(user: UserModel): boolean {
-    return (
-      this.userId == user.id || user.level >= Levels.Moderator
-    );
+    return this.userId == user.id || user.level >= Levels.Moderator;
   }
 
   static modifiers = {

@@ -40,7 +40,7 @@ export class PortalService {
         if (user.type === 'teacher') user.level = 2;
         else if (user.type === 'student') user.level = 1;
         return user;
-      };
+      }
       return null;
     });
   }

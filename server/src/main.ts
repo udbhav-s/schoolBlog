@@ -20,7 +20,7 @@ async function bootstrap() {
   app.use(passport.initialize());
   app.use(passport.session());
 
-  // request size limit 
+  // request size limit
   app.use(json({ limit: '80MB' }));
 
   // set up swagger for API documentation

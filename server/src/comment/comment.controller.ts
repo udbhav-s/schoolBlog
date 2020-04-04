@@ -107,7 +107,7 @@ export class CommentController {
     if (!comment) throw new NotFoundException();
     if (comment.userId !== req.user.id) throw new ForbiddenException();
     // update comment (only body is changed)
-    let updateData = {
+    const updateData = {
       ...data,
       edited: true,
       userId: req.user.id,
