@@ -13,6 +13,7 @@ import {
   NotFoundException,
   UseInterceptors,
   Query,
+  Delete,
 } from '@nestjs/common';
 import { ApiTags, ApiBasicAuth, ApiOperation } from '@nestjs/swagger';
 import { PostService } from './post.service';
@@ -228,5 +229,19 @@ export class PostController {
     if (!post.canAccess(req.user)) throw new ForbiddenException();
     // return the post
     return post;
+  }
+
+  @ApiOperation({ summary: 'Delete a post'})
+  @UsePipes(ParseIntPipe)
+  @Delete('/:id')
+  async del(@Param('id') id: number, @Request() req): Promise<PostModel> {
+    const post = await this.postService.getById(id);
+    // check if user can access
+    if (!post.canDelete(req.user)) throw new ForbiddenException();
+    // remove thumbnail and images
+    if (post.thumbnail) this.fileService.removeThumbnail(post.thumbnail);
+    this.fileService.removePostFiles(post.id);
+    // delete and return the post
+    return await this.postService.del(post.id);
   }
 }

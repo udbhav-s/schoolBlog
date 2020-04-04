@@ -27,6 +27,12 @@ export class PostModel extends BaseModel {
     );
   }
 
+  canDelete(user: UserModel): boolean {
+    return (
+      this.userId == user.id || user.level >= Levels.Moderator
+    );
+  }
+
   static modifiers = {
     verifiedOrByUser(query: QueryBuilder<PostModel>, userId: number) {
       query.where({ verified: true }).orWhere({ userId });
