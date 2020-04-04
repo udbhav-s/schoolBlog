@@ -58,6 +58,11 @@ export class PostController {
         options.userId = req.user.id;
       }
     }
+    // default order newest first
+    if (!options.orderBy) {
+      options.orderBy = 'createdAt';
+      options.order = 'desc';
+    }
     // return result
     return await this.postService.getAll(options);
   }

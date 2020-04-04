@@ -1,4 +1,4 @@
-import { Model, QueryBuilder } from 'objection';
+import { Model, QueryBuilder, OrderByDirection } from 'objection';
 import { GetOptionsDto } from '../../common/dto/getOptions.dto';
 
 export class BaseModel extends Model {
@@ -10,7 +10,7 @@ export class BaseModel extends Model {
       if (options.offset) query.offset(options.offset);
       // order options
       if (options.orderBy && options.order) {
-        query.toKnexQuery().orderBy(options.orderBy, options.order);
+        query.orderBy(options.orderBy, options.order as OrderByDirection);
       }
     },
   };

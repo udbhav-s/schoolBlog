@@ -6,7 +6,9 @@ import { CommentModel } from './comment.model';
 
 import { Levels } from 'src/common/util/level.enum';
 import { PostGetOptionsDto } from '../../post/dto/postGetOptions.dto';
-import { GET_OPTIONS } from '../modifiers';
+import { GET_OPTIONS, SEARCH } from '../modifiers';
+
+import { raw } from 'objection';
 
 export class PostModel extends BaseModel {
   static tableName = 'posts';
@@ -47,6 +49,26 @@ export class PostModel extends BaseModel {
       if (options.verified !== undefined) {
         query.where({ verified: options.verified });
       }
+      if (options.search) {
+        query.modify(SEARCH, options.search);
+      }
+    },
+
+    search(query: QueryBuilder<PostModel>, str: string) {
+      let columns = ['title', 'body'];
+      let terms = str.split(/\s+/);
+      terms = terms.map(term => term.trim());
+
+      for (let column of columns) {
+        for (let term of terms) {
+          query.orWhere(
+            raw(`LOWER(??) like LOWER('%' || ? || '%')`,
+            column,
+            term
+          ));
+        }
+      }
+      query.debug();
     },
 
     ...BaseModel.modifiers,
