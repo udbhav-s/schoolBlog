@@ -1,10 +1,24 @@
 <template>
   <div class="section fixed-column">
+    <post-search v-if="showOptions" @search="search" @close="showOptions = false"/>
+    <div v-else class="level is-mobile post-list-head">
+      <div class="level-left">
+        <div class="level-item">
+          <h1 class="title">Posts</h1>
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">
+          <a class="title is-5" @click="showOptions = true">Search</a>
+        </div>
+      </div>
+    </div>
+
     <div v-for="post in posts" :key="post.id">
       <post-card :post="post" />
     </div>
 
-    <div v-if="posts.length == 0" class="has-text-centered">
+    <div v-if="posts.length == 0 || !hasMorePosts" class="has-text-centered">
       <h2>No Posts</h2>
     </div>
 
@@ -12,13 +26,13 @@
       <button v-if="hasMorePosts" class="button is-info" @click="loadPosts">
         Load More
       </button>
-      <div v-else>No more posts</div>
     </div>
   </div>
 </template>
 
 <script>
 import PostCard from "@/components/post/PostCard.vue";
+import PostSearch from '@/components/post/PostSearch.vue';
 import { postService } from "@/services/dataService.js";
 
 export default {
@@ -30,7 +44,9 @@ export default {
       posts: [],
       limit: 10,
       offset: 0,
-      hasMorePosts: true
+      hasMorePosts: true,
+      searchOptions: {},
+      showOptions: false,
     };
   },
 
@@ -40,26 +56,33 @@ export default {
 
   methods: {
     async loadPosts() {
-      let result;
       const options = {
+        ...this.searchOptions,
         limit: this.limit,
         offset: this.offset
       };
+      if (this.userId) options.userId = this.userId;
 
-      if (this.userId)
-        result = await postService.getByUser(this.userId, options);
-      else result = await postService.getAll(options);
-
+      let result = await postService.getAll(options);
       if (!result.success) throw result.message;
+
       if (result.data.length > 0) {
         result.data.forEach(post => this.posts.push(post));
         this.offset += this.limit;
       } else this.hasMorePosts = false;
+    },
+
+    search(options) {
+      this.posts = [];
+      this.searchOptions = options;
+      this.offset = 0;
+      this.loadPosts();
     }
   },
 
   components: {
-    PostCard
+    PostCard,
+    PostSearch
   }
 };
 </script>

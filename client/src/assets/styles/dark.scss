@@ -5,6 +5,6 @@ $primary: hsl(171, 100%, 41%);
 @import 'bulmaswatch/superhero/_overrides.scss';
 @import './style.scss';
 
-.field input, .field textarea {
+.field input, .field textarea, .field select, .field .file-cta {
   background-color: $card-background-color;
 }
