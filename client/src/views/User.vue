@@ -6,9 +6,25 @@
         <div>{{ user.portalId }}</div>
         <div>{{ user.type }}</div>
       </div>
-      <button v-if="isCurrentUser" @click="logout" class="button">
-        Log Out
-      </button>
+
+      <template v-if="isCurrentUser">
+        <div class="field">
+          <button v-if="isCurrentUser" @click="logout" class="button">
+            Log Out
+          </button>
+        </div>
+
+        <div class="field">
+          <button class="button" @click="switchMode">
+            <template v-if="isDarkMode">
+              Light Mode
+            </template>
+            <template v-else>
+              Dark Mode
+            </template>
+          </button>
+        </div>
+      </template>
     </hero-section>
 
     <section class="section fixed-column">
@@ -68,6 +84,7 @@ export default {
   data() {
     return {
       user: {},
+      isDarkMode: null,
       levelDescriptions: [
         // Reader
         `
@@ -112,6 +129,8 @@ export default {
 
   mounted() {
     this.loadUser();
+    // get theme 
+    this.isDarkMode = (localStorage.getItem('mode') === 'dark');
   },
 
   methods: {
@@ -139,6 +158,16 @@ export default {
       } catch (err) {
         this.$toasted.error("An error occured");
       }
+    },
+
+    switchMode() {
+      if (this.isDarkMode) {
+        localStorage.setItem('mode', 'light');
+      }
+      else {
+        localStorage.setItem('mode', 'dark');
+      }
+      window.location.reload();
     }
   },
 

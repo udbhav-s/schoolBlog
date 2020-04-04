@@ -1,6 +1,6 @@
 <template>
   <div class="comments">
-    <div v-if="showAddComment">
+    <div v-if="showAddComment" class="add-comment">
       <comment-edit @commentAdded="commentAdded" :postId="postId" />
     </div>
 

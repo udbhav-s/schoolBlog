@@ -1,5 +1,5 @@
 <template>
-  <div class="section fixed-column">
+  <div class="section fixed-column post-page">
     <h1 class="title">{{ post.title }}</h1>
     <post-meta :post="post" @postDeleted="postDeleted" :showOptions="true" />
 

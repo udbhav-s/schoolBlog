@@ -1,0 +1,10 @@
+$primary: hsl(171, 100%, 41%);
+
+@import 'bulmaswatch/superhero/_variables.scss';
+@import 'bulma/bulma.sass';
+@import 'bulmaswatch/superhero/_overrides.scss';
+@import './style.scss';
+
+.field input, .field textarea {
+  background-color: $card-background-color;
+}

@@ -1,0 +1,41 @@
+@import './post-card.scss';
+@import './animations.scss';
+@import './comment-reply.scss';
+@import './post.scss';
+
+.navbar {
+  border-radius: 0;
+}
+
+.fixed-column {
+  margin: auto 1rem;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+@include tablet {
+  .fixed-column {
+    width: ($tablet - 32px);
+    margin: auto;
+  }
+}
+
+.ql-container {
+  min-height: 10rem;
+}
+
+.hero .hero-body .title {
+  animation: 0.3s ease-out 0s 1 slideDown;
+}
+
+.navbar .navbar-menu .navbar-item {
+  animation: 0.2s ease-in slideDown;
+}
+
+.navbar {
+  box-shadow: $box-shadow;
+}
+
+.navbar-menu {
+  box-shadow: none;
+}
