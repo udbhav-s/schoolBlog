@@ -5,7 +5,7 @@ import sanitizeHtmlOptions from '../common/util/sanitizeHtmlOptions';
 import { PostModel } from '../database/models/post.model';
 import { PostGetOptionsDto } from './dto/postGetOptions.dto';
 import { PostCreateDto } from './dto/postCreate.dto';
-import { GET_OPTIONS, VERIFIED_OR_BY_USER } from '../database/modifiers';
+import { POST_GET_OPTIONS } from '../database/modifiers';
 
 @Injectable()
 export class PostService {
@@ -18,35 +18,11 @@ export class PostService {
       .withGraphFetched('user');
   }
 
-  async getByUser(
-    userId: number,
-    options?: PostGetOptionsDto,
-  ): Promise<PostModel[]> {
-    const query = this.postModel
-      .query()
-      .where({ userId })
-      .withGraphFetched('user');
-    // apply options if any
-    if (options) {
-      query.modify(GET_OPTIONS, options);
-      // get only posts which are verified or by current user
-      if (options.verifiedOrCurrentUser && options.userId) {
-        query.modify(VERIFIED_OR_BY_USER, options.userId);
-      }
-    }
-    // return result
-    return await query;
-  }
-
   async getAll(options?: PostGetOptionsDto): Promise<PostModel[]> {
     const query = this.postModel.query();
+    // apply options if any
     if (options) {
-      // options for pagination and sorting
-      query.modify(GET_OPTIONS, options);
-      // get only posts which are verified or by current user
-      if (options.verifiedOrCurrentUser && options.userId) {
-        query.modify(VERIFIED_OR_BY_USER, options.userId);
-      }
+      query.modify(POST_GET_OPTIONS, options);
     }
     // add user
     query.withGraphFetched('user');

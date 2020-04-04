@@ -36,7 +36,11 @@ export class PortalService {
   async getById(id: string): Promise<any> {
     return Promise.resolve().then(() => {
       const user = this.users.find(user => user.id === id);
-      if (user) return user;
+      if (user) {
+        if (user.type === 'teacher') user.level = 2;
+        else if (user.type === 'student') user.level = 1;
+        return user;
+      };
       return null;
     });
   }

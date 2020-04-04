@@ -42,34 +42,25 @@ export class PostController {
   @ApiOperation({ summary: 'Get all posts with pagination options' })
   @Get('/all')
   async getAll(
-    @Query(new ValidationPipe({ transform: true })) options: GetOptionsDto,
+    @Query(new ValidationPipe({ transform: true })) options: PostGetOptionsDto,
     @Request() req,
   ): Promise<PostModel[]> {
-    // set options
-    options = {
-      ...options,
-      userId: req.user.id,
-      verifiedOrCurrentUser: req.user.level < Levels.Moderator,
-    } as PostGetOptionsDto;
+    // set restrictions for < mod
+    if (req.user.level < Levels.Moderator) {
+      // if user wants to get posts by a specific user 
+      // get only verified posts by that user
+      if (options.userId) {
+        options.verified = true;
+      }
+      // if user wants all posts
+      // get posts which are either verified or by the user themself
+      else {
+        options.verifiedOrUser = true;
+        options.userId = req.user.id;
+      }
+    }
     // return result
     return await this.postService.getAll(options);
-  }
-
-  @ApiOperation({ summary: 'Get all posts by user (will only get verified for < moderator)' })
-  @Get('/user/:id')
-  async getByUser(
-    @Param('id', ParseIntPipe) id: number,
-    @Request() req,
-    @Query(new ValidationPipe({ transform: true })) options: GetOptionsDto,
-  ): Promise<PostModel[]> {
-    // set options
-    options = {
-      ...options,
-      verifiedOrCurrentUser: req.user.level < Levels.Moderator,
-      userId: req.user.id,
-    } as PostGetOptionsDto;
-    // return result
-    return await this.postService.getByUser(id, options);
   }
 
   @ApiOperation({ summary: 'Create a post' })

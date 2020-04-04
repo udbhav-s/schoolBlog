@@ -3,7 +3,10 @@ import { Model, QueryBuilder } from 'objection';
 import { UserModel } from './user.model';
 import { FileModel } from './file.model';
 import { CommentModel } from './comment.model';
+
 import { Levels } from 'src/common/util/level.enum';
+import { PostGetOptionsDto } from '../../post/dto/postGetOptions.dto';
+import { GET_OPTIONS } from '../modifiers';
 
 export class PostModel extends BaseModel {
   static tableName = 'posts';
@@ -34,9 +37,20 @@ export class PostModel extends BaseModel {
   }
 
   static modifiers = {
-    verifiedOrByUser(query: QueryBuilder<PostModel>, userId: number) {
-      query.where({ verified: true }).orWhere({ userId });
+    postGetOptions(query: QueryBuilder<PostModel>, options: PostGetOptionsDto) {
+      query.modify(GET_OPTIONS, options);
+
+      if (options.verifiedOrUser && options.userId) {
+        query.where({ verified: true }).orWhere({ userId: options.userId });
+      } else if (options.userId) {
+        query.where({ userId: options.userId });
+      }
+
+      if (options.verified !== undefined) {
+        query.where({ verified: options.verified });
+      }
     },
+
     ...BaseModel.modifiers,
   };
 

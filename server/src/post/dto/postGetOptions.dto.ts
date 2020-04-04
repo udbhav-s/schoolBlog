@@ -1,12 +1,18 @@
-import { IsBoolean, IsOptional } from 'class-validator';
+import { IsBoolean, IsOptional, IsInt } from 'class-validator';
 import { GetOptionsDto } from '../../common/dto/getOptions.dto';
+import { Transform } from 'class-transformer';
 
 export class PostGetOptionsDto extends GetOptionsDto {
   @IsOptional()
   @IsBoolean()
-  verifiedOrCurrentUser?: boolean;
+  @Transform(val => (val === 'true'))
+  verified?: boolean;
 
   @IsOptional()
-  // provided by controller to service
+  @IsInt()
+  @Transform(val => parseInt(val))
   userId?: number;
+
+  // provided by controller to service
+  verifiedOrUser?: boolean;
 }

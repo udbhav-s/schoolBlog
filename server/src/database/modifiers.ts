@@ -1,4 +1,4 @@
 export const GET_OPTIONS = 'getOptions';
 
 // PostModel
-export const VERIFIED_OR_BY_USER = 'verifiedOrByUser';
+export const POST_GET_OPTIONS = 'postGetOptions';
