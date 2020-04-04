@@ -3,7 +3,7 @@
     <vue-progress-bar></vue-progress-bar>
     <app-header />
     <transition name="fade" mode="out-in" v-if="cssLoaded">
-      <router-view id="main"/>
+      <router-view id="main" />
     </transition>
 
     <h1 v-else>Loading</h1>
@@ -12,36 +12,40 @@
 
 <script>
 import AppHeader from "@/components/AppHeader.vue";
-import '@/assets/styles/main.scss';
+import "@/assets/styles/main.scss";
+import { mapGetters } from "vuex";
 
 export default {
   name: "App",
   data() {
     return {
       cssLoaded: false
-    }
+    };
+  },
+
+  computed: {
+    ...mapGetters(["theme"])
   },
 
   components: {
     AppHeader
   },
 
-  mounted() {
-    // class to add navbar spacing
-    document.body.classList.add("has-navbar-fixed-top");
-    // theme
+  created() {
+    // select theme
     let promise;
-    if (localStorage.getItem('mode') === 'dark') {
-      promise = import("@/assets/styles/dark.scss");
-    }
+    if (this.theme === "dark") promise = import("@/assets/styles/dark.scss");
     else promise = import("@/assets/styles/main.scss");
+
+    // load stylesheet
     promise.then(() => {
       this.cssLoaded = true;
     });
+  },
+
+  mounted() {
+    // class to add navbar spacing
+    document.body.classList.add("has-navbar-fixed-top");
   }
 };
 </script>
-
-<style>
-@import url("https://fonts.googleapis.com/css?family=PT+Sans&display=swap");
-</style>

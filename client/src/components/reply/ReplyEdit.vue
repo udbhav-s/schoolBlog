@@ -8,10 +8,7 @@
       ></textarea>
     </div>
     <div class="control has-text-centered">
-      <button
-        class="button is-primary is-small"
-        @click="submitReply"
-      >
+      <button class="button is-primary is-small" @click="submitReply">
         Submit
       </button>
     </div>

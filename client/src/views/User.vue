@@ -16,7 +16,7 @@
 
         <div class="field">
           <button class="button" @click="switchMode">
-            <template v-if="isDarkMode">
+            <template v-if="theme === 'dark'">
               Light Mode
             </template>
             <template v-else>
@@ -75,6 +75,7 @@ import HeroSection from "@/components/HeroSection.vue";
 import { userService } from "@/services/dataService.js";
 import { mapGetters } from "vuex";
 import { LOGOUT } from "@/store/actions.type.js";
+import { SET_THEME } from "@/store/mutations.type.js";
 import PostList from "@/components/post/PostList.vue";
 
 export default {
@@ -124,13 +125,11 @@ export default {
       return this.user.id === this.currentUser.id;
     },
 
-    ...mapGetters(["currentUser", "isAdminOrAbove"])
+    ...mapGetters(["currentUser", "isAdminOrAbove", "theme"])
   },
 
   mounted() {
     this.loadUser();
-    // get theme 
-    this.isDarkMode = (localStorage.getItem('mode') === 'dark');
   },
 
   methods: {
@@ -161,11 +160,10 @@ export default {
     },
 
     switchMode() {
-      if (this.isDarkMode) {
-        localStorage.setItem('mode', 'light');
-      }
-      else {
-        localStorage.setItem('mode', 'dark');
+      if (this.theme === "dark") {
+        this.$store.commit(SET_THEME, "light");
+      } else {
+        this.$store.commit(SET_THEME, "dark");
       }
       window.location.reload();
     }

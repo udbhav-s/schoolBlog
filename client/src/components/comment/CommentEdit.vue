@@ -11,10 +11,7 @@
     </div>
     <div class="field">
       <div class="control has-text-centered">
-        <button
-          class="button is-primary is-small"
-          @click="submitComment"
-        >
+        <button class="button is-primary is-small" @click="submitComment">
           Submit
         </button>
       </div>

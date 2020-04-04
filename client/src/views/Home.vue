@@ -3,7 +3,7 @@
     <hero-section>
       <h1 class="title">THE HPS BLOG</h1>
     </hero-section>
-    
+
     <post-list />
   </div>
 </template>
