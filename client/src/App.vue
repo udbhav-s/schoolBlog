@@ -3,7 +3,7 @@
     <vue-progress-bar></vue-progress-bar>
     <app-header />
     <transition name="fade" mode="out-in" v-if="cssLoaded">
-      <router-view id="main" />
+      <router-view id="main" :key="$route.path"/>
     </transition>
 
     <h1 v-else>Loading</h1>

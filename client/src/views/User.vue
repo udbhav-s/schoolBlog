@@ -27,11 +27,8 @@
       </template>
     </hero-section>
 
-    <section class="section fixed-column">
-      <div
-        class="container has-text-centered"
-        v-if="isAdminOrAbove && !isCurrentUser"
-      >
+    <section class="section fixed-column" v-if="isAdminOrAbove && !isCurrentUser">
+      <div class="container has-text-centered">
         <div class="field">
           <label class="label">Level</label>
           <div class="control has-text-centered">
@@ -63,9 +60,6 @@
       </div>
     </section>
 
-    <div class="container has-text-centered">
-      <h3 class="title is-3">Posts</h3>
-    </div>
     <post-list v-if="this.user.id" :userId="user.id" />
   </div>
 </template>
@@ -101,7 +95,7 @@ export default {
         // Author
         `
         Can see verified posts and comments. <br>
-        Submitted are automatically verified. <br>
+        Submitted posts are automatically verified. <br>
         Can submit comments on verified posts.
         `,
         // Moderator

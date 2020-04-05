@@ -28,6 +28,8 @@
             <a v-if="editComment" @click="editComment = false">Cancel</a>
 
             <a v-if="isModOrAbove" @click="deleteComment">Delete</a>
+
+            <span v-if="comment.edited">*</span>
           </small>
         </div>
       </div>

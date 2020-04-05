@@ -1,9 +1,18 @@
 .media.comment, .media.reply {  
-  small a {
-    margin-right: 5px;
-    font-weight: $weight-semibold;
-    color: $text;
+  small {
+    display: inline-block;
+    margin-top: 0.2rem;
+
+    a {
+      margin-right: 5px;
+      font-weight: $weight-semibold;
+      color: $text;
+    }
   }
+}
+
+.media.reply {
+  padding-bottom: 0.75rem;
 }
 
 .comments > .add-comment {
