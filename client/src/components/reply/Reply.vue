@@ -15,9 +15,14 @@
         </div>
 
         <small>
-          <a v-if="!editReply" @click="editReply = true">Edit</a>
-          <a v-else @click="editReply = false">Cancel</a>
-          <a @click="deleteReply">Delete</a>
+          <template v-if="byCurrentUser">
+            <a v-if="!editReply" @click="editReply = true">Edit</a>
+            <a v-else @click="editReply = false">Cancel</a>
+          </template>
+          <template v-if="byCurrentUser || isModOrAbove">
+            <a @click="deleteReply">Delete</a>
+          </template>
+          <span v-if="reply.edited">(Edited)</span>
         </small>
       </div>
     </div>
@@ -45,7 +50,7 @@ export default {
       return this.reply.user.id === this.currentUser.id;
     },
 
-    ...mapGetters(["currentUser"])
+    ...mapGetters(["currentUser", "isModOrAbove"])
   },
 
   methods: {
