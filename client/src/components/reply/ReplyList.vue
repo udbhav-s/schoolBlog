@@ -1,5 +1,5 @@
 <template>
-  <div class="replies">
+  <div class="replies" v-if="replies.length > 0">
     <div v-if="showAddReply">
       <reply-edit @replyAdded="replyAdded" :commentId="commentId" />
     </div>
