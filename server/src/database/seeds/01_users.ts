@@ -8,19 +8,23 @@ export async function seed(knex: Knex) {
       // Inserts seed entries
       return knex('users').insert([
         {
-          // id: 1, //id not needed for Postgres because it auto increments
-          name: 'Hasan Uddin',
           portalId: 'st9999',
+          name: 'Example Admin Account',
           type: 'student',
           level: 4,
         },
         {
-          // id: 2,
-          name: 'Michael Jackson',
-          portalId: 'sen0313',
+          portalId: 'st1234',
+          name: 'Tom Hanks',
+          type: 'student',
+          level: 1,
+        },
+        {
+          portalId: 'sen1234',
+          name: 'Heath Ledger',
           type: 'teacher',
           level: 2,
-        },
+        }
       ]);
     });
 }

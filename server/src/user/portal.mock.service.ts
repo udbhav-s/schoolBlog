@@ -8,28 +8,34 @@ export class PortalService {
     this.users = [
       {
         id: 'st9999',
-        name: 'Hasan Uddin',
+        name: 'Example Admin Account',
         type: 'student',
         password: '1234',
       },
       {
-        id: 'sen0313',
-        name: 'Michael Jackson',
-        type: 'teacher',
-        password: '5678',
+        id: 'st1234',
+        name: 'Tom Hanks',
+        type: 'student',
+        password: '1234',
       },
       {
-        id: 'st1234',
-        name: 'Barack Obama',
+        id: 'st5678',
+        name: 'Christian Bale',
         type: 'student',
-        password: 'USA',
+        password: '1234',
       },
       {
         id: 'sen1234',
-        name: 'Christian Bale',
+        name: 'Heath Ledger',
         type: 'teacher',
-        password: 'imbatman',
+        password: '1234',
       },
+      {
+        id: 'sen5678',
+        name: 'Will Smith',
+        type: 'teacher',
+        password: '1234'
+      }
     ];
   }
 

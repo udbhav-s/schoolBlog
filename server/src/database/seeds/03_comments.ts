@@ -8,8 +8,12 @@ export async function seed(knex: Knex) {
       // Inserts seed entries
       return knex('comments').insert([
         {
-          // id: 1,
-          body: 'Congrats Hasan!!!',
+          body: 'Example Comment',
+          userId: 2,
+          postId: 1,
+        },
+        {
+          body: 'Second Example Comment',
           userId: 2,
           postId: 1,
         },

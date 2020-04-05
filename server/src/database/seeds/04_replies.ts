@@ -8,8 +8,12 @@ export async function seed(knex: Knex) {
       // Inserts seed entries
       return knex('replies').insert([
         {
-          // id: 1,
-          body: 'thanks',
+          body: 'Reply 1',
+          userId: 1,
+          commentId: 1,
+        },
+        {
+          body: 'Reply 2',
           userId: 1,
           commentId: 1,
         },
