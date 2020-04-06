@@ -20,7 +20,7 @@ import { CommentService } from './comment.service';
 import { CommentModel } from 'src/database/models/comment.model';
 import { Levels } from 'src/common/util/level.enum';
 import { PostService } from 'src/post/post.service';
-import { CommentCreateDto, CommentUpdateDto } from './dto/commentCreate.dto';
+import { CommentCreateDto } from './dto/commentCreate.dto';
 import { LevelGuard } from 'src/common/guards/level.guard';
 import { Level } from 'src/common/decorators/level.decorator';
 
@@ -112,7 +112,7 @@ export class CommentController {
       edited: true,
       userId: req.user.id,
       postId: comment.postId,
-    } as CommentUpdateDto;
+    };
     return await this.commentService.update(id, updateData);
   }
 

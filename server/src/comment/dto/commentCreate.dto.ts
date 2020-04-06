@@ -12,7 +12,3 @@ export class CommentCreateDto {
   userId: number;
   edited: boolean;
 }
-
-export class CommentUpdateDto extends CommentCreateDto {
-  id: number;
-}

@@ -20,7 +20,7 @@ import { ReplyService } from './reply.service';
 import { CommentService } from '../comment/comment.service';
 import { ReplyModel } from 'src/database/models/reply.model';
 import { Levels } from 'src/common/util/level.enum';
-import { ReplyCreateDto, ReplyUpdateDto } from './dto/replyCreate.dto';
+import { ReplyCreateDto } from './dto/replyCreate.dto';
 import { LevelGuard } from 'src/common/guards/level.guard';
 import { Level } from 'src/common/decorators/level.decorator';
 
@@ -115,7 +115,7 @@ export class ReplyController {
       edited: true,
       userId: req.user.id,
       commentId: reply.commentId,
-    } as ReplyUpdateDto;
+    };
     return await this.replyService.update(id, updateData);
   }
 

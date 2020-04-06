@@ -12,7 +12,3 @@ export class ReplyCreateDto {
   userId: number;
   edited: boolean;
 }
-
-export class ReplyUpdateDto extends ReplyCreateDto {
-  id: number;
-}

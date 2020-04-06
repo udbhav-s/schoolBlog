@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { ModelClass } from 'objection';
 import { ReplyModel } from '../database/models/reply.model';
-import { ReplyCreateDto, ReplyUpdateDto } from './dto/replyCreate.dto';
+import { ReplyCreateDto } from './dto/replyCreate.dto';
 
 @Injectable()
 export class ReplyService {
@@ -45,7 +45,7 @@ export class ReplyService {
       .withGraphFetched('user');
   }
 
-  async update(id: number, data: ReplyUpdateDto): Promise<ReplyModel> {
+  async update(id: number, data: ReplyCreateDto): Promise<ReplyModel> {
     return await this.replyModel
       .query()
       .where({ id })
