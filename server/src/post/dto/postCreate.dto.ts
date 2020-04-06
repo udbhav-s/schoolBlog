@@ -1,4 +1,4 @@
-import { IsString, IsOptional } from 'class-validator';
+import { IsString, IsOptional, IsInt } from 'class-validator';
 
 export class PostCreateDto {
   @IsString()
@@ -12,9 +12,10 @@ export class PostCreateDto {
   @IsString()
   thumbnail: string;
 
+
   @IsOptional()
-  @IsString()
-  category: string;
+  @IsInt()
+  categoryId: number;
 
   // provided by controller to service
   userId: number;

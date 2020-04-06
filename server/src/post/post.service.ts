@@ -15,7 +15,7 @@ export class PostService {
     return await this.postModel
       .query()
       .findById(id)
-      .withGraphFetched('user');
+      .withGraphFetched('[user, category]');
   }
 
   async getAll(options?: PostGetOptionsDto): Promise<PostModel[]> {
@@ -25,7 +25,7 @@ export class PostService {
       query.modify(POST_GET_OPTIONS, options);
     }
     // add user
-    query.withGraphFetched('user');
+    query.withGraphFetched('[user, category]');
     return await query;
   }
 
@@ -43,7 +43,7 @@ export class PostService {
       .query()
       .where({ id: post.id })
       .first()
-      .withGraphFetched('user');
+      .withGraphFetched('[user, category]');
   }
 
   async update(data: PostCreateDto): Promise<PostModel> {
@@ -56,21 +56,21 @@ export class PostService {
       .query()
       .where({ id: post.id })
       .first()
-      .withGraphFetched('user');
+      .withGraphFetched('[user, category]');
   }
 
   async verify(id: number): Promise<PostModel> {
     return await this.postModel
       .query()
       .patchAndFetchById(id, { verified: true })
-      .withGraphFetched('user');
+      .withGraphFetched('[user, category]');
   }
 
   async unverify(id: number): Promise<PostModel> {
     return await this.postModel
       .query()
       .patchAndFetchById(id, { verified: false })
-      .withGraphFetched('user');
+      .withGraphFetched('[user, category]');
   }
 
   async del(id: number): Promise<PostModel> {
