@@ -33,6 +33,7 @@ async function bootstrap() {
     .addTag('comment')
     .addTag('reply')
     .addTag('file')
+    .addTag('category')
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('apidoc', app, document);

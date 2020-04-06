@@ -53,6 +53,9 @@ export class PostModel extends BaseModel {
       if (options.search) {
         query.modify(SEARCH, options.search);
       }
+      if (options.categoryId) {
+        query.where({ categoryId: options.categoryId });
+      }
     },
 
     search(query: QueryBuilder<PostModel>, str: string) {

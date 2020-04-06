@@ -14,6 +14,11 @@ export class PostGetOptionsDto extends GetOptionsDto {
   userId?: number;
 
   @IsOptional()
+  @IsInt()
+  @Transform(val => parseInt(val))
+  categoryId?: number;
+
+  @IsOptional()
   @IsString()
   search?: string;
 

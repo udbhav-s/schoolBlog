@@ -12,6 +12,7 @@ import { CommentModule } from './comment/comment.module';
 import { ReplyModule } from './reply/reply.module';
 
 import { join } from 'path';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { join } from 'path';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '..', 'public'),
     }),
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
