@@ -3,6 +3,7 @@ import { Model, QueryBuilder } from 'objection';
 import { UserModel } from './user.model';
 import { FileModel } from './file.model';
 import { CommentModel } from './comment.model';
+import { CategoryModel } from './category.model';
 
 import { Levels } from 'src/common/util/level.enum';
 import { PostGetOptionsDto } from '../../post/dto/postGetOptions.dto';
@@ -15,7 +16,6 @@ export class PostModel extends BaseModel {
 
   title!: string;
   body?: string;
-  category?: string;
   thumbnail?: string;
   verified?: boolean;
   userId!: number;
@@ -23,6 +23,7 @@ export class PostModel extends BaseModel {
   user?: UserModel;
   comments?: CommentModel[];
   files?: FileModel[];
+  category?: CategoryModel;
 
   // checks whether a user can access the post or not
   // based on verified property
@@ -101,5 +102,14 @@ export class PostModel extends BaseModel {
         to: 'files.postId',
       },
     },
+
+    category: {
+      modelClass: CategoryModel,
+      relation: Model.BelongsToOneRelation,
+      join: {
+        from: 'posts.categoryId',
+        to: 'categories.id'
+      }
+    }
   });
 }

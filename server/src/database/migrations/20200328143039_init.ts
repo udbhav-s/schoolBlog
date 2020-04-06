@@ -42,6 +42,11 @@ export async function up(knex: Knex): Promise<any> {
           .references('id')
           .inTable('users')
           .onDelete('CASCADE');
+        table
+          .foreign('category_id')
+          .references('id')
+          .inTable('categories')
+          .onDelete('SET NULL');
         table.timestamps(true, true);
       })
       // comments table
@@ -125,20 +130,6 @@ export async function up(knex: Knex): Promise<any> {
         table.increments();
         table.string('name').notNullable();
         table.timestamps(true, true);
-      })
-      // join table for categories and posts
-      .createTable('posts_categories', table => {
-        table.increments();
-        table
-          .foreign('post_id')
-          .references('id')
-          .inTable('posts')
-          .onDelete('CASCADE');
-        table
-          .foreign('category_id')
-          .references('id')
-          .inTable('categories')
-          .onDelete('CASCADE');
       })
   );
 }

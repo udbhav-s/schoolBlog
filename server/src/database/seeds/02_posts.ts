@@ -10,7 +10,6 @@ export async function seed(knex: Knex) {
         {
           title: 'Test post',
           body: 'test post content',
-          category: 'report',
           userId: 1,
         },
       ]);
