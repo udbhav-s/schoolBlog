@@ -18,6 +18,17 @@
     </div>
 
     <div class="field is-grouped is-grouped-centered is-grouped-multiline">
+      <div class="control" v-if="categories">
+        <span class="select is-small">
+          <select v-model="options.categoryId">
+            <option value="" selected>Category</option>
+            <option v-for="category in categories" :key="category.id" :value="category.id">
+              {{ category.name }}
+            </option>
+          </select>
+        </span>
+      </div>
+
       <div class="control">
         <span class="select is-small">
           <select v-model="options.orderBy">
@@ -51,6 +62,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import { categoryService } from '@/services/dataService.js';
 import Vue from 'vue';
 
 export default {
@@ -63,8 +75,14 @@ export default {
         orderBy: '',
         order: '',
         search: '',
-      }
+        categoryId: '',
+      },
+      categories: null,
     }
+  },
+
+  created() {
+    this.loadCategories();
   },
 
   computed: {
@@ -72,6 +90,12 @@ export default {
   },
 
   methods: {
+    async loadCategories() {
+      let result = await categoryService.getAll();
+      if (!result.success) this.$toasted.error("Could not load category list");
+      this.categories = result.data;
+    },
+
     submit() {
       let opts = {...this.options};
       // remove empty properties

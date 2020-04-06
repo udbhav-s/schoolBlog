@@ -3,7 +3,10 @@
     <div class="post-info">
       <username :user="post.user"></username>
       <div>{{ date }}</div>
-      <div v-if="!post.verified" class="has-text-danger">Unverified</div>
+      <span class="tags has-text-centered">
+        <span class="tag has-text-info" v-if="post.category">{{ post.category.name }}</span>
+        <span v-if="!post.verified" class="tag has-text-danger">Unverified</span>
+      </span>
     </div>
     <div class="post-options buttons are-small" v-if="showOptions">
       <router-link

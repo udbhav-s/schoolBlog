@@ -32,6 +32,11 @@
     margin: auto;
     text-align: center;
   }
+
+  .tags {
+    display: flex;
+    justify-content: center;
+  }
 }
 
 @include tablet {

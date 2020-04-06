@@ -11,3 +11,25 @@
 .post-list-head {
   align-items: flex-end;
 }
+
+.post-info .tags {
+  .tag {
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
+  }
+}
+
+// quill editor overrides
+.editor {
+  .ql-snow {
+    .ql-picker {
+      color: $text !important;
+    }
+    .ql-stroke {
+      stroke: $text !important;
+    }
+    .ql-fill {
+      fill: $text !important
+    }
+  }
+}

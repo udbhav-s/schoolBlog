@@ -12,7 +12,7 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home,
-    alias: "/home"
+    alias: "/index"
   },
   {
     path: "/login",

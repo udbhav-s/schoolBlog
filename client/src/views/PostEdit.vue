@@ -21,20 +21,38 @@
         </div>
       </div>
 
-      <div class="field file">
-        <label class="file-label">
-          <input
-            class="file-input"
-            type="file"
-            @change="setThumbnail"
-            name="thumbnail"
-            ref="thumbnail"
-            accept=".png, .jpg, .jpeg, .gif"
-          />
-          <span class="file-cta">
-            Upload Thumbnail
+      <div class="field" v-if="categories">
+        <div class="control">
+          <span class="select">
+            <select v-model="form.categoryId">
+              <option :value="null" selected>Category</option>
+              <option v-for="category in categories" :key="category.id" :value="category.id">
+                {{ category.name }}
+              </option>
+            </select>
           </span>
-        </label>
+        </div>
+      </div>
+
+      <div class="field is-grouped">
+        <div class="control file">
+          <label class="file-label">
+            <input
+              class="file-input"
+              type="file"
+              @change="setThumbnail"
+              name="thumbnail"
+              ref="thumbnail"
+              accept=".png, .jpg, .jpeg, .gif"
+            />
+            <span class="file-cta">
+              Upload Thumbnail
+            </span>
+          </label>
+        </div>
+        <div class="control" v-if="form.thumbnail">
+          <button @click="form.thumbnail = ''" class="button is-danger">Remove</button>
+        </div>
       </div>
       <div class="field">
         <div class="image">
@@ -64,7 +82,7 @@
 import HeroSection from "@/components/HeroSection.vue";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
-import { postService } from "@/services/dataService.js";
+import { postService, categoryService } from "@/services/dataService.js";
 import Vue from "vue";
 
 export default {
@@ -77,9 +95,15 @@ export default {
       form: {
         title: "",
         thumbnail: "",
-        body: ""
-      }
+        body: "",
+        categoryId: null,
+      },
+      categories: null,
     };
+  },
+
+  created() {
+    this.loadCategories();
   },
 
   mounted() {
@@ -88,11 +112,17 @@ export default {
   },
 
   methods: {
+    async loadCategories() {
+      let result = await categoryService.getAll();
+      if (!result.success) this.$toasted.error("Could not load category list");
+      this.categories = result.data;
+    },
+
     async submitPost() {
       // set contents of body from editor
       this.form.body = this.editor.root.innerHTML;
-      let result;
       // post the form
+      let result;
       if (this.editMode) {
         result = await postService.update(this.editId, this.form);
       } else {
@@ -115,7 +145,8 @@ export default {
         throw result;
       }
       // set form data to post
-      this.form.title = result.data.title;
+      Vue.set(this.form, "title", result.data.title);
+      Vue.set(this.form, "categoryId", result.data.categoryId);
       this.editor.root.innerHTML = result.data.body;
       // set thumbnail
       if (result.data.thumbnail) {
