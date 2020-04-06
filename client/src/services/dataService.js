@@ -49,6 +49,14 @@ export const postService = {
   unverify: id => api.post(`/post/unverify/${id}`)
 };
 
+const categoryService = {
+  getById: id => api.get(`/category/${id}`),
+  getAll: () => api.get('/category/all'),
+  create: (data) => api.post('/category/create', data),
+  update: (id, data) => api.post(`/category/update/${id}`, data),
+  delete: (id) => api.delete(`/category/${id}`)
+};
+
 export const commentService = {
   getById: id => api.get(`/comment/${id}`),
   getByUser: id => api.get(`/comment/user/${id}`),
