@@ -25,7 +25,7 @@ import { Levels } from '../common/util/level.enum';
 import { FormatResponseInterceptor } from '../common/interceptors/formatResponse.interceptor';
 import { FileService } from '../file/file.service';
 import { PostGetOptionsDto } from './dto/postGetOptions.dto';
-import { PostCreateDto, PostUpdateDto } from './dto/postCreate.dto';
+import { PostCreateDto } from './dto/postCreate.dto';
 
 @ApiTags('post')
 @ApiBasicAuth()
@@ -185,15 +185,14 @@ export class PostController {
     // add the new files
     if (files.length > 0) data.files = files;
 
-    // set post id and user id
+    // set user id
     data = {
       ...data,
-      id: post.id,
       userId: req.user.id,
-    } as PostUpdateDto;
+    };
 
     // update post
-    return await this.postService.update(data);
+    return await this.postService.update(id, data);
   }
 
   @ApiOperation({ summary: 'Verify a post' })
