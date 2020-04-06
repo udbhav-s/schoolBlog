@@ -48,6 +48,11 @@ export async function up(knex: Knex): Promise<any> {
           .references('id')
           .inTable('users')
           .onDelete('CASCADE');
+        // category
+        table
+          .integer('category_id')
+          .unsigned()
+          .notNullable();
         table
           .foreign('category_id')
           .references('id')
@@ -141,5 +146,6 @@ export async function down(knex: Knex) {
     .dropTableIfExists('replies')
     .dropTableIfExists('comments')
     .dropTableIfExists('posts')
+    .dropTableIfExists('categories')
     .dropTableIfExists('users');
 }
