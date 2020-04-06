@@ -52,7 +52,6 @@ export async function up(knex: Knex): Promise<any> {
         table
           .integer('category_id')
           .unsigned()
-          .notNullable();
         table
           .foreign('category_id')
           .references('id')
