@@ -22,6 +22,12 @@ export async function up(knex: Knex): Promise<any> {
           .notNullable();
         table.timestamps(true, true);
       })
+      // categories table
+      .createTable('categories', table => {
+        table.increments();
+        table.string('name').notNullable();
+        table.timestamps(true, true);
+      })
       // posts table
       .createTable('posts', table => {
         table.increments();
@@ -123,12 +129,6 @@ export async function up(knex: Knex): Promise<any> {
           .references('id')
           .inTable('posts')
           .onDelete('CASCADE');
-        table.timestamps(true, true);
-      })
-      // categories table
-      .createTable('categories', table => {
-        table.increments();
-        table.string('name').notNullable();
         table.timestamps(true, true);
       })
   );
