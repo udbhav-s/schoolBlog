@@ -2,15 +2,13 @@ import * as Knex from 'knex';
 
 export async function seed(knex: Knex) {
   // Deletes ALL existing entries
-  return knex('posts')
+  return knex('categories')
     .del()
     .then(() => {
       // Inserts seed entries
-      return knex('posts').insert([
+      return knex('categories').insert([
         {
-          title: 'Test post',
-          body: 'test post content',
-          userId: 1,
+          name: 'Announcement'
         },
       ]);
     });

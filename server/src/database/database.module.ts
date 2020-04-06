@@ -7,10 +7,11 @@ import { PostModel } from './models/post.model';
 import { FileModel } from './models/file.model';
 import { CommentModel } from './models/comment.model';
 import { ReplyModel } from './models/reply.model';
+import { CategoryModel } from './models/category.model';
 
 import * as KnexConfig from '../../knexfile';
 
-const models = [UserModel, PostModel, FileModel, CommentModel, ReplyModel];
+const models = [UserModel, PostModel, FileModel, CommentModel, ReplyModel, CategoryModel];
 
 const modelProviders = models.map(model => {
   return {
