@@ -46,11 +46,14 @@ export class PostService {
       .withGraphFetched('[user, category]');
   }
 
-  async update(data: PostCreateDto): Promise<PostModel> {
+  async update(id: number, data: PostCreateDto): Promise<PostModel> {
     const post = await this.postModel
       .query()
       .allowGraph('files')
-      .upsertGraph(data);
+      .upsertGraph({
+        id,
+        ...data
+      });
 
     return await this.postModel
       .query()

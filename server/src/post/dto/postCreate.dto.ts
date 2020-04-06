@@ -20,7 +20,3 @@ export class PostCreateDto {
   userId: number;
   files: object[];
 }
-
-export class PostUpdateDto extends PostCreateDto {
-  id: number;
-}
