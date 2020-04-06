@@ -27,7 +27,6 @@ export async function up(knex: Knex): Promise<any> {
         table.increments();
         table.string('title').notNullable();
         table.text('body');
-        table.string('category');
         table.string('thumbnail');
         table
           .boolean('verified')
@@ -120,6 +119,26 @@ export async function up(knex: Knex): Promise<any> {
           .inTable('posts')
           .onDelete('CASCADE');
         table.timestamps(true, true);
+      })
+      // categories table
+      .createTable('categories', table => {
+        table.increments();
+        table.string('name').notNullable();
+        table.timestamps(true, true);
+      })
+      // join table for categories and posts
+      .createTable('posts_categories', table => {
+        table.increments();
+        table
+          .foreign('post_id')
+          .references('id')
+          .inTable('posts')
+          .onDelete('CASCADE');
+        table
+          .foreign('category_id')
+          .references('id')
+          .inTable('categories')
+          .onDelete('CASCADE');
       })
   );
 }
