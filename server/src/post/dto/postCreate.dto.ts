@@ -12,7 +12,6 @@ export class PostCreateDto {
   @IsString()
   thumbnail: string;
 
-
   @IsOptional()
   @IsInt()
   categoryId: number;
