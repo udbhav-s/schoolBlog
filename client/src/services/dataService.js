@@ -49,7 +49,7 @@ export const postService = {
   unverify: id => api.post(`/post/unverify/${id}`)
 };
 
-const categoryService = {
+export const categoryService = {
   getById: id => api.get(`/category/${id}`),
   getAll: () => api.get('/category/all'),
   create: (data) => api.post('/category/create', data),
