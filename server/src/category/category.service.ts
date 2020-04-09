@@ -18,7 +18,7 @@ export class CategoryService {
   }
 
   async create(body: CategoryCreateDto): Promise<CategoryModel> {
-    return await this.categoryModel.query().insert(body);
+    return await this.categoryModel.query().insert(body).returning('*');
   }
 
   async update(id: number, body: CategoryCreateDto): Promise<CategoryModel> {

@@ -1,6 +1,8 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { ModelClass } from 'objection';
 import { UserModel } from '../database/models/user.model';
+import { GetOptionsDto } from 'src/common/dto/getOptions.dto';
+import { GET_OPTIONS } from 'src/database/modifiers';
 
 @Injectable()
 export class UserService {
@@ -15,6 +17,12 @@ export class UserService {
       .query()
       .where({ portalId: id })
       .first();
+  }
+
+  async getAll(options?: GetOptionsDto): Promise<UserModel[]> {
+    let query = this.userModel.query();
+    if (options) query.modify(GET_OPTIONS, options);
+    return await query;
   }
 
   async createFromPortalUser(user: any): Promise<UserModel> {

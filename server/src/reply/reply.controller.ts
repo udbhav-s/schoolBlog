@@ -12,6 +12,7 @@ import {
   ValidationPipe,
   Delete,
   NotFoundException,
+  Query,
 } from '@nestjs/common';
 import { ApiTags, ApiBasicAuth, ApiOperation } from '@nestjs/swagger';
 import { AuthenticatedGuard } from 'src/common/guards/authenticated.guard';
@@ -41,7 +42,7 @@ export class ReplyController {
   @Level(Levels.Moderator)
   @Get('/all')
   async getAll(
-    @Body(ValidationPipe) options: GetOptionsDto,
+    @Query(new ValidationPipe({ transform: true })) options: GetOptionsDto,
   ): Promise<ReplyModel[]> {
     return await this.replyService.getAll(options);
   }

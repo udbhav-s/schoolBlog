@@ -10,6 +10,7 @@ import {
   Body,
   Request,
   UseInterceptors,
+  Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserModel } from '../database/models/user.model';
@@ -22,6 +23,7 @@ import { ApiTags, ApiOperation, ApiBasicAuth } from '@nestjs/swagger';
 import { LevelGuard } from 'src/common/guards/level.guard';
 import { Level } from 'src/common/decorators/level.decorator';
 import { Levels } from 'src/common/util/level.enum';
+import { GetOptionsDto } from 'src/common/dto/getOptions.dto';
 
 @ApiTags('user')
 @UseInterceptors(FormatResponseInterceptor)
@@ -50,6 +52,17 @@ export class UserController {
   @Get('portal/:id')
   async getByPortal(@Param('id', ParseIntPipe) id: string): Promise<UserModel> {
     return await this.userService.getByPortalId(id);
+  }
+
+  @ApiOperation({ summary: 'Get all users' })
+  @ApiBasicAuth()
+  @UseGuards(AuthenticatedGuard, LevelGuard)
+  @Level(Levels.Moderator)
+  @Get('/all')
+  async getAll(
+    @Query(new ValidationPipe({ transform: true })) options: GetOptionsDto
+  ): Promise<UserModel[]> {
+    return await this.userService.getAll(options);
   }
 
   @ApiOperation({ summary: 'Log out' })
