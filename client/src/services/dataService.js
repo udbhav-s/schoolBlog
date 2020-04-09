@@ -30,7 +30,6 @@ api.interceptors.response.use(
       app.$Progress.finish();
     } else {
       app.$Progress.fail();
-      app.$toasted.error("There was an error loading data");
     }
     return res;
   }
@@ -59,7 +58,7 @@ export const categoryService = {
 
 export const commentService = {
   getById: id => api.get(`/comment/${id}`),
-  getByUser: id => api.get(`/comment/user/${id}`),
+  getAll: options => api.get('/comment/all', { params: options }),
   getByPost: id => api.get(`/comment/post/${id}`),
 
   create: data => api.post("/comment/create", data),
@@ -69,7 +68,7 @@ export const commentService = {
 
 export const replyService = {
   getById: id => api.get(`/reply/${id}`),
-  getByUser: id => api.get(`/reply/user/${id}`),
+  getAll: options => api.get('/reply/all', { params: options }),
   getByComment: id => api.get(`/reply/comment/${id}`),
 
   create: data => api.post("/reply/create", data),
@@ -80,5 +79,6 @@ export const replyService = {
 export const userService = {
   getCurrent: () => api.get("/user/current"),
   getById: id => api.get(`/user/${id}`),
+  getAll: () => api.get('/user/all'),
   setLevel: (id, level) => api.post(`/user/level/${id}`, { level })
 };

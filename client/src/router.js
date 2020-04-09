@@ -12,7 +12,35 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home,
-    alias: "/index"
+    alias: "/index",
+    children: [
+      {
+        path: '/',
+        alias: '/posts',
+        name: 'posts',
+        component: () => import("@/components/post/PostList.vue")
+      },
+      {
+        path: '/users',
+        name: 'users',
+        component: () => import("@/components/user/UserList.vue")
+      },
+      {
+        path: '/comments',
+        name: 'comments',
+        component: () => import("@/components/comment/CommentList.vue")
+      },
+      {
+        path: '/replies',
+        name: 'replies',
+        component: () => import("@/components/reply/ReplyList.vue")
+      },
+      {
+        path: '/categories',
+        name: 'categories',
+        component: () => import("@/components/category/CategoryList.vue")
+      },
+    ]
   },
   {
     path: "/login",

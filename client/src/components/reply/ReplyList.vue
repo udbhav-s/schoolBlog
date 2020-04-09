@@ -24,7 +24,6 @@ export default {
   name: "ReplyList",
   props: {
     commentId: Number,
-    userId: Number,
     showAddReply: Boolean
   },
 
@@ -34,7 +33,7 @@ export default {
     };
   },
 
-  beforeMount() {
+  created() {
     this.loadReplies();
   },
 
@@ -43,7 +42,7 @@ export default {
       let result;
       if (this.commentId)
         result = await replyService.getByComment(this.commentId);
-      else if (this.userId) result = await replyService.getByUser(this.userId);
+      else result = await replyService.getAll(this.userId);
       if (!result.success) throw result.message;
       else this.replies = result.data;
     },

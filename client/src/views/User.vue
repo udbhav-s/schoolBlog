@@ -60,7 +60,9 @@
       </div>
     </section>
 
-    <post-list v-if="this.user.id" :userId="user.id" />
+    <section class="section fixed-container">
+      <post-list v-if="this.user.id" :userId="user.id" />
+    </section>
   </div>
 </template>
 
@@ -124,6 +126,14 @@ export default {
 
   mounted() {
     this.loadUser();
+  },
+
+  watch: {
+    userId(oldId, newId) {
+      if (oldId !== newId) {
+        this.loadUser();
+      }
+    }
   },
 
   methods: {

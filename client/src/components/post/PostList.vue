@@ -1,5 +1,5 @@
 <template>
-  <div class="section fixed-column">
+  <div>
     <post-search v-if="showOptions" @search="search" @close="showOptions = false"/>
     <div v-else class="level is-mobile post-list-head">
       <div class="level-left">
@@ -50,7 +50,7 @@ export default {
     };
   },
 
-  mounted() {
+  created() {
     this.loadPosts();
   },
 

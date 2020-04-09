@@ -49,7 +49,7 @@ import { mapGetters } from "vuex";
 import { commentService } from "@/services/dataService.js";
 import ReplyList from "@/components/reply/ReplyList.vue";
 import CommentEdit from "@/components/comment/CommentEdit.vue";
-import Username from "@/components/Username.vue";
+import Username from "@/components/user/Username.vue";
 
 export default {
   name: "Comment",

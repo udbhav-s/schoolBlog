@@ -52,7 +52,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import Username from "@/components/Username.vue";
+import Username from "@/components/user/Username.vue";
 import { postService } from "@/services/dataService.js";
 
 export default {

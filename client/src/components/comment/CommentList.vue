@@ -24,7 +24,6 @@ export default {
   name: "CommentList",
   props: {
     postId: Number,
-    userId: Number,
     showAddComment: Boolean
   },
 
@@ -43,8 +42,7 @@ export default {
       // load comments
       let result;
       if (this.postId) result = await commentService.getByPost(this.postId);
-      else if (this.userId)
-        result = await commentService.getByUser(this.userId);
+      else result = await commentService.getAll();
       if (!result.success) throw result.message;
       else this.comments = result.data;
     },

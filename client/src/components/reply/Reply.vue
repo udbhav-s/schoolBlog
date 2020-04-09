@@ -33,7 +33,7 @@
 import { mapGetters } from "vuex";
 import ReplyEdit from "@/components/reply/ReplyEdit.vue";
 import { replyService } from "@/services/dataService.js";
-import Username from "@/components/Username.vue";
+import Username from "@/components/user/Username.vue";
 
 export default {
   name: "Reply",
