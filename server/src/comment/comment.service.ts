@@ -3,6 +3,8 @@ import { ModelClass } from 'objection';
 import { CommentModel } from '../database/models/comment.model';
 import { PostModel } from '../database/models/post.model';
 import { CommentCreateDto } from './dto/commentCreate.dto';
+import { GetOptionsDto } from 'src/common/dto/getOptions.dto';
+import { GET_OPTIONS } from 'src/database/modifiers';
 
 @Injectable()
 export class CommentService {
@@ -17,15 +19,18 @@ export class CommentService {
       .withGraphFetched('user');
   }
 
-  async getByUser(userId: number, verified: boolean): Promise<CommentModel[]> {
-    // get comment
+  // (no verified checks - route only for mods)
+  async getAll(options?: GetOptionsDto): Promise<CommentModel[]> {
     const query = this.commentModel
       .query()
-      .where({ userId })
-      .withGraphFetched('user');
-    // get comments on verified posts
-    if (verified) query.joinRelated('post').where('post.verified', true);
-    // return result
+      .withGraphFetched('[user, post(title)]')
+      .modifiers({
+        title(builder) {
+          builder.select('title');
+        }
+      });
+    // add search options
+    if (options) query.modify(GET_OPTIONS, options);
     return await query;
   }
 

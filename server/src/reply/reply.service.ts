@@ -2,6 +2,8 @@ import { Injectable, Inject } from '@nestjs/common';
 import { ModelClass } from 'objection';
 import { ReplyModel } from '../database/models/reply.model';
 import { ReplyCreateDto } from './dto/replyCreate.dto';
+import { GetOptionsDto } from 'src/common/dto/getOptions.dto';
+import { GET_OPTIONS } from 'src/database/modifiers';
 
 @Injectable()
 export class ReplyService {
@@ -16,17 +18,18 @@ export class ReplyService {
       .withGraphFetched('user');
   }
 
-  async getByUser(userId: number, verified: boolean): Promise<ReplyModel[]> {
-    // get reply
+  // (no verified checks - route only for mods)
+  async getAll(options?: GetOptionsDto): Promise<ReplyModel[]> {
     const query = this.replyModel
       .query()
-      .where({ userId })
-      .withGraphFetched('user');
-    // get replies on verified posts
-    if (verified) {
-      query.joinRelated('[comment, comment.post]').where('post.verified', true);
-    }
-    // return result
+      .withGraphFetched('[user, comment.post(title)]')
+      .modifiers({
+        title(builder) {
+          builder.select('title');
+        }
+      });
+    // add search options
+    if (options) query.modify(GET_OPTIONS, options);
     return await query;
   }
 

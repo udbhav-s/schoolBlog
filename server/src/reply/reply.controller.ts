@@ -23,6 +23,7 @@ import { Levels } from 'src/common/util/level.enum';
 import { ReplyCreateDto } from './dto/replyCreate.dto';
 import { LevelGuard } from 'src/common/guards/level.guard';
 import { Level } from 'src/common/decorators/level.decorator';
+import { GetOptionsDto } from 'src/common/dto/getOptions.dto';
 
 @ApiTags('reply')
 @ApiBasicAuth()
@@ -35,19 +36,17 @@ export class ReplyController {
     private commentService: CommentService,
   ) {}
 
-  @ApiOperation({ summary: 'Get replies by user' })
-  @Get('user/:id')
-  async getByUser(
-    @Param('id', ParseIntPipe) id: number,
-    @Request() req,
+  @ApiOperation({ summary: 'Get all replies' })
+  @UseGuards(LevelGuard)
+  @Level(Levels.Moderator)
+  @Get('/all')
+  async getAll(
+    @Body(ValidationPipe) options: GetOptionsDto,
   ): Promise<ReplyModel[]> {
-    return await this.replyService.getByUser(
-      id,
-      req.user.level < Levels.Moderator,
-    );
+    return await this.replyService.getAll(options);
   }
 
-  @ApiOperation({ summary: 'Get reply by comment' })
+  @ApiOperation({ summary: 'Get replies by comment' })
   @Get('comment/:id')
   async getByComment(
     @Param('id', ParseIntPipe) id: number,

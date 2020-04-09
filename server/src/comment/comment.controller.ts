@@ -23,6 +23,7 @@ import { PostService } from 'src/post/post.service';
 import { CommentCreateDto } from './dto/commentCreate.dto';
 import { LevelGuard } from 'src/common/guards/level.guard';
 import { Level } from 'src/common/decorators/level.decorator';
+import { GetOptionsDto } from 'src/common/dto/getOptions.dto';
 
 @ApiTags('comment')
 @ApiBasicAuth()
@@ -35,16 +36,14 @@ export class CommentController {
     private postService: PostService,
   ) {}
 
-  @ApiOperation({ summary: 'Get comments by user' })
-  @Get('user/:id')
-  async getByUser(
-    @Param('id', ParseIntPipe) id: number,
-    @Request() req,
+  @ApiOperation({ summary: 'Get all comments' })
+  @UseGuards(LevelGuard)
+  @Level(Levels.Moderator)
+  @Get('/all')
+  async getAll(
+    @Body(ValidationPipe) options: GetOptionsDto,
   ): Promise<CommentModel[]> {
-    return await this.commentService.getByUser(
-      id,
-      req.user.level < Levels.Moderator,
-    );
+    return await this.commentService.getAll(options);
   }
 
   @ApiOperation({ summary: 'Get comments by post' })
