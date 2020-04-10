@@ -5,7 +5,7 @@
     </hero-section>
 
     <section v-if="isModOrAbove" class="section fixed-column">
-      <div class="tabs is-centered">
+      <div class="tabs is-centered is-boxed is-small">
         <ul>
           <li 
             v-for="tab in tabs"
