@@ -60,7 +60,7 @@
       </div>
     </section>
 
-    <section class="section fixed-container">
+    <section class="section fixed-column">
       <post-list v-if="this.user.id" :userId="user.id" />
     </section>
   </div>
