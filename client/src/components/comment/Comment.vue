@@ -44,7 +44,7 @@
       </div>
 
       <reply-list
-        v-if="comment.id && !adminView"
+        v-if="comment.id"
         :commentId="comment.id"
         :showAddReply="addReply"
         @replyAdded="addReply = false"

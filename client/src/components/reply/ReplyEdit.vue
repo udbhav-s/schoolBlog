@@ -1,16 +1,20 @@
 <template>
-  <div class="field">
-    <div class="control">
-      <textarea
-        placeholder="Write a reply"
-        class="textarea"
-        v-model="form.body"
-      ></textarea>
+  <div>
+    <div class="field">
+      <div class="control">
+        <textarea
+          placeholder="Write a reply"
+          class="textarea"
+          v-model="form.body"
+        ></textarea>
+      </div>
     </div>
-    <div class="control has-text-centered">
-      <button class="button is-primary is-small" @click="submitReply">
-        Submit
-      </button>
+    <div class="field">
+      <div class="control has-text-centered">
+        <button class="button is-primary is-small" @click="submitReply">
+          Submit
+        </button>
+      </div>
     </div>
   </div>
 </template>
