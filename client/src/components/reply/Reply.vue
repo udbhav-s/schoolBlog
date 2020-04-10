@@ -2,6 +2,15 @@
   <div class="media reply">
     <div class="media-content">
       <div class="content">
+        <div v-if="adminView && reply.comment.post">
+          <router-link 
+            :to="{name: 'Post', params: {id: reply.comment.postId}}"
+            class="title is-6"
+          >
+            {{ reply.comment.post.title }}
+          </router-link>
+        </div>
+
         <username :user="reply.user"></username>
 
         <div v-if="!editReply">{{ reply.body }}</div>
@@ -37,7 +46,7 @@ import Username from "@/components/user/Username.vue";
 
 export default {
   name: "Reply",
-  props: ["reply"],
+  props: ["reply", "adminView"],
 
   data() {
     return {

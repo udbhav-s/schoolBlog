@@ -18,7 +18,7 @@
       <post-card :post="post" />
     </div>
 
-    <div v-if="posts.length == 0 || !hasMorePosts" class="has-text-centered">
+    <div v-if="posts.length == 0" class="has-text-centered">
       <h2>No Posts</h2>
     </div>
 
@@ -42,8 +42,10 @@ export default {
   data() {
     return {
       posts: [],
-      limit: 10,
-      offset: 0,
+      options: {
+        limit: 10,
+        offset: 0,
+      },
       hasMorePosts: true,
       searchOptions: {},
       showOptions: false,
@@ -58,8 +60,7 @@ export default {
     async loadPosts() {
       const options = {
         ...this.searchOptions,
-        limit: this.limit,
-        offset: this.offset
+        ...this.options
       };
       if (this.userId) options.userId = this.userId;
 
@@ -68,8 +69,9 @@ export default {
 
       if (result.data.length > 0) {
         result.data.forEach(post => this.posts.push(post));
-        this.offset += this.limit;
-      } else this.hasMorePosts = false;
+        this.options.offset += this.options.limit;
+      }
+      if (result.data.length < this.options.limit) this.hasMorePosts = false;
     },
 
     search(options) {

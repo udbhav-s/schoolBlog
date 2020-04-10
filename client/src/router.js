@@ -28,12 +28,18 @@ const routes = [
       {
         path: '/comments',
         name: 'comments',
-        component: () => import("@/components/comment/CommentList.vue")
+        component: () => import("@/components/comment/CommentList.vue"),
+        props: {
+          adminView: true
+        }
       },
       {
         path: '/replies',
         name: 'replies',
-        component: () => import("@/components/reply/ReplyList.vue")
+        component: () => import("@/components/reply/ReplyList.vue"),
+        props: {
+          adminView: true
+        }
       },
       {
         path: '/categories',

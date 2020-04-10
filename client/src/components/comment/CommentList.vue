@@ -8,9 +8,20 @@
       v-for="comment in comments"
       :comment="comment"
       :key="comment.id"
+      :adminView="adminView"
       @commentEdited="commentEdited"
       @commentDeleted="commentDeleted"
     />
+
+    <div class="has-text-centered">
+      <button 
+        v-if="hasMoreComments && adminView" 
+        class="button is-info is-small" 
+        @click="loadComments"
+      >
+        Load More
+      </button>
+    </div>
   </div>
 </template>
 
@@ -24,12 +35,18 @@ export default {
   name: "CommentList",
   props: {
     postId: Number,
-    showAddComment: Boolean
+    showAddComment: Boolean,
+    adminView: Boolean,
   },
 
   data() {
     return {
-      comments: []
+      comments: [],
+      options: {
+        limit: 20,
+        offset: 0,
+      },
+      hasMoreComments: true,
     };
   },
 
@@ -42,9 +59,14 @@ export default {
       // load comments
       let result;
       if (this.postId) result = await commentService.getByPost(this.postId);
-      else result = await commentService.getAll();
+      else result = await commentService.getAll(this.options);
       if (!result.success) throw result.message;
-      else this.comments = result.data;
+      
+      if (result.data.length > 0) {
+        result.data.forEach(c => this.comments.push(c));
+        this.options.offset += this.options.limit;
+      }
+      if (result.data.length < this.options.limit) this.hasMoreComments = false;
     },
 
     commentAdded(comment) {

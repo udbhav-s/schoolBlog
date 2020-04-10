@@ -9,7 +9,14 @@
         @replyEdited="replyEdited"
         @replyDeleted="replyDeleted"
         :reply="reply"
+        :adminView="adminView"
       />
+    </div>
+
+    <div class="has-text-centered">
+      <button v-if="hasMoreReplies && adminView" class="button is-info is-small" @click="loadReplies">
+        Load More
+      </button>
     </div>
   </div>
 </template>
@@ -24,12 +31,18 @@ export default {
   name: "ReplyList",
   props: {
     commentId: Number,
-    showAddReply: Boolean
+    showAddReply: Boolean,
+    adminView: Boolean,
   },
 
   data() {
     return {
-      replies: []
+      replies: [],
+      options: {
+        limit: 20,
+        offset: 0
+      },
+      hasMoreReplies: true,
     };
   },
 
@@ -42,9 +55,14 @@ export default {
       let result;
       if (this.commentId)
         result = await replyService.getByComment(this.commentId);
-      else result = await replyService.getAll(this.userId);
+      else result = await replyService.getAll(this.options);
       if (!result.success) throw result.message;
-      else this.replies = result.data;
+      
+      if (result.data.length > 0) {
+        result.data.forEach(r => this.replies.push(r));
+        this.options.offset += this.options.limit;
+      }
+      if (result.data.length < this.options.limit) this.hasMoreReplies = false;
     },
 
     replyAdded(reply) {

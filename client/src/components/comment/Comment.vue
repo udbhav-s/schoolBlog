@@ -2,8 +2,17 @@
   <div class="media comment">
     <div class="media-content">
       <div class="content">
-        <div class="">
-          <div class="">
+        <div>
+          <div v-if="adminView && comment.post">
+            <router-link 
+              :to="{name: 'Post', params: {id: comment.postId}}"
+              class="title is-6"
+            >
+              {{ comment.post.title }}
+            </router-link>
+          </div>
+
+          <div>
             <username :user="comment.user"></username>
           </div>
 
@@ -35,7 +44,7 @@
       </div>
 
       <reply-list
-        v-if="comment.id"
+        v-if="comment.id && !adminView"
         :commentId="comment.id"
         :showAddReply="addReply"
         @replyAdded="addReply = false"
@@ -53,7 +62,7 @@ import Username from "@/components/user/Username.vue";
 
 export default {
   name: "Comment",
-  props: ["comment"],
+  props: ["comment", "adminView"],
 
   data() {
     return {
