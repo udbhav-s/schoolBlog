@@ -16,7 +16,7 @@ const routes = [
     children: [
       {
         path: '/',
-        alias: '/posts',
+        alias: ['/posts', '/index'],
         name: 'posts',
         component: () => import("@/components/post/PostList.vue")
       },
