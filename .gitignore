@@ -2,3 +2,4 @@
 /uploads
 /client/node_modules
 /server/public
+*.code-workspace
