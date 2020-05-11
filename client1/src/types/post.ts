@@ -1,5 +1,5 @@
-import { User } from '.';
-import { Category } from './category';
+import { User } from ".";
+import { Category } from "./category";
 
 export interface Post {
   title: string;

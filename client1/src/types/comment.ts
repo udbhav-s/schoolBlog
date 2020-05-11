@@ -1,4 +1,4 @@
-import { Post, User, Reply } from '.';
+import { Post, User, Reply } from ".";
 
 export interface PostComment {
   body: string;

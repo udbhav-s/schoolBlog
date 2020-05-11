@@ -1,5 +1,5 @@
 import api from "./apiService";
-import { User, ApiResponse, Credentials } from '@/types';
+import { User, ApiResponse, Credentials } from "@/types";
 
 export const userService = {
   getCurrent() {

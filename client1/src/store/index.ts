@@ -3,7 +3,7 @@ import { userService } from "@/services";
 import { User, Credentials } from "@/types";
 
 const store = Vue.observable({
-  user: {} as User,
+  user: {} as User
 });
 
 export const userStore = {
