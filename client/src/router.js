@@ -12,21 +12,20 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home,
-    alias: "/index",
     children: [
       {
         path: "/",
-        alias: ["/posts", "/index"],
+        alias: "posts",
         name: "posts",
         component: () => import("@/components/post/PostList.vue")
       },
       {
-        path: "/users",
+        path: "users",
         name: "users",
         component: () => import("@/components/user/UserList.vue")
       },
       {
-        path: "/comments",
+        path: "comments",
         name: "comments",
         component: () => import("@/components/comment/CommentList.vue"),
         props: {
@@ -34,7 +33,7 @@ const routes = [
         }
       },
       {
-        path: "/replies",
+        path: "replies",
         name: "replies",
         component: () => import("@/components/reply/ReplyList.vue"),
         props: {
@@ -42,7 +41,7 @@ const routes = [
         }
       },
       {
-        path: "/categories",
+        path: "categories",
         name: "categories",
         component: () => import("@/components/category/CategoryList.vue")
       }
