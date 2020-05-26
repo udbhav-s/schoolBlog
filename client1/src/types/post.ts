@@ -7,6 +7,7 @@ export interface Post {
   thumbnail?: string;
   verified: boolean;
   userId: number;
+  createdAt: string;
 
   user?: User;
   category?: Category;

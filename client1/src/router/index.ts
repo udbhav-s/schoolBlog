@@ -1,6 +1,5 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
-import Home from "../views/Home.vue";
 import { userStore } from "@/store";
 import { userService } from "@/services";
 
@@ -9,57 +8,12 @@ Vue.use(VueRouter);
 const routes: Array<RouteConfig> = [
   {
     path: "/",
-    name: "Home",
-    component: Home,
-    children: [
-      {
-        path: "/",
-        alias: ["/posts", "/index"],
-        name: "posts",
-        component: () =>
+    name: "Posts",
+    alias: "/posts",
+    component: () =>
           import(
             /* webpackChunkName: "postList" */ "@/components/post/PostList.vue"
           )
-      },
-      {
-        path: "/users",
-        name: "users",
-        component: () =>
-          import(
-            /* webpackChunkName: "userList" */ "@/components/user/UserList.vue"
-          )
-      },
-      {
-        path: "/comments",
-        name: "comments",
-        component: () =>
-          import(
-            /* webpackChunkName: "commentList" */ "@/components/comment/CommentList.vue"
-          ),
-        props: {
-          adminView: true
-        }
-      },
-      {
-        path: "/replies",
-        name: "replies",
-        component: () =>
-          import(
-            /* webpackChunkName: "replyList" */ "@/components/reply/ReplyList.vue"
-          ),
-        props: {
-          adminView: true
-        }
-      },
-      {
-        path: "/categories",
-        name: "categories",
-        component: () =>
-          import(
-            /* webpackChunkName: "categoryList" */ "@/components/category/CategoryList.vue"
-          )
-      }
-    ]
   },
   {
     path: "/login",
@@ -110,6 +64,44 @@ const routes: Array<RouteConfig> = [
     path: "/user/",
     name: "CurrentUser",
     component: () => import(/* webpackChunkName: "user" */ "@/views/User.vue")
+  },
+  {
+    path: "/users",
+    name: "Users",
+    component: () =>
+      import(
+        /* webpackChunkName: "userList" */ "@/components/user/UserList.vue"
+      )
+  },
+  {
+    path: "/comments",
+    name: "Comments",
+    component: () =>
+      import(
+        /* webpackChunkName: "commentList" */ "@/components/comment/CommentList.vue"
+      ),
+    props: {
+      adminView: true
+    }
+  },
+  {
+    path: "/replies",
+    name: "Replies",
+    component: () =>
+      import(
+        /* webpackChunkName: "replyList" */ "@/components/reply/ReplyList.vue"
+      ),
+    props: {
+      adminView: true
+    }
+  },
+  {
+    path: "/categories",
+    name: "Categories",
+    component: () =>
+      import(
+        /* webpackChunkName: "categoryList" */ "@/components/category/CategoryList.vue"
+      )
   }
 ];
 
