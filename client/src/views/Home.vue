@@ -7,13 +7,13 @@
     <section v-if="isModOrAbove" class="section fixed-column">
       <div class="tabs is-centered is-boxed is-small">
         <ul>
-          <li 
+          <li
             v-for="tab in tabs"
             :key="tab.name"
             :class="{
-              'is-active': 
-                ($route.path === tab.route) 
-                || ($route.path === '/' && tab.name === 'Posts')
+              'is-active':
+                $route.path === tab.route ||
+                ($route.path === '/' && tab.name === 'Posts')
             }"
           >
             <router-link :to="tab.route">
@@ -24,7 +24,7 @@
       </div>
 
       <transition name="fade" mode="out-in">
-        <router-view/>
+        <router-view />
       </transition>
     </section>
 
@@ -37,7 +37,7 @@
 <script>
 import HeroSection from "@/components/HeroSection.vue";
 import PostList from "@/components/post/PostList.vue";
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 
 export default {
   name: "Home",
@@ -49,30 +49,30 @@ export default {
     return {
       tabs: [
         {
-          name: 'Posts',
-          route: '/posts'
+          name: "Posts",
+          route: "/posts"
         },
         {
-          name: 'Users',
-          route: '/users'
+          name: "Users",
+          route: "/users"
         },
         {
-          name: 'Comments',
-          route: '/comments'
+          name: "Comments",
+          route: "/comments"
         },
         {
-          name: 'Replies',
-          route: '/replies'
+          name: "Replies",
+          route: "/replies"
         },
         {
-          name: 'Categories',
-          route: '/categories'
-        },
-      ],
-    }
+          name: "Categories",
+          route: "/categories"
+        }
+      ]
+    };
   },
   computed: {
-    ...mapGetters(['isModOrAbove'])
+    ...mapGetters(["isModOrAbove"])
   }
 };
 </script>

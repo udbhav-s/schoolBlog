@@ -1,8 +1,8 @@
 <template>
   <div v-if="categories">
-    <category 
-      v-for="category in categories" 
-      :key="category.id" 
+    <category
+      v-for="category in categories"
+      :key="category.id"
       :category="category"
       @categoryDeleted="categoryDeleted"
       @categoryEdited="categoryEdited"
@@ -19,10 +19,15 @@
         <input v-model="form.name" type="text" class="input is-small" />
       </div>
       <div class="control">
-        <button @click="addCategory" class="button is-primary is-small">Add</button>
+        <button @click="addCategory" class="button is-primary is-small">
+          Add
+        </button>
       </div>
       <div class="control">
-        <button @click="showAddCategory = false" class="button is-danger is-small">
+        <button
+          @click="showAddCategory = false"
+          class="button is-danger is-small"
+        >
           Cancel
         </button>
       </div>
@@ -31,20 +36,20 @@
 </template>
 
 <script>
-import { categoryService } from '@/services/dataService.js';
-import Category from '@/components/category/Category.vue';
-import Vue from 'vue';
+import { categoryService } from "@/services/dataService.js";
+import Category from "@/components/category/Category.vue";
+import Vue from "vue";
 
 export default {
-  name: 'CategoryList',
+  name: "CategoryList",
   data() {
     return {
       categories: null,
       showAddCategory: false,
       form: {
-        name: ''
+        name: ""
       }
-    }
+    };
   },
 
   created() {
@@ -53,18 +58,18 @@ export default {
 
   methods: {
     async loadCategories() {
-      let result = await categoryService.getAll();
+      const result = await categoryService.getAll();
       if (!result.success) {
-        this.$toasted.error('Error getting categories');
+        this.$toasted.error("Error getting categories");
         throw result.message;
       }
       this.categories = result.data;
     },
 
     async addCategory() {
-      let result = await categoryService.create(this.form);
+      const result = await categoryService.create(this.form);
       if (!result.success) {
-        this.$toasted.error('Error while adding category');
+        this.$toasted.error("Error while adding category");
         throw result.message;
       }
       this.$toasted.success("Category created");
@@ -73,9 +78,9 @@ export default {
     },
 
     async categoryDeleted(id) {
-      let result = await categoryService.delete(id);
+      const result = await categoryService.delete(id);
       if (!result.success) {
-        this.$toasted.error('Error while deleting category');
+        this.$toasted.error("Error while deleting category");
         throw result.message;
       }
       this.$toasted.success("Category deleted");
@@ -83,14 +88,14 @@ export default {
     },
 
     async categoryEdited(category) {
-      let result = await categoryService.update(category.id, {
+      const result = await categoryService.update(category.id, {
         name: category.name
       });
       if (!result.success) {
-        this.$toasted.error('Error while updating category');
+        this.$toasted.error("Error while updating category");
         throw result.message;
       }
-      let index = this.categories.findIndex(c => c.id === category.id);
+      const index = this.categories.findIndex(c => c.id === category.id);
       Vue.set(this.categories, index, result.data);
     }
   },
@@ -98,5 +103,5 @@ export default {
   components: {
     Category
   }
-}
+};
 </script>

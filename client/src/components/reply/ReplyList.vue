@@ -14,7 +14,11 @@
     </div>
 
     <div class="has-text-centered">
-      <button v-if="hasMoreReplies && adminView" class="button is-info is-small" @click="loadReplies">
+      <button
+        v-if="hasMoreReplies && adminView"
+        class="button is-info is-small"
+        @click="loadReplies"
+      >
         Load More
       </button>
     </div>
@@ -32,7 +36,7 @@ export default {
   props: {
     commentId: Number,
     showAddReply: Boolean,
-    adminView: Boolean,
+    adminView: Boolean
   },
 
   data() {
@@ -42,7 +46,7 @@ export default {
         limit: 20,
         offset: 0
       },
-      hasMoreReplies: true,
+      hasMoreReplies: true
     };
   },
 
@@ -57,7 +61,7 @@ export default {
         result = await replyService.getByComment(this.commentId);
       else result = await replyService.getAll(this.options);
       if (!result.success) throw result.message;
-      
+
       if (result.data.length > 0) {
         result.data.forEach(r => this.replies.push(r));
         this.options.offset += this.options.limit;

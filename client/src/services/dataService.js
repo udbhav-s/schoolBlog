@@ -50,15 +50,15 @@ export const postService = {
 
 export const categoryService = {
   getById: id => api.get(`/category/${id}`),
-  getAll: () => api.get('/category/all'),
-  create: (data) => api.post('/category/create', data),
+  getAll: () => api.get("/category/all"),
+  create: data => api.post("/category/create", data),
   update: (id, data) => api.post(`/category/update/${id}`, data),
-  delete: (id) => api.delete(`/category/${id}`)
+  delete: id => api.delete(`/category/${id}`)
 };
 
 export const commentService = {
   getById: id => api.get(`/comment/${id}`),
-  getAll: options => api.get('/comment/all', { params: options }),
+  getAll: options => api.get("/comment/all", { params: options }),
   getByPost: id => api.get(`/comment/post/${id}`),
 
   create: data => api.post("/comment/create", data),
@@ -68,7 +68,7 @@ export const commentService = {
 
 export const replyService = {
   getById: id => api.get(`/reply/${id}`),
-  getAll: options => api.get('/reply/all', { params: options }),
+  getAll: options => api.get("/reply/all", { params: options }),
   getByComment: id => api.get(`/reply/comment/${id}`),
 
   create: data => api.post("/reply/create", data),
@@ -79,6 +79,6 @@ export const replyService = {
 export const userService = {
   getCurrent: () => api.get("/user/current"),
   getById: id => api.get(`/user/${id}`),
-  getAll: () => api.get('/user/all'),
+  getAll: () => api.get("/user/all"),
   setLevel: (id, level) => api.post(`/user/level/${id}`, { level })
 };

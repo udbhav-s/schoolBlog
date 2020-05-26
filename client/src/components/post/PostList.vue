@@ -1,6 +1,10 @@
 <template>
   <div>
-    <post-search v-if="showOptions" @search="search" @close="showOptions = false"/>
+    <post-search
+      v-if="showOptions"
+      @search="search"
+      @close="showOptions = false"
+    />
     <div v-else class="level is-mobile post-list-head">
       <div class="level-left">
         <div class="level-item">
@@ -32,7 +36,7 @@
 
 <script>
 import PostCard from "@/components/post/PostCard.vue";
-import PostSearch from '@/components/post/PostSearch.vue';
+import PostSearch from "@/components/post/PostSearch.vue";
 import { postService } from "@/services/dataService.js";
 
 export default {
@@ -44,11 +48,11 @@ export default {
       posts: [],
       options: {
         limit: 10,
-        offset: 0,
+        offset: 0
       },
       hasMorePosts: true,
       searchOptions: {},
-      showOptions: false,
+      showOptions: false
     };
   },
 
@@ -64,7 +68,7 @@ export default {
       };
       if (this.userId) options.userId = this.userId;
 
-      let result = await postService.getAll(options);
+      const result = await postService.getAll(options);
       if (!result.success) throw result.message;
 
       if (result.data.length > 0) {

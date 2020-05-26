@@ -4,8 +4,8 @@
       <div class="content">
         <div>
           <div v-if="adminView && comment.post">
-            <router-link 
-              :to="{name: 'Post', params: {id: comment.postId}}"
+            <router-link
+              :to="{ name: 'Post', params: { id: comment.postId } }"
               class="title is-6"
             >
               {{ comment.post.title }}
@@ -36,7 +36,9 @@
             >
             <a v-if="editComment" @click="editComment = false">Cancel</a>
 
-            <a v-if="byCurrentUser || isModOrAbove" @click="deleteComment">Delete</a>
+            <a v-if="byCurrentUser || isModOrAbove" @click="deleteComment"
+              >Delete</a
+            >
 
             <span v-if="comment.edited">(Edited)</span>
           </small>

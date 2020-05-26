@@ -27,7 +27,10 @@
       </template>
     </hero-section>
 
-    <section class="section fixed-column" v-if="isAdminOrAbove && !isCurrentUser">
+    <section
+      class="section fixed-column"
+      v-if="isAdminOrAbove && !isCurrentUser"
+    >
       <div class="container has-text-centered">
         <div class="field">
           <label class="label">Level</label>

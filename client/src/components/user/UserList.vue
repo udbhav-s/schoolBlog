@@ -6,7 +6,7 @@
           <username :user="user"></username>
         </div>
       </div>
-      
+
       <div class="level-right">
         <div class="level-item">
           {{ user.portalId }}
@@ -17,15 +17,15 @@
 </template>
 
 <script>
-import Username from '@/components/user/Username.vue';
-import { userService } from '@/services/dataService.js';
+import Username from "@/components/user/Username.vue";
+import { userService } from "@/services/dataService.js";
 
 export default {
-  name: 'UserList',
+  name: "UserList",
   data() {
     return {
       users: null
-    }
+    };
   },
 
   created() {
@@ -34,7 +34,7 @@ export default {
 
   methods: {
     async loadUsers() {
-      let result = await userService.getAll();
+      const result = await userService.getAll();
       if (!result.success) {
         this.$toasted.error("Error while loading users");
         throw result.message;
@@ -46,5 +46,5 @@ export default {
   components: {
     Username
   }
-}
+};
 </script>

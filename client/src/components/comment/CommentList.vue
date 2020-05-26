@@ -14,9 +14,9 @@
     />
 
     <div class="has-text-centered">
-      <button 
-        v-if="hasMoreComments && adminView" 
-        class="button is-info is-small" 
+      <button
+        v-if="hasMoreComments && adminView"
+        class="button is-info is-small"
         @click="loadComments"
       >
         Load More
@@ -36,7 +36,7 @@ export default {
   props: {
     postId: Number,
     showAddComment: Boolean,
-    adminView: Boolean,
+    adminView: Boolean
   },
 
   data() {
@@ -44,9 +44,9 @@ export default {
       comments: [],
       options: {
         limit: 20,
-        offset: 0,
+        offset: 0
       },
-      hasMoreComments: true,
+      hasMoreComments: true
     };
   },
 
@@ -61,7 +61,7 @@ export default {
       if (this.postId) result = await commentService.getByPost(this.postId);
       else result = await commentService.getAll(this.options);
       if (!result.success) throw result.message;
-      
+
       if (result.data.length > 0) {
         result.data.forEach(c => this.comments.push(c));
         this.options.offset += this.options.limit;

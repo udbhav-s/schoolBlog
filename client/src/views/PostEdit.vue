@@ -26,7 +26,11 @@
           <span class="select">
             <select v-model="form.categoryId">
               <option :value="null" selected>Category</option>
-              <option v-for="category in categories" :key="category.id" :value="category.id">
+              <option
+                v-for="category in categories"
+                :key="category.id"
+                :value="category.id"
+              >
                 {{ category.name }}
               </option>
             </select>
@@ -51,7 +55,9 @@
           </label>
         </div>
         <div class="control" v-if="form.thumbnail">
-          <button @click="form.thumbnail = ''" class="button is-danger">Remove</button>
+          <button @click="form.thumbnail = ''" class="button is-danger">
+            Remove
+          </button>
         </div>
       </div>
       <div class="field">
@@ -96,9 +102,9 @@ export default {
         title: "",
         thumbnail: "",
         body: "",
-        categoryId: null,
+        categoryId: null
       },
-      categories: null,
+      categories: null
     };
   },
 
@@ -113,7 +119,7 @@ export default {
 
   methods: {
     async loadCategories() {
-      let result = await categoryService.getAll();
+      const result = await categoryService.getAll();
       if (!result.success) this.$toasted.error("Could not load category list");
       this.categories = result.data;
     },

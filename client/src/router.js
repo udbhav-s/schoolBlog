@@ -15,37 +15,37 @@ const routes = [
     alias: "/index",
     children: [
       {
-        path: '/',
-        alias: ['/posts', '/index'],
-        name: 'posts',
+        path: "/",
+        alias: ["/posts", "/index"],
+        name: "posts",
         component: () => import("@/components/post/PostList.vue")
       },
       {
-        path: '/users',
-        name: 'users',
+        path: "/users",
+        name: "users",
         component: () => import("@/components/user/UserList.vue")
       },
       {
-        path: '/comments',
-        name: 'comments',
+        path: "/comments",
+        name: "comments",
         component: () => import("@/components/comment/CommentList.vue"),
         props: {
           adminView: true
         }
       },
       {
-        path: '/replies',
-        name: 'replies',
+        path: "/replies",
+        name: "replies",
         component: () => import("@/components/reply/ReplyList.vue"),
         props: {
           adminView: true
         }
       },
       {
-        path: '/categories',
-        name: 'categories',
+        path: "/categories",
+        name: "categories",
         component: () => import("@/components/category/CategoryList.vue")
-      },
+      }
     ]
   },
   {

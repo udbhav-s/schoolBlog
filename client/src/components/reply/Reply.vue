@@ -3,8 +3,8 @@
     <div class="media-content">
       <div class="content">
         <div v-if="adminView && reply.comment.post">
-          <router-link 
-            :to="{name: 'Post', params: {id: reply.comment.postId}}"
+          <router-link
+            :to="{ name: 'Post', params: { id: reply.comment.postId } }"
             class="title is-6"
           >
             {{ reply.comment.post.title }}

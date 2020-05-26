@@ -4,8 +4,12 @@
       <username :user="post.user"></username>
       <div>{{ date }}</div>
       <span class="tags has-text-centered">
-        <span class="tag has-text-info" v-if="post.category">{{ post.category.name }}</span>
-        <span v-if="!post.verified" class="tag has-text-danger">Unverified</span>
+        <span class="tag has-text-info" v-if="post.category">{{
+          post.category.name
+        }}</span>
+        <span v-if="!post.verified" class="tag has-text-danger"
+          >Unverified</span
+        >
       </span>
     </div>
     <div class="post-options buttons are-small" v-if="showOptions">
