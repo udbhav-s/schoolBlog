@@ -6,6 +6,7 @@ export class FileModel extends BaseModel {
   static tableName = 'files';
 
   filename!: string;
+  type!: string;
   postId!: number;
 
   post: PostModel;
