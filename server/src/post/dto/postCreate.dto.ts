@@ -6,17 +6,17 @@ export class PostCreateDto {
 
   @IsOptional()
   @IsString()
-  body: string;
+  body?: string;
 
   @IsOptional()
   @IsString()
-  thumbnail: string;
+  thumbnail?: string;
 
   @IsOptional()
   @IsInt()
-  categoryId: number;
+  categoryId?: number;
 
   // provided by controller to service
   userId: number;
-  files: object[];
+  files?: object[];
 }
