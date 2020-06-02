@@ -3,10 +3,10 @@ import { ApiResponse, Category } from "@/types";
 
 export const categoryService = {
   getById(id: number) {
-    api.get<ApiResponse<Category>>(`/category/${id}`);
+    return api.get<ApiResponse<Category>>(`/category/${id}`);
   },
   getAll() {
-    api.get<ApiResponse<Category>>("/category/all");
+    return api.get<ApiResponse<Category>>("/category/all");
   },
 
   create(data: Category) {
