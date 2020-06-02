@@ -50,6 +50,12 @@ export class PostModel extends BaseModel {
         query.where({ userId: options.userId });
       }
 
+      if (options.published === false) {
+        query.where({ published: false });
+      } else {
+        query.where({ published: true });
+      }
+
       if (options.verified !== undefined) {
         query.where({ verified: options.verified });
       }
