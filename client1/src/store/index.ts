@@ -9,7 +9,10 @@ const store = Vue.observable({
 export const userStore = {
   getters: {
     user: () => store.user,
-    isAuthenticated: () => !!(store.user && store.user.id)
+    isAuthenticated: () => !!(store.user && store.user.id),
+    isModOrAbove: () => store.user.level >= 3,
+    isMemberOrAbove: () => store.user.level >= 1,
+    isAdminOrAbove: () => store.user.level >= 4
   },
 
   mutations: {
