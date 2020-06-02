@@ -71,6 +71,23 @@ export class PostController {
     return await this.postService.getAll(options);
   }
 
+  @ApiOperation({ summary: 'Create a blank post draft' })
+  @UseGuards(LevelGuard)
+  @Level(Levels.Member)
+  @UsePipes(ValidationPipe)
+  @Post('/create')
+  async createDraft(
+    @Request() req,
+  ): Promise<PostModel> {
+    const post = {
+      title: "Untitled Draft",
+      userId: req.user.id,
+      verified: req.user.level >= Levels.Author,
+    } as PostCreateDto;
+
+    return await this.postService.create(post);
+  }
+
   @ApiOperation({ summary: 'Create a post' })
   @UseGuards(LevelGuard)
   @Level(Levels.Member)
