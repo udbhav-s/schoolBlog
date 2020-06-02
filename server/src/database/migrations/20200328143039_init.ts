@@ -38,6 +38,10 @@ export async function up(knex: Knex): Promise<any> {
           .boolean('verified')
           .notNullable()
           .defaultTo(false);
+        table
+          .boolean('published')
+          .notNullable()
+          .defaultTo(false);
         // post author
         table
           .integer('user_id')
