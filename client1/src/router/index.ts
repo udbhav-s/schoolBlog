@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
+import Home from "@/views/Home.vue";
 import { userStore } from "@/store";
 import { userService } from "@/services";
 
@@ -8,28 +9,57 @@ Vue.use(VueRouter);
 const routes: Array<RouteConfig> = [
   {
     path: "/",
-    name: "Posts",
-    alias: "/posts",
-    component: () =>
-          import(
-            /* webpackChunkName: "postList" */ "@/components/post/PostList.vue"
-          )
+    name: "Home",
+    component: Home,
+    children: [
+      {
+        path: "/",
+        alias: "posts",
+        name: "posts",
+        component: () => import("@/components/post/PostList.vue")
+      },
+      {
+        path: "users",
+        name: "users",
+        component: () => import("@/components/user/UserList.vue")
+      },
+      {
+        path: "comments",
+        name: "comments",
+        component: () => import("@/components/comment/CommentList.vue"),
+        props: {
+          adminView: true
+        }
+      },
+      {
+        path: "replies",
+        name: "replies",
+        component: () => import("@/components/reply/ReplyList.vue"),
+        props: {
+          adminView: true
+        }
+      },
+      {
+        path: "categories",
+        name: "categories",
+        component: () => import("@/components/category/CategoryList.vue")
+      }
+    ]
   },
   {
     path: "/login",
     name: "Login",
-    component: () => import(/* webpackChunkName: "login" */ "@/views/Login.vue")
+    component: () => import("@/views/Login.vue")
   },
   {
     path: "/about",
     name: "About",
-    component: () => import(/* webpackChunkName: "about" */ "@/views/About.vue")
+    component: () => import("@/views/About.vue")
   },
   {
     path: "/post/edit/:id",
     name: "EditPost",
-    component: () =>
-      import(/* webpackChunkName: "postEditor" */ "@/views/PostEditor.vue"),
+    component: () => import("@/views/PostEdit.vue"),
     props: route => ({
       editMode: true,
       editId: route.params.id
@@ -38,8 +68,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/post/create",
     name: "CreatePost",
-    component: () =>
-      import(/* webpackChunkName: "postEditor" */ "@/views/PostEditor.vue"),
+    component: () => import("@/views/PostEdit.vue"),
     props: {
       editMode: false
     }
@@ -47,7 +76,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/post/:id",
     name: "Post",
-    component: () => import(/* webpackChunkName: "post" */ "@/views/Post.vue"),
+    component: () => import("@/views/Post.vue"),
     props: route => ({
       id: route.params.id
     })
@@ -55,7 +84,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/user/:id",
     name: "User",
-    component: () => import(/* webpackChunkName: "user" */ "@/views/User.vue"),
+    component: () => import("@/views/User.vue"),
     props: route => ({
       userId: route.params.id
     })
@@ -63,45 +92,10 @@ const routes: Array<RouteConfig> = [
   {
     path: "/user/",
     name: "CurrentUser",
-    component: () => import(/* webpackChunkName: "user" */ "@/views/User.vue")
-  },
-  {
-    path: "/users",
-    name: "Users",
-    component: () =>
-      import(
-        /* webpackChunkName: "userList" */ "@/components/user/UserList.vue"
-      )
-  },
-  {
-    path: "/comments",
-    name: "Comments",
-    component: () =>
-      import(
-        /* webpackChunkName: "commentList" */ "@/components/comment/CommentList.vue"
-      ),
-    props: {
-      adminView: true
-    }
-  },
-  {
-    path: "/replies",
-    name: "Replies",
-    component: () =>
-      import(
-        /* webpackChunkName: "replyList" */ "@/components/reply/ReplyList.vue"
-      ),
-    props: {
-      adminView: true
-    }
-  },
-  {
-    path: "/categories",
-    name: "Categories",
-    component: () =>
-      import(
-        /* webpackChunkName: "categoryList" */ "@/components/category/CategoryList.vue"
-      )
+    component: () => import("@/views/User.vue"),
+    props: route => ({
+      userId: userStore.getters.user().id
+    })
   }
 ];
 
