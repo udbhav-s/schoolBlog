@@ -2,6 +2,7 @@ import { User } from ".";
 import { Category } from "./category";
 
 export interface Post {
+  id: number;
   title: string;
   body?: string;
   thumbnail?: string;
