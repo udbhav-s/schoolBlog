@@ -35,43 +35,47 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, reactive, computed } from "@vue/composition-api";
 import HeroSection from "@/components/HeroSection.vue";
 import PostList from "@/components/post/PostList.vue";
+import { userStore } from "@/store";
 
-export default {
+export default defineComponent({
   name: "Home",
   components: {
     PostList,
     HeroSection
   },
-  data() {
+
+  setup() {
+    const isModOrAbove = computed(userStore.getters.isModOrAbove);
+    const tabs = reactive([
+      {
+        name: "Posts",
+        route: "/posts"
+      },
+      {
+        name: "Users",
+        route: "/users"
+      },
+      {
+        name: "Comments",
+        route: "/comments"
+      },
+      {
+        name: "Replies",
+        route: "/replies"
+      },
+      {
+        name: "Categories",
+        route: "/categories"
+      }
+    ]);
+
     return {
-      tabs: [
-        {
-          name: "Posts",
-          route: "/posts"
-        },
-        {
-          name: "Users",
-          route: "/users"
-        },
-        {
-          name: "Comments",
-          route: "/comments"
-        },
-        {
-          name: "Replies",
-          route: "/replies"
-        },
-        {
-          name: "Categories",
-          route: "/categories"
-        }
-      ]
+      tabs,
+      isModOrAbove
     };
-  },
-  computed: {
-    ...mapGetters(["isModOrAbove"])
   }
-};
+});
 </script>
