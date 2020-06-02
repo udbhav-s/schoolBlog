@@ -75,7 +75,7 @@ export class PostController {
   @UseGuards(LevelGuard)
   @Level(Levels.Member)
   @UsePipes(ValidationPipe)
-  @Post('/create')
+  @Post('/createDraft')
   async createDraft(
     @Request() req,
   ): Promise<PostModel> {
@@ -86,6 +86,48 @@ export class PostController {
     } as PostCreateDto;
 
     return await this.postService.create(post);
+  }
+
+  @ApiOperation({ summary: 'Publish a draft' })
+  @UseGuards(LevelGuard)
+  @Level(Levels.Member)
+  @UsePipes(ValidationPipe)
+  @Post('/publish/:id')
+  async publish(
+    @Param('id', ParseIntPipe) id: number,
+    @Request() req,
+  ): Promise<PostModel> {
+    // get post to be published
+    const post = await this.postService.getById(id);
+    if (!post) throw new NotFoundException();
+
+    // check if post is by user
+    if (post.userId !== req.user.id) {
+      throw new ForbiddenException();
+    }
+
+    return await this.postService.publish(id);
+  }
+
+  @ApiOperation({ summary: 'Unpublish a post' })
+  @UseGuards(LevelGuard)
+  @Level(Levels.Member)
+  @UsePipes(ValidationPipe)
+  @Post('/unpublish/:id')
+  async unpublish(
+    @Param('id', ParseIntPipe) id: number,
+    @Request() req,
+  ): Promise<PostModel> {
+    // get post to be published
+    const post = await this.postService.getById(id);
+    if (!post) throw new NotFoundException();
+
+    // check if post is by user
+    if (post.userId !== req.user.id) {
+      throw new ForbiddenException();
+    }
+
+    return await this.postService.unpublish(id);
   }
 
   @ApiOperation({ summary: 'Create a post' })
@@ -186,6 +228,9 @@ export class PostController {
     if (data.thumbnail)
       data.thumbnail = this.fileService.uploadThumbnail(data.thumbnail);
     else data.thumbnail = '';
+
+    // sanitize
+    data.body = this.postService.sanitizeBody(data.body);
 
     // new body
     let files: any[] = [];
