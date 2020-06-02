@@ -58,6 +58,10 @@ export class PostController {
         options.userId = req.user.id;
       }
     }
+    // if user wants unpublished posts show only theirs
+    if (options.published === false) {
+      options.userId = req.user.id;
+    } else options.published = true;
     // default order newest first
     if (!options.orderBy) {
       options.orderBy = 'createdAt';
