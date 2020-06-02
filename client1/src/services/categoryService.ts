@@ -6,7 +6,7 @@ export const categoryService = {
     return api.get<ApiResponse<Category>>(`/category/${id}`);
   },
   getAll() {
-    return api.get<ApiResponse<Category>>("/category/all");
+    return api.get<ApiResponse<Category[]>>("/category/all");
   },
 
   create(data: Category) {
