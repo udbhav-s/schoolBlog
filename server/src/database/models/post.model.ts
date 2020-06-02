@@ -27,15 +27,17 @@ export class PostModel extends BaseModel {
   category?: CategoryModel;
 
   // checks whether a user can access the post or not
-  // based on verified property
   canAccess(user: UserModel): boolean {
     return (
-      this.verified || this.userId == user.id || user.level >= Levels.Moderator
+      (this.verified && this.published) ||
+      this.userId == user.id ||
+      (user.level >= Levels.Moderator && this.published)
     );
   }
 
   canDelete(user: UserModel): boolean {
-    return this.userId == user.id || user.level >= Levels.Moderator;
+    return this.userId == user.id ||
+    (user.level >= Levels.Moderator && this.published);
   }
 
   static modifiers = {
