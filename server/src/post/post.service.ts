@@ -15,7 +15,7 @@ export class PostService {
     return await this.postModel
       .query()
       .findById(id)
-      .withGraphFetched('[user, category]');
+      .withGraphFetched('[user, category, files]');
   }
 
   async getAll(options?: PostGetOptionsDto): Promise<PostModel[]> {
@@ -25,7 +25,7 @@ export class PostService {
       query.modify(POST_GET_OPTIONS, options);
     }
     // add user
-    query.withGraphFetched('[user, category]');
+    query.withGraphFetched('[user, category, files]');
     return await query;
   }
 
@@ -86,14 +86,6 @@ export class PostService {
       .where({ id })
       .del()
       .returning('*')
-      .first();
-  }
-
-  // for image requests
-  async getByThumbnail(thumbnail: string): Promise<PostModel> {
-    return await this.postModel
-      .query()
-      .where({ thumbnail })
       .first();
   }
 }

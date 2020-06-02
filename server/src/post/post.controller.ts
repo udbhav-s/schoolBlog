@@ -88,6 +88,37 @@ export class PostController {
     return await this.postService.create(post);
   }
 
+  // the update method in the post service uses upsertGraph
+  // any properties which are not specified in the update request will be DELETED
+  @ApiOperation({ summary: 'Update a post' })
+  @Post('/update/:id')
+  async update(
+    @Body(ValidationPipe) data: PostCreateDto,
+    @Param('id', ParseIntPipe) id: number,
+    @Request() req,
+  ): Promise<PostModel> {
+    // get post to be updated
+    const post = await this.postService.getById(id);
+    if (!post) throw new NotFoundException();
+
+    // check if post is by user
+    if (post.userId !== req.user.id) {
+      throw new ForbiddenException();
+    }
+
+    // sanitize
+    data.body = this.postService.sanitizeBody(data.body);
+
+    // set user id
+    data = {
+      ...data,
+      userId: req.user.id,
+    };
+
+    // update post
+    return await this.postService.update(id, data);
+  }
+
   @ApiOperation({ summary: 'Publish a draft' })
   @UseGuards(LevelGuard)
   @Level(Levels.Member)
@@ -128,44 +159,6 @@ export class PostController {
     }
 
     return await this.postService.unpublish(id);
-  }
-
-  // the update method in the post service uses upsertGraph
-  // any properties which are not specified in the update request will be DELETED
-  @ApiOperation({ summary: 'Update a post' })
-  @Post('/update/:id')
-  async update(
-    @Body(ValidationPipe) data: PostCreateDto,
-    @Param('id', ParseIntPipe) id: number,
-    @Request() req,
-  ): Promise<PostModel> {
-    // get post to be updated
-    const post = await this.postService.getById(id);
-    if (!post) throw new NotFoundException();
-
-    // check if post is by user
-    if (post.userId !== req.user.id) {
-      throw new ForbiddenException();
-    }
-
-    // delete the old thumbnail (even if new thumbnail is not present in request data)
-    if (post.thumbnail) this.fileService.removeThumbnail(post.thumbnail);
-    // upload new thumbnail if present
-    if (data.thumbnail)
-      data.thumbnail = this.fileService.uploadThumbnail(data.thumbnail);
-    else data.thumbnail = '';
-
-    // sanitize
-    data.body = this.postService.sanitizeBody(data.body);
-
-    // set user id
-    data = {
-      ...data,
-      userId: req.user.id,
-    };
-
-    // update post
-    return await this.postService.update(id, data);
   }
 
   @ApiOperation({ summary: 'Verify a post' })
@@ -209,7 +202,6 @@ export class PostController {
     // check if user can access
     if (!post.canDelete(req.user)) throw new ForbiddenException();
     // remove thumbnail and images
-    if (post.thumbnail) this.fileService.removeThumbnail(post.thumbnail);
     this.fileService.removePostFiles(post.id);
     // delete and return the post
     return await this.postService.del(post.id);
