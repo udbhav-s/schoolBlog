@@ -12,6 +12,7 @@ export async function seed(knex: Knex) {
           body: 'test post content',
           userId: 1,
           categoryId: 1,
+          published: true
         },
       ]);
     });
