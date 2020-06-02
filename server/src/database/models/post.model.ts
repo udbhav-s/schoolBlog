@@ -20,6 +20,8 @@ export class PostModel extends BaseModel {
   published?: boolean;
   userId!: number;
 
+  thumbnail?: string;
+  attachments?: string[];
   user?: UserModel;
   comments?: CommentModel[];
   files?: FileModel[];
@@ -83,6 +85,23 @@ export class PostModel extends BaseModel {
 
     ...BaseModel.modifiers,
   };
+
+  static afterFind({ result = [] }) {
+    return result.map((post: PostModel) => {
+      // add thumbnail property
+      post.thumbnail = post
+        .files
+        .find(f => f.type === 'thumbnail')
+        ?.filename;
+      // add attachments array
+      post.attachments = post.
+        files.
+        filter(f => f.type === 'attachment')
+        .map(a => a.filename);
+      
+      return post;
+    });
+  }
 
   static relationMappings = () => ({
     user: {
