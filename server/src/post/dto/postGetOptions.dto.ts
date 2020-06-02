@@ -9,6 +9,11 @@ export class PostGetOptionsDto extends GetOptionsDto {
   verified?: boolean;
 
   @IsOptional()
+  @IsBoolean()
+  @Transform(val => val === 'true')
+  published?: boolean;
+
+  @IsOptional()
   @IsInt()
   @Transform(val => parseInt(val))
   userId?: number;
