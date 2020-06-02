@@ -34,30 +34,20 @@ export class PostService {
   }
 
   async create(data: PostCreateDto): Promise<PostModel> {
-    const post = await this.postModel
-      .query()
-      .allowGraph('files')
-      .insertGraph(data);
-
     return await this.postModel
       .query()
-      .where({ id: post.id })
+      .insert(data)
+      .returning('*')
       .first()
       .withGraphFetched('[user, category]');
   }
 
   async update(id: number, data: PostCreateDto): Promise<PostModel> {
-    const post = await this.postModel
-      .query()
-      .allowGraph('files')
-      .upsertGraph({
-        id,
-        ...data,
-      });
-
     return await this.postModel
       .query()
-      .where({ id: post.id })
+      .where({ id })
+      .update(data)
+      .returning('*')
       .first()
       .withGraphFetched('[user, category]');
   }
