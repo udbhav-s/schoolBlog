@@ -60,7 +60,7 @@ export class UserController {
   @Level(Levels.Moderator)
   @Get('/all')
   async getAll(
-    @Query(new ValidationPipe({ transform: true })) options: GetOptionsDto
+    @Query(new ValidationPipe({ transform: true })) options: GetOptionsDto,
   ): Promise<UserModel[]> {
     return await this.userService.getAll(options);
   }

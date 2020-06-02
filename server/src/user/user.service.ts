@@ -20,7 +20,7 @@ export class UserService {
   }
 
   async getAll(options?: GetOptionsDto): Promise<UserModel[]> {
-    let query = this.userModel.query();
+    const query = this.userModel.query();
     if (options) query.modify(GET_OPTIONS, options);
     return await query;
   }

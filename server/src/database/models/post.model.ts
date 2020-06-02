@@ -59,17 +59,15 @@ export class PostModel extends BaseModel {
     },
 
     search(query: QueryBuilder<PostModel>, str: string) {
-      let columns = ['title', 'body'];
+      const columns = ['title', 'body'];
       let terms = str.split(/\s+/);
       terms = terms.map(term => term.trim());
 
-      for (let column of columns) {
-        for (let term of terms) {
+      for (const column of columns) {
+        for (const term of terms) {
           query.orWhere(
-            raw(`LOWER(??) like LOWER('%' || ? || '%')`,
-            column,
-            term
-          ));
+            raw(`LOWER(??) like LOWER('%' || ? || '%')`, column, term),
+          );
         }
       }
       query.debug();
@@ -111,8 +109,8 @@ export class PostModel extends BaseModel {
       relation: Model.BelongsToOneRelation,
       join: {
         from: 'posts.categoryId',
-        to: 'categories.id'
-      }
-    }
+        to: 'categories.id',
+      },
+    },
   });
 }

@@ -34,8 +34,8 @@ export class PortalService {
         id: 'sen5678',
         name: 'Will Smith',
         type: 'teacher',
-        password: '1234'
-      }
+        password: '1234',
+      },
     ];
   }
 

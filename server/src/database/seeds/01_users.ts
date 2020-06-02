@@ -24,7 +24,7 @@ export async function seed(knex: Knex) {
           name: 'Heath Ledger',
           type: 'teacher',
           level: 2,
-        }
+        },
       ]);
     });
 }

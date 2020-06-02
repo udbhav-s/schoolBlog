@@ -27,7 +27,7 @@ export class CommentService {
       .modifiers({
         title(builder) {
           builder.select('title');
-        }
+        },
       });
     // add search options
     if (options) query.modify(GET_OPTIONS, options);

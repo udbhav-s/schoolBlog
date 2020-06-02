@@ -11,7 +11,7 @@ export async function seed(knex: Knex) {
           title: 'Test post',
           body: 'test post content',
           userId: 1,
-          categoryId: 1
+          categoryId: 1,
         },
       ]);
     });

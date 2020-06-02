@@ -6,7 +6,7 @@ import { CategoryCreateDto } from './dto/categoryCreate.dto';
 @Injectable()
 export class CategoryService {
   constructor(
-    @Inject('CategoryModel') private categoryModel: ModelClass<CategoryModel>
+    @Inject('CategoryModel') private categoryModel: ModelClass<CategoryModel>,
   ) {}
 
   async getAll(): Promise<CategoryModel[]> {
@@ -18,7 +18,10 @@ export class CategoryService {
   }
 
   async create(body: CategoryCreateDto): Promise<CategoryModel> {
-    return await this.categoryModel.query().insert(body).returning('*');
+    return await this.categoryModel
+      .query()
+      .insert(body)
+      .returning('*');
   }
 
   async update(id: number, body: CategoryCreateDto): Promise<CategoryModel> {

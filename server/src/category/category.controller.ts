@@ -1,4 +1,15 @@
-import { Controller, UseGuards, UseInterceptors, Get, ParseIntPipe, Post, Param, Body, ValidationPipe, Delete } from '@nestjs/common';
+import {
+  Controller,
+  UseGuards,
+  UseInterceptors,
+  Get,
+  ParseIntPipe,
+  Post,
+  Param,
+  Body,
+  ValidationPipe,
+  Delete,
+} from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { ApiTags, ApiBasicAuth, ApiOperation } from '@nestjs/swagger';
 import { AuthenticatedGuard } from 'src/common/guards/authenticated.guard';
@@ -15,9 +26,7 @@ import { LevelGuard } from 'src/common/guards/level.guard';
 @UseInterceptors(FormatResponseInterceptor)
 @Controller('api/category')
 export class CategoryController {
-  constructor(
-    private categoryService: CategoryService
-  ) {}
+  constructor(private categoryService: CategoryService) {}
 
   @ApiOperation({ summary: 'Get all categories' })
   @Get('/all')
@@ -27,9 +36,7 @@ export class CategoryController {
 
   @ApiOperation({ summary: 'Get category by id' })
   @Get('/:id')
-  async getById(
-    @Param('id', ParseIntPipe) id: number
-  ): Promise<CategoryModel> {
+  async getById(@Param('id', ParseIntPipe) id: number): Promise<CategoryModel> {
     return await this.categoryService.getById(id);
   }
 
@@ -38,7 +45,7 @@ export class CategoryController {
   @Level(Levels.Moderator)
   @Post('/create')
   async create(
-    @Body(ValidationPipe) body: CategoryCreateDto
+    @Body(ValidationPipe) body: CategoryCreateDto,
   ): Promise<CategoryModel> {
     return await this.categoryService.create(body);
   }
@@ -49,7 +56,7 @@ export class CategoryController {
   @Post('/update/:id')
   async update(
     @Param('id', ParseIntPipe) id: number,
-    @Body(ValidationPipe) body: CategoryCreateDto
+    @Body(ValidationPipe) body: CategoryCreateDto,
   ): Promise<CategoryModel> {
     return await this.categoryService.update(id, body);
   }
@@ -58,9 +65,7 @@ export class CategoryController {
   @UseGuards(LevelGuard)
   @Level(Levels.Moderator)
   @Delete('/:id')
-  async del(
-    @Param('id', ParseIntPipe) id: number
-  ): Promise<CategoryModel> {
+  async del(@Param('id', ParseIntPipe) id: number): Promise<CategoryModel> {
     return await this.categoryService.del(id);
   }
 }

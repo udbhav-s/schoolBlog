@@ -53,9 +53,7 @@ export async function up(knex: Knex): Promise<any> {
           .inTable('users')
           .onDelete('CASCADE');
         // category
-        table
-          .integer('category_id')
-          .unsigned()
+        table.integer('category_id').unsigned();
         table
           .foreign('category_id')
           .references('id')

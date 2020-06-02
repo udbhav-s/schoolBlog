@@ -52,7 +52,7 @@ export class PostService {
       .allowGraph('files')
       .upsertGraph({
         id,
-        ...data
+        ...data,
       });
 
     return await this.postModel

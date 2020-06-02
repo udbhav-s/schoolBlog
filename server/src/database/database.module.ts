@@ -11,7 +11,14 @@ import { CategoryModel } from './models/category.model';
 
 import * as KnexConfig from '../../knexfile';
 
-const models = [UserModel, PostModel, FileModel, CommentModel, ReplyModel, CategoryModel];
+const models = [
+  UserModel,
+  PostModel,
+  FileModel,
+  CommentModel,
+  ReplyModel,
+  CategoryModel,
+];
 
 const modelProviders = models.map(model => {
   return {

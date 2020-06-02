@@ -8,7 +8,7 @@ export async function seed(knex: Knex) {
       // Inserts seed entries
       return knex('categories').insert([
         {
-          name: 'Announcement'
+          name: 'Announcement',
         },
       ]);
     });
