@@ -75,8 +75,8 @@ export class PostController {
   @UseGuards(LevelGuard)
   @Level(Levels.Member)
   @UsePipes(ValidationPipe)
-  @Post('/createDraft')
-  async createDraft(
+  @Post('/create')
+  async create(
     @Request() req,
   ): Promise<PostModel> {
     const post = {
@@ -130,80 +130,6 @@ export class PostController {
     return await this.postService.unpublish(id);
   }
 
-  @ApiOperation({ summary: 'Create a post' })
-  @UseGuards(LevelGuard)
-  @Level(Levels.Member)
-  @UsePipes(ValidationPipe)
-  @Post('/create')
-  async create(
-    @Body() data: PostCreateDto,
-    @Request() req,
-  ): Promise<PostModel> {
-    const post = {
-      ...data,
-      userId: req.user.id,
-      verified: req.user.level >= Levels.Author,
-    } as PostCreateDto;
-
-    // sanitize the post html
-    post.body = this.postService.sanitizeBody(post.body);
-    // upload thumbnail if present
-    if (post.thumbnail) {
-      post.thumbnail = this.fileService.uploadThumbnail(post.thumbnail);
-    }
-    // separate images from post
-    const { html, filenames } = this.fileService.separateAndStoreImages(
-      post.body,
-    );
-    post.body = html;
-
-    // turn filenames into object to store using query
-    const files: any[] = filenames.map(filename => ({ filename }));
-    // add files to post body to insert as graph
-    if (files.length > 0) post.files = files;
-
-    // create the post
-    return await this.postService.create(post);
-  }
-
-  // Returns post with images & thumbnail paths replaced by base64
-  // Since update request deletes all old images and uploads new ones
-  @ApiOperation({
-    summary:
-      'Get a post with base64 embedded images instead of file URLs for editing',
-  })
-  @Get('/edit/:id')
-  async getEditMode(
-    @Param('id', ParseIntPipe) id: number,
-    @Request() req,
-  ): Promise<PostModel> {
-    // get the post
-    const post = await this.postService.getById(id);
-    if (!post) throw new NotFoundException();
-
-    // check if user can access post
-    if (!post.canAccess(req.user)) throw new ForbiddenException();
-
-    // get post files
-    const files = await this.fileService.getByPost(post.id);
-    const filenames = files.map(({ filename }) => filename);
-
-    // change the image urls to base64
-    if (post.body) {
-      post.body = this.fileService.joinImages(filenames, post.body);
-    }
-
-    // change the thumbnail to base64
-    if (post.thumbnail) {
-      post.thumbnail = await this.fileService.getBase64Thumbnail(
-        post.thumbnail,
-      );
-    }
-
-    // return the post
-    return post;
-  }
-
   // the update method in the post service uses upsertGraph
   // any properties which are not specified in the update request will be DELETED
   @ApiOperation({ summary: 'Update a post' })
@@ -231,25 +157,6 @@ export class PostController {
 
     // sanitize
     data.body = this.postService.sanitizeBody(data.body);
-
-    // new body
-    let files: any[] = [];
-    // if old post had images delete them
-    if (post.body) this.fileService.removePostFiles(post.id);
-    // process the new body
-    if (data.body) {
-      // sanitize
-      data.body = this.postService.sanitizeBody(data.body);
-      // separate and store new images
-      const { html, filenames } = this.fileService.separateAndStoreImages(
-        data.body,
-      );
-      data.body = html;
-      // add filenames to files for graph insert
-      files = filenames.map(filename => ({ filename }));
-    }
-    // add the new files
-    if (files.length > 0) data.files = files;
 
     // set user id
     data = {
