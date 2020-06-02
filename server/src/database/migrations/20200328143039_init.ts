@@ -125,6 +125,7 @@ export async function up(knex: Knex): Promise<any> {
       .createTable('files', table => {
         table.increments();
         table.text('filename').notNullable();
+        table.string('type').notNullable();
         // id of the post with the file
         table
           .integer('post_id')
