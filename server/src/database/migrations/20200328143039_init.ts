@@ -33,7 +33,6 @@ export async function up(knex: Knex): Promise<any> {
         table.increments();
         table.string('title').notNullable();
         table.text('body');
-        table.string('thumbnail');
         table
           .boolean('verified')
           .notNullable()

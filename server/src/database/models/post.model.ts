@@ -16,7 +16,6 @@ export class PostModel extends BaseModel {
 
   title!: string;
   body?: string;
-  thumbnail?: string;
   verified?: boolean;
   published?: boolean;
   userId!: number;
