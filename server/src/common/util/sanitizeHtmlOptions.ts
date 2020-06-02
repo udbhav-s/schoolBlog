@@ -41,10 +41,10 @@ export default {
   selfClosing: ['img', 'br', 'hr'],
   // URL schemes we permit
   allowedSchemes: ['http', 'https'],
-  // since images are uploaded as Data URIs
-  allowedSchemesByTag: {
-    img: ['data'],
-  },
+  // images are uploaded as Data URIs
+  // allowedSchemesByTag: {
+  //   img: ['data'],
+  // },
   allowedSchemesAppliedToAttributes: ['href', 'src', 'cite'],
   allowProtocolRelative: true,
 };
