@@ -9,14 +9,9 @@ export class PostCreateDto {
   body?: string;
 
   @IsOptional()
-  @IsString()
-  thumbnail?: string;
-
-  @IsOptional()
   @IsInt()
   categoryId?: number;
 
   // provided by controller to service
   userId: number;
-  files?: object[];
 }
