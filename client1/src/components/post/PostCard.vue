@@ -10,10 +10,7 @@
     >
       <div class="box is-paddingless post-card">
         <div class="thumbnail-container" v-if="post.thumbnail">
-          <img
-            class="thumbnail"
-            :src="`/api/file/thumbnail/${post.thumbnail}`"
-          />
+          <img class="thumbnail" :src="`/api/file/${post.thumbnail}`" />
         </div>
 
         <div class="content-container">

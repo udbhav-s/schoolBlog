@@ -4,7 +4,7 @@
     <post-meta :post="post" @postDeleted="postDeleted" :showOptions="true" />
 
     <div v-if="post.thumbnail" class="image post-thumbnail">
-      <img :src="`/api/file/thumbnail/${post.thumbnail}`" />
+      <img :src="`/api/file/${post.thumbnail}`" />
     </div>
 
     <div class="content" v-html="post.body"></div>
