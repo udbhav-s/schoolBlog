@@ -62,6 +62,7 @@ export default defineComponent({
       }
       categories.value = result.data;
     };
+    loadCategories();
 
     const addCategory = async () => {
       const result = await categoryService.create(form);
