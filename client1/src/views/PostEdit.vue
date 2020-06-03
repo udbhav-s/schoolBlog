@@ -79,6 +79,15 @@
         </div>
       </div>
 
+      <file-pond
+        name="file"
+        ref="pond"
+        label-idle="Drop files here or <span class='filepond--label-action'>Browse</span>"
+        allow-multiple="true"
+        :files="attachedFiles"
+        :server="filePondOptions"
+      />
+
       <div class="field is-grouped">
         <div class="control">
           <button class="button is-small is-info" @click="savePost">
@@ -109,18 +118,27 @@
 <script lang="ts">
 import HeroSection from "@/components/HeroSection.vue";
 import { postService, categoryService, fileService } from "@/services";
-import { defineComponent, ref } from "@vue/composition-api";
+import { defineComponent, ref, computed } from "@vue/composition-api";
 import { PostCreate, Category } from "@/types";
+
+// quill
 import Quill from "quill";
 import { quillEditor } from "vue-quill-editor";
 import quillConfig from "@/config/quillOptions";
 import "quill/dist/quill.snow.css";
 
+// file uploader
+import vueFilePond from "vue-filepond";
+import "filepond/dist/filepond.min.css";
+import { FilePondOptionProps } from "filepond";
+const FilePond = vueFilePond();
+
 export default defineComponent({
   name: "PostEdit",
   components: {
     HeroSection,
-    quillEditor
+    quillEditor,
+    FilePond
   },
   props: {
     create: {
@@ -136,6 +154,48 @@ export default defineComponent({
     const categories = ref<Category[]>(null);
     const quillOptions = ref(quillConfig);
     const thumbnail = ref<HTMLInputElement>(null);
+
+    // mock files which show up as attachments (not actually loaded from server)
+    const attachedFiles = computed(() => {
+      return post.value?.attachments?.map(filename => {
+        return {
+          source: filename,
+          options: {
+            type: "limbo",
+            file: {
+              name: filename
+            }
+          }
+        };
+      });
+    });
+
+    // FilePond config
+    const filePondOptions = ref<FilePondOptionProps["server"]>({
+      process: {
+        url: "/api/file/upload",
+        method: "POST",
+        onload: (data: string) => JSON.parse(data).data,
+        ondata: (formData: FormData) => {
+          if (!post.value?.id) return;
+          // upload type - attachment
+          formData.append("type", "attachment");
+          formData.append("postId", post.value.id.toString());
+          return formData;
+        }
+      },
+      revert: (filename: string, load: Function, error: Function) => {
+        fileService
+          .deleteFile(filename)
+          .then(() => load())
+          .catch(() => {
+            error();
+          });
+      },
+      // revert: null,
+      fetch: null,
+      restore: null
+    });
 
     // load the post
     const loadPost = async (id: number) => {
@@ -300,7 +360,9 @@ export default defineComponent({
       editorReady,
       thumbnail,
       uploadThumbnail,
-      removeThumbnail
+      removeThumbnail,
+      filePondOptions,
+      attachedFiles
     };
   }
 });
