@@ -8,7 +8,7 @@ export const userService = {
   getById(id: number) {
     return api.get<ApiResponse<User>>(`/user/${id}`);
   },
-  getAll(id: number) {
+  getAll() {
     return api.get<ApiResponse<User[]>>(`/user/all`);
   },
   login(credentials: Credentials) {
