@@ -6,8 +6,9 @@ export const fileService = {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("type", type);
+    formData.append("postId", postId.toString());
     return api.post<ApiResponse<string>>(
-      `/file/upload/${postId}`,
+      "/file/upload",
       formData,
       {
         headers: {
