@@ -21,12 +21,12 @@ const routes: Array<RouteConfig> = [
       {
         path: "users",
         name: "users",
-        // component: () => import("@/components/user/UserList.vue")
+        component: () => import("@/components/user/UserList.vue")
       },
       {
         path: "comments",
         name: "comments",
-        // component: () => import("@/components/comment/CommentList.vue"),
+        component: () => import("@/components/comment/CommentList.vue"),
         props: {
           adminView: true
         }
@@ -34,7 +34,7 @@ const routes: Array<RouteConfig> = [
       {
         path: "replies",
         name: "replies",
-        // component: () => import("@/components/reply/ReplyList.vue"),
+        component: () => import("@/components/reply/ReplyList.vue"),
         props: {
           adminView: true
         }
@@ -42,7 +42,7 @@ const routes: Array<RouteConfig> = [
       {
         path: "categories",
         name: "categories",
-        // component: () => import("@/components/category/CategoryList.vue")
+        component: () => import("@/components/category/CategoryList.vue")
       }
     ]
   },
