@@ -8,6 +8,7 @@ import { AppModule } from './app.module';
 import { json } from 'body-parser';
 import * as session from 'express-session';
 import * as passport from 'passport';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -25,6 +26,9 @@ async function bootstrap() {
 
   // request size limit
   app.use(json({ limit: '80MB' }));
+
+  // use global validation pipe
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
   // set up swagger for API documentation
   const options = new DocumentBuilder()
