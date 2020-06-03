@@ -9,6 +9,7 @@ export interface Post {
   published: boolean;
   verified: boolean;
   userId: number;
+  categoryId: number;
   createdAt: string;
 
   user?: User;
