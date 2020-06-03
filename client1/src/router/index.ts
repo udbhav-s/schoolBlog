@@ -21,12 +21,12 @@ const routes: Array<RouteConfig> = [
       {
         path: "users",
         name: "users",
-        component: () => import("@/components/user/UserList.vue")
+        // component: () => import("@/components/user/UserList.vue")
       },
       {
         path: "comments",
         name: "comments",
-        component: () => import("@/components/comment/CommentList.vue"),
+        // component: () => import("@/components/comment/CommentList.vue"),
         props: {
           adminView: true
         }
@@ -34,7 +34,7 @@ const routes: Array<RouteConfig> = [
       {
         path: "replies",
         name: "replies",
-        component: () => import("@/components/reply/ReplyList.vue"),
+        // component: () => import("@/components/reply/ReplyList.vue"),
         props: {
           adminView: true
         }
@@ -42,7 +42,7 @@ const routes: Array<RouteConfig> = [
       {
         path: "categories",
         name: "categories",
-        component: () => import("@/components/category/CategoryList.vue")
+        // component: () => import("@/components/category/CategoryList.vue")
       }
     ]
   },
@@ -59,7 +59,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/post/edit/:id",
     name: "EditPost",
-    component: () => import("@/views/PostEdit.vue"),
+    // component: () => import("@/views/PostEdit.vue"),
     props: route => ({
       editMode: true,
       editId: route.params.id
@@ -68,7 +68,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/post/create",
     name: "CreatePost",
-    component: () => import("@/views/PostEdit.vue"),
+    // component: () => import("@/views/PostEdit.vue"),
     props: {
       editMode: false
     }
@@ -76,7 +76,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/post/:id",
     name: "Post",
-    component: () => import("@/views/Post.vue"),
+    // component: () => import("@/views/Post.vue"),
     props: route => ({
       id: route.params.id
     })
@@ -84,7 +84,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/user/:id",
     name: "User",
-    component: () => import("@/views/User.vue"),
+    // component: () => import("@/views/User.vue"),
     props: route => ({
       userId: route.params.id
     })
@@ -92,8 +92,8 @@ const routes: Array<RouteConfig> = [
   {
     path: "/user/",
     name: "CurrentUser",
-    component: () => import("@/views/User.vue"),
-    props: route => ({
+    // component: () => import("@/views/User.vue"),
+    props: () => ({
       userId: userStore.getters.user().id
     })
   }
