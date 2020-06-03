@@ -92,7 +92,8 @@ export default defineComponent({
       hasMoreReplies,
       replyAdded,
       replyEdited,
-      replyDeleted
+      replyDeleted,
+      loadReplies
     };
   }
 });
