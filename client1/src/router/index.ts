@@ -59,18 +59,17 @@ const routes: Array<RouteConfig> = [
   {
     path: "/post/edit/:id",
     name: "EditPost",
-    // component: () => import("@/views/PostEdit.vue"),
+    component: () => import("@/views/PostEdit.vue"),
     props: route => ({
-      editMode: true,
-      editId: parseInt(route.params.id)
+      postId: parseInt(route.params.id)
     })
   },
   {
     path: "/post/create",
     name: "CreatePost",
-    // component: () => import("@/views/PostEdit.vue"),
+    component: () => import("@/views/PostEdit.vue"),
     props: {
-      editMode: false
+      create: true
     }
   },
   {
