@@ -8,7 +8,10 @@
     <div v-else class="level is-mobile post-list-head">
       <div class="level-left">
         <div class="level-item">
-          <h1 class="title">Posts</h1>
+          <h1 class="title">
+            <template v-if="drafts">Drafts</template>
+            <template v-else>Posts</template>
+          </h1>
         </div>
       </div>
       <div class="level-right">
@@ -46,6 +49,9 @@ export default defineComponent({
   props: {
     userId: {
       type: Number as () => number
+    },
+    drafts: {
+      type: Boolean as () => boolean
     }
   },
   components: {
@@ -70,8 +76,9 @@ export default defineComponent({
         ...options
       };
       if (props.userId) opts.userId = props.userId;
+      if (props.drafts) opts.published = false;
 
-      const result = await postService.getAll(options);
+      const result = await postService.getAll(opts);
       if ("error" in result) throw result.message;
 
       if (result.data.length > 0) {

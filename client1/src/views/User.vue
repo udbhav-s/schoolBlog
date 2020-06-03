@@ -64,7 +64,10 @@
     </section>
 
     <section class="section fixed-column">
-      <post-list v-if="this.user.id" :userId="user.id" />
+      <div v-if="isCurrentUser">
+        <post-list v-if="user.id" :userId="user.id" :drafts="true" />
+      </div>
+      <post-list v-if="user.id" :userId="user.id" />
     </section>
   </div>
 </template>
