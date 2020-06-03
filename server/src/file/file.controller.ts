@@ -129,8 +129,8 @@ export class FileController {
     // check if file exists
     const file = await this.fileService.getByFilename(filename);
     if (!file) throw new NotFoundException();
-    // check if user can access
-    if (!file.post.canAccess(req.user)) throw new ForbiddenException();
+    // check if user can modify
+    if (!file.post.canDelete(req.user)) throw new ForbiddenException();
     // delete file
     fs.unlinkSync(path.join(process.env.UPLOADS_PATH, filename));
     // delete from database
