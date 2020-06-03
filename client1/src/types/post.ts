@@ -5,13 +5,14 @@ export interface Post {
   id: number;
   title: string;
   body?: string;
-  thumbnail?: string;
   published: boolean;
   verified: boolean;
   userId: number;
   categoryId: number;
   createdAt: string;
 
+  thumbnail?: string;
+  attachments?: string[];
   user?: User;
   category?: Category;
 }
