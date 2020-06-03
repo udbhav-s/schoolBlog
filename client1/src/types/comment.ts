@@ -1,6 +1,7 @@
 import { Post, User, Reply } from ".";
 
 export interface PostComment {
+  id: number;
   body: string;
   edited: boolean;
   userId: number;
