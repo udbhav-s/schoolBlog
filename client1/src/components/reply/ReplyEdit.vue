@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="reply-edit">
     <div class="field">
       <div class="control">
         <textarea
