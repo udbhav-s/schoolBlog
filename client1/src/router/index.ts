@@ -62,7 +62,7 @@ const routes: Array<RouteConfig> = [
     // component: () => import("@/views/PostEdit.vue"),
     props: route => ({
       editMode: true,
-      editId: route.params.id
+      editId: parseInt(route.params.id)
     })
   },
   {
@@ -76,9 +76,9 @@ const routes: Array<RouteConfig> = [
   {
     path: "/post/:id",
     name: "Post",
-    // component: () => import("@/views/Post.vue"),
+    component: () => import("@/views/Post.vue"),
     props: route => ({
-      id: route.params.id
+      id: parseInt(route.params.id)
     })
   },
   {
@@ -86,7 +86,7 @@ const routes: Array<RouteConfig> = [
     name: "User",
     // component: () => import("@/views/User.vue"),
     props: route => ({
-      userId: route.params.id
+      userId: parseInt(route.params.id)
     })
   },
   {
