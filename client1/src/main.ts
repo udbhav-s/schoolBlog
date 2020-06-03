@@ -5,6 +5,7 @@ import "./registerServiceWorker";
 
 import VueCompositionApi from "@vue/composition-api";
 import "@/config/toasted";
+import "@/config/progressBar";
 
 Vue.config.productionTip = false;
 
