@@ -1,5 +1,5 @@
 import api from "./apiService";
-import { ApiResponse, Category } from "@/types";
+import { ApiResponse, Category, CategoryCreate } from "@/types";
 
 export const categoryService = {
   getById(id: number) {
@@ -9,10 +9,10 @@ export const categoryService = {
     return api.get<ApiResponse<Category[]>>("/category/all");
   },
 
-  create(data: Category) {
+  create(data: CategoryCreate) {
     return api.post<ApiResponse<Category>>("/category/create", data);
   },
-  update(id: number, data: Category) {
+  update(id: number, data: CategoryCreate) {
     return api.post<ApiResponse<Category>>(`/category/update/${id}`, data);
   },
   delete(id: number) {
