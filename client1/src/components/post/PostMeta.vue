@@ -79,6 +79,9 @@ export default defineComponent({
   setup(props, { root, emit }) {
     const currentUser = computed<User>(userStore.getters.user);
     const isModOrAbove = computed<boolean>(userStore.getters.isModOrAbove);
+    const byCurrentUser = computed<boolean>(
+      () => props.post.userId === currentUser.value.id
+    );
     const date = computed<string>(() =>
       new Date(props.post.createdAt).toDateString()
     );
@@ -110,6 +113,7 @@ export default defineComponent({
 
     return {
       date,
+      byCurrentUser,
       currentUser,
       isModOrAbove,
       deletePost,
