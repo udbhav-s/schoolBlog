@@ -91,13 +91,13 @@ export class PostModel extends BaseModel {
       // add thumbnail property
       post.thumbnail = post
         .files
-        .find(f => f.type === 'thumbnail')
+        ?.find(f => f.type === 'thumbnail')
         ?.filename;
       // add attachments array
       post.attachments = post.
-        files.
-        filter(f => f.type === 'attachment')
-        .map(a => a.filename);
+        files
+        ?.filter(f => f.type === 'attachment')
+        ?.map(a => a.filename);
       
       return post;
     });
