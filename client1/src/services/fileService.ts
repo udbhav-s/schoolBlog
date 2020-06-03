@@ -15,5 +15,9 @@ export const fileService = {
         }
       }
     );
+  },
+  
+  deleteFile(filename: string) {
+    return api.delete(`/file/${filename}`);
   }
 };
