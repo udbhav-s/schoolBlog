@@ -9,6 +9,11 @@
 
     <div class="content" v-html="post.body"></div>
 
+    <attachments
+      v-if="post.attachments && post.attachments.length > 0"
+      :attachments="post.attachments"
+    />
+
     <div>
       <h2 class="title is-4">Comments:</h2>
 
@@ -25,6 +30,7 @@
 import { postService } from "@/services";
 import PostMeta from "@/components/post/PostMeta.vue";
 import CommentList from "@/components/comment/CommentList.vue";
+import Attachments from "@/components/post/Attachments.vue";
 import { userStore } from "@/store";
 import { defineComponent, computed, ref } from "@vue/composition-api";
 import { Post } from "@/types";
@@ -39,7 +45,8 @@ export default defineComponent({
   },
   components: {
     PostMeta,
-    CommentList
+    CommentList,
+    Attachments
   },
 
   setup(props, { root }) {
