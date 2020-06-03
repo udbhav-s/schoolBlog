@@ -84,7 +84,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/user/:id",
     name: "User",
-    // component: () => import("@/views/User.vue"),
+    component: () => import("@/views/User.vue"),
     props: route => ({
       userId: parseInt(route.params.id)
     })
@@ -92,7 +92,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/user/",
     name: "CurrentUser",
-    // component: () => import("@/views/User.vue"),
+    component: () => import("@/views/User.vue"),
     props: () => ({
       userId: userStore.getters.user().id
     })
