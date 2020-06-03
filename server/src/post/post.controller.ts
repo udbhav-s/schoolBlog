@@ -189,7 +189,7 @@ export class PostController {
   async getById(@Param('id') id: number, @Request() req): Promise<PostModel> {
     const post = await this.postService.getById(id);
     // check if user can access
-    if (!post.canAccess(req.user)) throw new ForbiddenException();
+    if (!post || !post.canAccess(req.user)) throw new ForbiddenException();
     // return the post
     return post;
   }
@@ -200,7 +200,7 @@ export class PostController {
   async del(@Param('id') id: number, @Request() req): Promise<PostModel> {
     const post = await this.postService.getById(id);
     // check if user can access
-    if (!post.canDelete(req.user)) throw new ForbiddenException();
+    if (!post || !post.canDelete(req.user)) throw new ForbiddenException();
     // remove thumbnail and images
     this.fileService.removePostFiles(post.id);
     // delete and return the post
