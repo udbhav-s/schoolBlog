@@ -79,16 +79,18 @@ export class FileController {
       })
     })
   )
-  @Post('/upload/:id')
+  @Post('/upload')
   async uploadFile(
     @UploadedFile() file, 
-    @Body(ValidationPipe) body: FileUploadDto,
-    @Param('id') id: number,
+    @Body(new ValidationPipe({
+      transform: true,
+      whitelist: true
+    })) body: FileUploadDto,
     @Request() req,
   ): Promise<string> {
     try {
       // get post
-      const post = await this.postService.getById(id);
+      const post = await this.postService.getById(body.postId);
       if (!post) throw new NotFoundException();
       if (!post.canAccess(req.user)) throw new ForbiddenException();
       // validate if image
@@ -99,7 +101,7 @@ export class FileController {
       }
       // if thumbnail remove old thumbnail
       if (body.type === "thumbnail") {
-        const thumbnail = (await this.fileService.getByPost(id, true))[0];
+        const thumbnail = (await this.fileService.getByPost(body.postId, true))[0];
         if (thumbnail) {
           fs.unlinkSync(path.join(process.env.UPLOADS_PATH, thumbnail.filename));
           await this.fileService.removeFilename(thumbnail.filename);
@@ -107,7 +109,7 @@ export class FileController {
       }
       // store filename in database
       await this.fileService.storeFilename({
-        postId: id,
+        postId: body.postId,
         filename: file.filename,
         type: body.type
       });
