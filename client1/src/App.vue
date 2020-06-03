@@ -1,12 +1,12 @@
 <template>
   <div id="app">
     <vue-progress-bar></vue-progress-bar>
+
     <app-header />
-    <transition name="fade" mode="out-in" v-if="cssLoaded">
+
+    <transition name="fade" mode="out-in">
       <router-view id="main" />
     </transition>
-
-    <h1 v-else>Loading</h1>
   </div>
 </template>
 
