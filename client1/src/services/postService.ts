@@ -12,8 +12,8 @@ export const postService = {
     return api.get<ApiResponse<Post[]>>("/post/all", { params: options });
   },
 
-  create(data: PostCreate) {
-    return api.post<ApiResponse<Post>>("/post/create", data);
+  create() {
+    return api.post<ApiResponse<Post>>("/post/create");
   },
   update(id: number, data: PostCreate) {
     return api.post<ApiResponse<Post>>(`/post/update/${id}`, data);
@@ -23,9 +23,15 @@ export const postService = {
   },
 
   verify(id: number) {
-    return api.post<ApiResponse<number>>(`/post/verify/${id}`);
+    return api.post<ApiResponse<Post>>(`/post/verify/${id}`);
   },
   unverify(id: number) {
-    return api.post<ApiResponse<number>>(`/post/unverify/${id}`);
+    return api.post<ApiResponse<Post>>(`/post/unverify/${id}`);
+  },
+  publish(id: number) {
+    return api.post<ApiResponse<Post>>(`/post/publish/${id}`);
+  },
+  unpublish(id: number) {
+    return api.post<ApiResponse<Post>>(`/post/unpublish/${id}`);
   }
 };
