@@ -1,5 +1,5 @@
 <template>
-  <div class="section fixed-column post-page">
+  <div class="section fixed-column post-page" v-if="post">
     <h1 class="title">{{ post.title }}</h1>
     <post-meta :post="post" @postDeleted="postDeleted" :showOptions="true" />
 
