@@ -36,8 +36,7 @@ export default defineComponent({
   name: "CommentList",
   props: {
     postId: {
-      type: Number as () => number,
-      required: true
+      type: Number as () => number
     },
     showAddComment: {
       type: Boolean as () => boolean
