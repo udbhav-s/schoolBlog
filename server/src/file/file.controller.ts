@@ -25,6 +25,7 @@ import { FileUploadDto } from './dto/fileUpload.dto';
 import * as multer from "multer";
 import * as fs from 'fs';
 import { FileModel } from 'src/database/models/file.model';
+import { FormatResponseInterceptor } from 'src/common/interceptors/formatResponse.interceptor';
 
 @ApiTags('file')
 @UseGuards(AuthenticatedGuard)
@@ -68,6 +69,7 @@ export class FileController {
   }
 
   @UseInterceptors(
+    FormatResponseInterceptor,
     FileInterceptor('file', {
       storage: multer.diskStorage({
         destination: process.env.UPLOADS_PATH,
@@ -83,7 +85,7 @@ export class FileController {
     @Body(ValidationPipe) body: FileUploadDto,
     @Param('id') id: number,
     @Request() req,
-  ): Promise<FileModel> {
+  ): Promise<string> {
     try {
       // get post
       const post = await this.postService.getById(id);
@@ -104,11 +106,13 @@ export class FileController {
         }
       }
       // store filename in database
-      return await this.fileService.storeFilename({
+      await this.fileService.storeFilename({
         postId: id,
         filename: file.filename,
         type: body.type
       });
+
+      return file.filename;
     }
     catch (err) {
       // delete file
