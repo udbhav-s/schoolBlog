@@ -13,5 +13,8 @@ export const userService = {
   },
   logout() {
     return api.get("/user/logout");
+  },
+  setLevel(id: number, level: number) {
+    return api.post<ApiResponse<User>>(`/user/level/${id}`, { level })
   }
 };
