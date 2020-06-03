@@ -120,19 +120,6 @@ export default defineComponent({
       submit,
       close
     };
-  },
-
-  data() {
-    return {
-      options: {
-        verified: "",
-        orderBy: "",
-        order: "",
-        search: "",
-        categoryId: ""
-      },
-      categories: null
-    };
   }
 });
 </script>
