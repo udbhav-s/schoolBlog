@@ -1,6 +1,7 @@
 import { User, PostComment } from ".";
 
 export interface Reply {
+  id: number;
   body: string;
   edited: boolean;
   userId: number;
