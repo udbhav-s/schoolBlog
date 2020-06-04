@@ -2,7 +2,7 @@
   <div>
     <router-link
       :to="{
-        name: 'Post',
+        name: post.published ? 'Post' : 'EditPost',
         params: {
           id: post.id
         }
