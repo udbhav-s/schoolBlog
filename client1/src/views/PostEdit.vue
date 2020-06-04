@@ -7,16 +7,29 @@
 
     <div class="section fixed-column">
       <div class="field">
-        <div class="label">
+        <!-- <div class="label">
           Title
-        </div>
+        </div> -->
         <div class="control">
           <input
-            class="input"
+            class="input title-input"
             type="text"
             name="title"
             v-model="post.title"
             placeholder="Title"
+          />
+        </div>
+      </div>
+
+      <div class="field">
+        <!-- <label class="label">
+          Content
+        </label> -->
+        <div class="editor">
+          <quill-editor
+            v-model="post.body"
+            :options="quillOptions"
+            @ready="editorReady"
           />
         </div>
       </div>
@@ -67,26 +80,15 @@
       </div>
 
       <div class="field">
-        <label class="label">
-          Content
-        </label>
-        <div class="editor">
-          <quill-editor
-            v-model="post.body"
-            :options="quillOptions"
-            @ready="editorReady"
-          />
-        </div>
+        <file-pond
+          name="file"
+          ref="pond"
+          label-idle="Attachments: Drop files here or <span class='filepond--label-action'>Browse</span>"
+          allow-multiple="true"
+          :files="attachedFiles"
+          :server="filePondOptions"
+        />
       </div>
-
-      <file-pond
-        name="file"
-        ref="pond"
-        label-idle="Drop files here or <span class='filepond--label-action'>Browse</span>"
-        allow-multiple="true"
-        :files="attachedFiles"
-        :server="filePondOptions"
-      />
 
       <div class="field is-grouped">
         <div class="control">
@@ -97,7 +99,7 @@
         <div class="control">
           <button
             v-if="post.published"
-            class="button is-small is-primary"
+            class="button is-small is-danger"
             @click="unpublishPost"
           >
             Unpublish
@@ -110,6 +112,11 @@
             Publish
           </button>
         </div>
+        <div class="control">
+          <button class="button is-small is-danger" @click="deletePost">
+            Delete
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -118,7 +125,7 @@
 <script lang="ts">
 import HeroSection from "@/components/HeroSection.vue";
 import { postService, categoryService, fileService } from "@/services";
-import { defineComponent, ref, computed } from "@vue/composition-api";
+import { defineComponent, ref, computed, watch } from "@vue/composition-api";
 import { PostCreate, Category } from "@/types";
 
 // quill
@@ -141,9 +148,6 @@ export default defineComponent({
     FilePond
   },
   props: {
-    create: {
-      type: Boolean as () => boolean
-    },
     postId: {
       type: Number as () => number
     }
@@ -208,23 +212,12 @@ export default defineComponent({
         post.value = result.data;
       }
     };
-
-    // create a new post and then load it
-    const createPost = async () => {
-      const result = await postService.create();
-      if ("error" in result) {
-        root.$toasted.error("Error creating post");
-        throw result.message;
-      } else {
-        post.value = result.data;
+    watch(
+      () => props.postId,
+      id => {
+        if (id) loadPost(id);
       }
-    };
-
-    if (props.postId) {
-      loadPost(props.postId);
-    } else if (props.create) {
-      createPost();
-    }
+    );
 
     // load categories
     const loadCategories = async () => {
@@ -350,6 +343,19 @@ export default defineComponent({
       }
     };
 
+    const deletePost = async () => {
+      if (!post.value?.id) return;
+
+      const result = await postService.delete(post.value.id);
+      if ("error" in result) {
+        root.$toasted.error("Error deleting post");
+        throw result.message;
+      } else {
+        root.$toasted.success("Post deleted");
+        root.$router.push("/");
+      }
+    };
+
     return {
       post,
       categories,
@@ -357,6 +363,7 @@ export default defineComponent({
       savePost,
       publishPost,
       unpublishPost,
+      deletePost,
       editorReady,
       thumbnail,
       uploadThumbnail,
