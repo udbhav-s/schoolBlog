@@ -13,7 +13,7 @@
 
         <username :user="reply.user"></username>
 
-        <div v-if="!editReply">{{ reply.body }}</div>
+        <div v-if="!editReply" class="reply-body">{{ reply.body }}</div>
         <div v-else>
           <reply-edit
             @replyEdited="replyEdited"

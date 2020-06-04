@@ -16,7 +16,7 @@
             <username :user="comment.user"></username>
           </div>
 
-          <div v-if="!editComment">{{ comment.body }}</div>
+          <div v-if="!editComment" class="comment-body">{{ comment.body }}</div>
           <div v-else>
             <comment-edit
               @commentEdited="commentEdited"

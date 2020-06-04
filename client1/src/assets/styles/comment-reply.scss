@@ -5,10 +5,15 @@
 
     a {
       margin-right: 5px;
-      font-weight: $weight-semibold;
+      // font-weight: $weight-semibold;
       color: $text;
     }
   }
+}
+
+.comment-body, .reply-body {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
 .media.reply {
