@@ -39,10 +39,11 @@
         <template v-if="currentUser.level >= 1">
           <router-link
             class="navbar-item"
-            to="/post/create"
-            @click.native="isActive = false"
-            >New Post</router-link
+            to=""
+            @click.native.prevent="createPost"
           >
+            New Post
+          </router-link>
         </template>
       </div>
     </div>
@@ -52,15 +53,35 @@
 <script lang="ts">
 import { defineComponent, computed, ref } from "@vue/composition-api";
 import { userStore } from "@/store";
+import { postService } from "@/services";
 
 export default defineComponent({
   name: "AppHeader",
-  setup() {
+  setup(props, { root }) {
     const currentUser = computed(userStore.getters.user);
     const isActive = ref<boolean>(false);
+
+    const createPost = async () => {
+      isActive.value = false;
+
+      const result = await postService.create();
+      if ("error" in result) {
+        root.$toasted.error("Error creating post");
+        throw result.message;
+      } else {
+        root.$router.push({
+          name: "EditPost",
+          params: {
+            id: result.data.id.toString()
+          }
+        });
+      }
+    };
+
     return {
       isActive,
-      currentUser
+      currentUser,
+      createPost
     };
   }
 });
