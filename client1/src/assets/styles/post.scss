@@ -19,8 +19,24 @@
   }
 }
 
+// edit page
+.field .input.title-input {
+  @extend .title;
+  border: none;
+  background-color: inherit;
+  box-shadow: none;
+  padding-left: 0;
+
+  &::placeholder {
+    color: $text;
+    opacity: 0.5;
+  }
+}
+
 // quill editor overrides
 .editor {
+  margin-bottom: 1rem;
+  
   .ql-snow {
     .ql-picker {
       color: $text !important;
@@ -31,5 +47,25 @@
     .ql-fill {
       fill: $text !important
     }
+  }
+
+  .ql-snow.ql-toolbar, .ql-snow.ql-container {
+    // border-color: $border;
+    border: none;
+  }
+
+  .ql-editor {
+    font-size: $size-normal;
+  }
+
+  .ql-editor.ql-blank::before {
+    color: $text;
+    opacity: 0.5;
+    font-style: normal;
+    margin-left: -15px;
+  }
+
+  .ql-editor, .ql-snow.ql-toolbar, .ql-snow .ql-picker-label {
+    padding-left: 0;
   }
 }
