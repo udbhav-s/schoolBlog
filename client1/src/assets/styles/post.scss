@@ -19,6 +19,15 @@
   }
 }
 
+.attachments {
+  margin-bottom: 1.5rem;
+
+  .card {
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+  } 
+}
+
 // edit page
 .field .input.title-input {
   @extend .title;

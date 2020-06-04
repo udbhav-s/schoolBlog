@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="attachments">
     <h2 class="title is-4">Attachments</h2>
     <div>
       <a
@@ -7,9 +7,8 @@
         download
         v-for="attachment in attachments"
         :key="attachment"
-        class="card"
       >
-        <div>{{ attachment }}</div>
+        <div class="card">{{ attachment }}</div>
       </a>
     </div>
   </div>
