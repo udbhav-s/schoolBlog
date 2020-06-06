@@ -6,7 +6,10 @@ export default {
       ["blockquote", "code-block"],
       [{ list: "ordered" }, { list: "bullet" }],
       ["link", "image"]
-    ]
+    ],
+    imageDropAndPaste: {
+      handler: () => alert("The editor has not loaded completely")
+    }
   },
   theme: "snow",
   formats: [

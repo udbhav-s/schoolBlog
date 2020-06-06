@@ -1,15 +1,13 @@
 <template>
   <div class="post-edit-container" v-if="post">
-    <!-- <hero-section>
-      <h1 class="title" v-if="editMode">Edit Post</h1>
-      <h1 class="title" v-else>Create Post</h1>
-    </hero-section> -->
+    <modal :class="{ 'is-active': imageUploading }">
+      <div class="card">
+        <h1 class="title is-3">Uploading image</h1>
+      </div>
+    </modal>
 
     <div class="section fixed-column">
       <div class="field">
-        <!-- <div class="label">
-          Title
-        </div> -->
         <div class="control">
           <input
             class="input title-input"
@@ -85,6 +83,7 @@
           ref="pond"
           label-idle="Attachments: Drop files here or <span class='filepond--label-action'>Browse</span>"
           allow-multiple="true"
+          allow-paste="false"
           :files="attachedFiles"
           :server="filePondOptions"
         />
@@ -124,14 +123,17 @@
 
 <script lang="ts">
 import HeroSection from "@/components/HeroSection.vue";
+import Modal from "@/components/Modal.vue";
 import { postService, categoryService, fileService } from "@/services";
 import { defineComponent, ref, computed, watch } from "@vue/composition-api";
-import { PostCreate, Category } from "@/types";
+import { PostCreate, Category, ImageDropData } from "@/types";
 
 // quill
 import Quill from "quill";
 import { quillEditor } from "vue-quill-editor";
 import quillConfig from "@/config/quillOptions";
+import QuillImageDropAndPaste from "quill-image-drop-and-paste";
+Quill.register("modules/imageDropAndPaste", QuillImageDropAndPaste);
 import "quill/dist/quill.snow.css";
 
 // file uploader
@@ -145,7 +147,8 @@ export default defineComponent({
   components: {
     HeroSection,
     quillEditor,
-    FilePond
+    FilePond,
+    Modal
   },
   props: {
     postId: {
@@ -158,6 +161,7 @@ export default defineComponent({
     const categories = ref<Category[]>(null);
     const quillOptions = ref(quillConfig);
     const thumbnail = ref<HTMLInputElement>(null);
+    const imageUploading = ref<boolean>(false);
 
     // mock files which show up as attachments (not actually loaded from server)
     const attachedFiles = computed(() => {
@@ -231,8 +235,43 @@ export default defineComponent({
     };
     loadCategories();
 
+    const uploadAndInsertImage = async (file: File, editor: Quill) => {
+      if (!post.value?.id) return;
+
+      imageUploading.value = true;
+
+      const result = await fileService.uploadFile(post.value.id, file, "image");
+
+      imageUploading.value = false;
+
+      if ("error" in result) {
+        root.$toasted.error("Error uploading file");
+        throw result.message;
+      }
+      const filename = result.data;
+
+      // insert the image in the editor
+      const range = editor.getSelection();
+      if (range === null) return;
+      editor.insertEmbed(range.index, "image", `/api/file/${filename}`);
+    };
+
+    // add handlers
     const editorReady = (editor: Quill) => {
-      //add image upload handler
+      // handler for image drop and paste
+      editor.getModule("imageDropAndPaste").options.handler = (
+        dataUrl: string,
+        type: string,
+        data: ImageDropData
+      ) => {
+        let filename = "";
+        const match = /image\/(.*)/.exec(type);
+        if (!match) return;
+        else filename = "image." + match[1];
+        const file = data.toFile(filename);
+        uploadAndInsertImage(file, editor);
+      };
+      // add image upload handler
       editor.getModule("toolbar").addHandler("image", () => {
         // create an element for file input
         const input = document.createElement("input");
@@ -243,24 +282,9 @@ export default defineComponent({
         input.onchange = async () => {
           if (input === null) return;
           if (input.files === null) return;
-          if (!post.value?.id) return;
 
           const file = input.files[0];
-          const result = await fileService.uploadFile(
-            post.value.id,
-            file,
-            "image"
-          );
-          if ("error" in result) {
-            root.$toasted.error("Error uploading file");
-            throw result.message;
-          }
-          const filename = result.data;
-
-          // insert the image in the editor
-          const range = editor.getSelection();
-          if (range === null) return;
-          editor.insertEmbed(range.index, "image", `/api/file/${filename}`);
+          await uploadAndInsertImage(file, editor);
         };
       });
     };
@@ -369,7 +393,8 @@ export default defineComponent({
       uploadThumbnail,
       removeThumbnail,
       filePondOptions,
-      attachedFiles
+      attachedFiles,
+      imageUploading
     };
   }
 });
