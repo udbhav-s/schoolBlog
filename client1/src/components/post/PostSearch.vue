@@ -87,7 +87,7 @@ export default defineComponent({
       orderBy: "",
       order: "",
       search: "",
-      categoryId: undefined
+      categoryId: ""
     });
 
     const loadCategories = async () => {
@@ -116,6 +116,7 @@ export default defineComponent({
     return {
       isModOrAbove,
       options,
+      categories,
       loadCategories,
       submit,
       close

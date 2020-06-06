@@ -70,7 +70,12 @@ export default defineComponent({
       offset: 0
     };
 
-    const loadPosts = async () => {
+    const loadPosts = async (reset?: boolean) => {
+      if (reset) {
+        posts.value = [];
+        options.offset = 0;
+      }
+
       const opts = {
         ...searchOptions,
         ...options
@@ -90,10 +95,8 @@ export default defineComponent({
     loadPosts();
 
     const search = async (options: PostQueryOptions) => {
-      posts.value = [];
       searchOptions = options;
-      options.offset = 0;
-      loadPosts();
+      loadPosts(true);
     };
 
     return {
