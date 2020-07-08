@@ -11,6 +11,7 @@ import {
   Request,
   UseInterceptors,
   Query,
+  Res,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserModel } from '../database/models/user.model';
@@ -24,12 +25,28 @@ import { LevelGuard } from 'src/common/guards/level.guard';
 import { Level } from 'src/common/decorators/level.decorator';
 import { Levels } from 'src/common/util/level.enum';
 import { GetOptionsDto } from 'src/common/dto/getOptions.dto';
+import { GoogleSamlGuard } from 'src/common/guards/saml.guard';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('user')
 @UseInterceptors(FormatResponseInterceptor)
 @Controller('api/user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
+  @UseGuards(GoogleSamlGuard)
+  @Get('/google')
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  googleLogin(): void {}
+
+  @UseGuards(GoogleSamlGuard)
+  // @UseGuards(AuthGuard('google-saml'))
+  @Post("/google/callback")
+  googleCallback(@Request() req, @Res() res) {
+    console.log("GOOGLE CALLBACK ROUTE CALLED");
+    console.log(req.user)
+    res.redirect("/")
+  }
 
   @ApiOperation({ summary: 'Log in with st number and password' })
   @UseGuards(LoginGuard)
@@ -46,12 +63,12 @@ export class UserController {
     return await this.userService.getById(req.user.id);
   }
 
-  @ApiOperation({ summary: 'Get a user by portal id' })
+  @ApiOperation({ summary: 'Get a user by email' })
   @ApiBasicAuth()
   @UseGuards(AuthenticatedGuard)
-  @Get('portal/:id')
-  async getByPortal(@Param('id', ParseIntPipe) id: string): Promise<UserModel> {
-    return await this.userService.getByPortalId(id);
+  @Get('email/:id')
+  async getByEmail(@Param('id', ParseIntPipe) email: string): Promise<UserModel> {
+    return await this.userService.getByEmail(email);
   }
 
   @ApiOperation({ summary: 'Get all users' })
