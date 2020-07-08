@@ -23,7 +23,7 @@
         <!-- <label class="label">
           Content
         </label> -->
-        <div class="editor">
+        <div class="editor post-content">
           <quill-editor
             v-model="post.body"
             :options="quillOptions"

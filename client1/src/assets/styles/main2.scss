@@ -1,0 +1,91 @@
+@import "normalize.css";
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap');
+// @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300&display=swap');
+
+$hps-color: #133163;
+
+html, body {
+  font-family: 'Lato', Helvetica, sans-serif;
+  color: #333;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  color: $hps-color;
+}
+
+.section {
+  max-width: 650px;
+  margin: auto;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.hr {
+  width: 100%;
+  border: 0;
+  height: 0;
+  border-top: 2px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  margin: 2rem auto;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.post-title {
+  font-family: 'Kanit', Helvetica, sans-serif;
+}
+
+.post-content {
+  font-family: 'Roboto Slab', Helvetica, sans-serif;
+  letter-spacing: 0.015em;
+}
+
+.post-card {
+  .post-thumbnail-container {
+    img {
+      width: 100%;
+      max-height: 25rem;
+      object-fit: cover;
+    }
+  }
+
+  .post-title {
+    margin: 0.5rem 0 0.2rem 0;
+  }
+
+  .post-full-link {
+    text-align: center;
+    color: $hps-color;
+  }
+}
+
+.post-info {
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  
+  & > * {
+    margin-right: 0.5rem;
+  }
+
+  .post-user {
+    font-style: italic;
+    color: #777;
+    display: inline-block;
+
+    .user {
+      display: inline;
+    }
+  }
+
+  .post-category {
+    color: #777;
+    font-weight: bold;
+  }
+}

@@ -38,7 +38,7 @@
 </template>
 
 <script lang="ts">
-import PostCard from "@/components/post/PostCard.vue";
+import PostCard from "@/components/PostCard.vue";
 import PostSearch from "@/components/post/PostSearch.vue";
 import { postService } from "@/services";
 import { Post, PostQueryOptions } from "@/types";

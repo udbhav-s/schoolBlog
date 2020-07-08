@@ -13,7 +13,8 @@
 <script lang="ts">
 import { defineComponent, onMounted } from "@vue/composition-api";
 import AppHeader from "@/components/AppHeader.vue";
-import "@/assets/styles/main.scss";
+// import "@/assets/styles/main.scss";
+import "@/assets/styles/main2.scss";
 
 export default defineComponent({
   name: "App",

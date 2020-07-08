@@ -4,6 +4,11 @@ $primary: hsl(171, 100%, 41%);
 @import 'bulma/bulma.sass';
 @import 'bulmaswatch/superhero/_overrides.scss';
 @import './style.scss';
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text&display=swap');
+
+* {
+  font-family: 'Crimson Text' !important;
+}
 
 .field input, .field textarea, .field select, .field .file-cta {
   background-color: $card-background-color;

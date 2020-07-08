@@ -7,7 +7,7 @@
       <img :src="`/api/file/${post.thumbnail}`" />
     </div>
 
-    <div class="content" v-html="post.body"></div>
+    <div class="post-content" v-html="post.body"></div>
 
     <attachments
       v-if="post.attachments && post.attachments.length > 0"

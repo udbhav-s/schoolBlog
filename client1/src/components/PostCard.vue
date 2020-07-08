@@ -1,41 +1,51 @@
 <template>
   <div>
-    <router-link
-      :to="{
-        name: 'Post',
-        params: {
-          id: post.id
-        }
-      }"
-    >
-      <div>
+    <div class="post-card">
+      <div class="post-thumbnail-container">
         <div v-if="post.thumbnail">
-          <img :src="`/api/file/thumbnail/${post.thumbnail}`" />
-        </div>
-
-        <div>
-          <h3>{{ post.title }}</h3>
-          <div>postPreview</div>
+          <img :src="`/api/file/${post.thumbnail}`" />
         </div>
       </div>
 
-      <div>
-        <span>
-          By { post.user.name }
-        </span>
-        <span>
-          postDate
-        </span>
+      <div class="post-preview-container">
+        <h1 class="post-title">{{ post.title }}</h1>
+
+        <div class="post-info">
+          <div class="post-user">By <username :user="post.user" /></div>
+          <span class="post-date">
+            {{ postDate }}
+          </span>
+          <span class="post-category"> {{ post.category.name }}</span>
+        </div>
+
+        <div v-html="postPreview" class="post-content"></div>
+
+        <div class="post-full-link">
+          <router-link
+            :to="{
+              name: 'Post',
+              params: {
+                id: post.id
+              }
+            }"
+          >
+            Read Full
+          </router-link>
+        </div>
       </div>
-    </router-link>
+    </div>
+
+    <div class="hr" />
   </div>
 </template>
 
 <script lang="ts">
 import PostMeta from "@/components/post/PostMeta.vue";
+import Username from "@/components/user/Username.vue";
 import { defineComponent, computed } from "@vue/composition-api";
 import { Post } from "../types";
 import timeDifference from "@/util/timeDifference";
+import clip from "text-clipper";
 
 export default defineComponent({
   name: "PostCard",
@@ -46,7 +56,8 @@ export default defineComponent({
     }
   },
   components: {
-    PostMeta
+    PostMeta,
+    Username
   },
 
   setup(props) {
@@ -56,8 +67,9 @@ export default defineComponent({
 
     const postPreview = computed<string>(() => {
       if (props.post.body) {
-        const text = document.createElement(props.post.body).innerText;
-        return text.length > 300 ? text.substring(0, 300) + "..." : text;
+        return clip(props.post.body, 300, {
+          html: true
+        });
       } else return "";
     });
 
