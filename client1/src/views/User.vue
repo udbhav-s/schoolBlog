@@ -3,7 +3,7 @@
     <hero-section>
       <h1 class="title">{{ user.name }}</h1>
       <div class="subtitle">
-        <div>{{ user.portalId }}</div>
+        <div>{{ user.email }}</div>
         <div>{{ user.type }}</div>
       </div>
 

@@ -9,7 +9,7 @@
 
       <div class="level-right">
         <div class="level-item">
-          {{ user.portalId }}
+          {{ user.email }}
         </div>
       </div>
     </div>
