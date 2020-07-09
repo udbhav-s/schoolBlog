@@ -14,7 +14,7 @@
           </h1>
         </div>
       </div>
-      <div class="level-right">
+      <div v-if="showSearch" class="level-right">
         <div class="level-item">
           <a class="title is-5" @click="showOptions = true">Search</a>
         </div>
@@ -38,7 +38,7 @@
 </template>
 
 <script lang="ts">
-import PostCard from "@/components/PostCard.vue";
+import PostCard from "@/components/post/PostCard.vue";
 import PostSearch from "@/components/post/PostSearch.vue";
 import { postService } from "@/services";
 import { Post, PostQueryOptions } from "@/types";
@@ -51,6 +51,9 @@ export default defineComponent({
       type: Number as () => number
     },
     drafts: {
+      type: Boolean as () => boolean
+    },
+    showSearch: {
       type: Boolean as () => boolean
     }
   },

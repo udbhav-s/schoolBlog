@@ -29,7 +29,7 @@
     </section>
 
     <section v-else class="section fixed-column">
-      <post-list />
+      <post-list :showSearch="true" />
     </section>
   </div>
 </template>
