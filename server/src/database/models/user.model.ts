@@ -8,7 +8,7 @@ export class UserModel extends BaseModel {
   static tableName = 'users';
 
   name!: string;
-  portalId!: string;
+  email!: string;
   level!: number;
   type!: string;
 

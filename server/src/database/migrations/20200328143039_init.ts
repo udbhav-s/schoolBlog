@@ -9,7 +9,7 @@ export async function up(knex: Knex): Promise<any> {
         table.increments();
         table.string('name').notNullable();
         table
-          .string('portal_id')
+          .string('email')
           .unique()
           .notNullable();
         // student/teacher/etc

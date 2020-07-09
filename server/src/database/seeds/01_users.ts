@@ -8,19 +8,19 @@ export async function seed(knex: Knex) {
       // Inserts seed entries
       return knex('users').insert([
         {
-          portalId: 'st9999',
+          email: 'st9999@hpsbegumpet.fake.in',
           name: 'Example Admin Account',
           type: 'student',
           level: 4,
         },
         {
-          portalId: 'st1234',
+          email: 'st1234@hpsbegumpet.fake.in',
           name: 'Tom Hanks',
           type: 'student',
           level: 1,
         },
         {
-          portalId: 'sen1234',
+          email: 'sen1234@hpsbegumpet.fake.in',
           name: 'Heath Ledger',
           type: 'teacher',
           level: 2,

@@ -3,6 +3,7 @@ import { ModelClass } from 'objection';
 import { UserModel } from '../database/models/user.model';
 import { GetOptionsDto } from 'src/common/dto/getOptions.dto';
 import { GET_OPTIONS } from 'src/database/modifiers';
+import { GoogleSamlProfile } from 'src/auth/dto/googleSamlProfile.dto';
 
 @Injectable()
 export class UserService {
@@ -12,10 +13,10 @@ export class UserService {
     return await this.userModel.query().findById(id);
   }
 
-  async getByPortalId(id: string): Promise<UserModel> {
+  async getByEmail(email: string): Promise<UserModel> {
     return await this.userModel
       .query()
-      .where({ portalId: id })
+      .where({ email })
       .first();
   }
 
@@ -25,12 +26,10 @@ export class UserService {
     return await query;
   }
 
-  async createFromPortalUser(user: any): Promise<UserModel> {
+  async createFromGoogleSaml(profile: GoogleSamlProfile): Promise<UserModel> {
     return await this.userModel.query().insert({
-      name: user.name,
-      type: user.type,
-      level: user.level,
-      portalId: user.id,
+      name: profile.name,
+      email: profile.email,
     });
   }
 

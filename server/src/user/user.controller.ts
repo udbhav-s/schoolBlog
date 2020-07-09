@@ -11,19 +11,19 @@ import {
   Request,
   UseInterceptors,
   Query,
+  Res,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserModel } from '../database/models/user.model';
-import { LoginGuard } from '../common/guards/login.guard';
 import { AuthenticatedGuard } from '../common/guards/authenticated.guard';
 import { FormatResponseInterceptor } from '../common/interceptors/formatResponse.interceptor';
-import { LoginDto } from './dto/login.dto';
 
 import { ApiTags, ApiOperation, ApiBasicAuth } from '@nestjs/swagger';
 import { LevelGuard } from 'src/common/guards/level.guard';
 import { Level } from 'src/common/decorators/level.decorator';
 import { Levels } from 'src/common/util/level.enum';
 import { GetOptionsDto } from 'src/common/dto/getOptions.dto';
+import { GoogleSamlGuard } from 'src/common/guards/saml.guard';
 
 @ApiTags('user')
 @UseInterceptors(FormatResponseInterceptor)
@@ -31,11 +31,16 @@ import { GetOptionsDto } from 'src/common/dto/getOptions.dto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @ApiOperation({ summary: 'Log in with st number and password' })
-  @UseGuards(LoginGuard)
-  @Post('/login')
-  login(@Body(ValidationPipe) body: LoginDto, @Request() req): number {
-    return req.user.id;
+  @UseGuards(GoogleSamlGuard)
+  @Get('/google')
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  googleLogin(): void {}
+
+  @ApiOperation({ summary: 'Callback for Gsuite initiated SAML login' })
+  @UseGuards(GoogleSamlGuard)
+  @Post("/google/callback")
+  googleCallback(@Res() res) {
+    res.redirect("/")
   }
 
   @ApiOperation({ summary: 'Get the current logged in user' })
@@ -46,12 +51,12 @@ export class UserController {
     return await this.userService.getById(req.user.id);
   }
 
-  @ApiOperation({ summary: 'Get a user by portal id' })
+  @ApiOperation({ summary: 'Get a user by email' })
   @ApiBasicAuth()
   @UseGuards(AuthenticatedGuard)
-  @Get('portal/:id')
-  async getByPortal(@Param('id', ParseIntPipe) id: string): Promise<UserModel> {
-    return await this.userService.getByPortalId(id);
+  @Get('email/:id')
+  async getByEmail(@Param('id', ParseIntPipe) email: string): Promise<UserModel> {
+    return await this.userService.getByEmail(email);
   }
 
   @ApiOperation({ summary: 'Get all users' })
