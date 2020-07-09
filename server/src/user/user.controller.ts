@@ -15,10 +15,8 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserModel } from '../database/models/user.model';
-import { LoginGuard } from '../common/guards/login.guard';
 import { AuthenticatedGuard } from '../common/guards/authenticated.guard';
 import { FormatResponseInterceptor } from '../common/interceptors/formatResponse.interceptor';
-import { LoginDto } from './dto/login.dto';
 
 import { ApiTags, ApiOperation, ApiBasicAuth } from '@nestjs/swagger';
 import { LevelGuard } from 'src/common/guards/level.guard';
@@ -26,7 +24,6 @@ import { Level } from 'src/common/decorators/level.decorator';
 import { Levels } from 'src/common/util/level.enum';
 import { GetOptionsDto } from 'src/common/dto/getOptions.dto';
 import { GoogleSamlGuard } from 'src/common/guards/saml.guard';
-import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('user')
 @UseInterceptors(FormatResponseInterceptor)
@@ -39,20 +36,11 @@ export class UserController {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   googleLogin(): void {}
 
+  @ApiOperation({ summary: 'Callback for Gsuite initiated SAML login' })
   @UseGuards(GoogleSamlGuard)
-  // @UseGuards(AuthGuard('google-saml'))
   @Post("/google/callback")
-  googleCallback(@Request() req, @Res() res) {
-    console.log("GOOGLE CALLBACK ROUTE CALLED");
-    console.log(req.user)
+  googleCallback(@Res() res) {
     res.redirect("/")
-  }
-
-  @ApiOperation({ summary: 'Log in with st number and password' })
-  @UseGuards(LoginGuard)
-  @Post('/login')
-  login(@Body(ValidationPipe) body: LoginDto, @Request() req): number {
-    return req.user.id;
   }
 
   @ApiOperation({ summary: 'Get the current logged in user' })
