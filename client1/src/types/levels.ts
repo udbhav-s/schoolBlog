@@ -3,5 +3,5 @@ export enum Levels {
   Member = 1,
   Author = 2,
   Moderator = 3,
-  Admin = 4,
+  Admin = 4
 }

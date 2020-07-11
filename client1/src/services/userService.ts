@@ -18,6 +18,6 @@ export const userService = {
     return api.get("/user/logout");
   },
   setLevel(id: number, level: number) {
-    return api.post<ApiResponse<User>>(`/user/level/${id}`, { level })
+    return api.post<ApiResponse<User>>(`/user/level/${id}`, { level });
   }
 };
