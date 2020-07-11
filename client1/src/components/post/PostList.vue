@@ -21,6 +21,8 @@
       </div>
     </div>
 
+    <div class="hr"></div>
+
     <div v-for="post in posts" :key="post.id">
       <post-card :post="post" />
     </div>
@@ -38,7 +40,7 @@
 </template>
 
 <script lang="ts">
-import PostCard from "@/components/post/PostCard.vue";
+import PostCard from "@/components/PostCard.vue";
 import PostSearch from "@/components/post/PostSearch.vue";
 import { postService } from "@/services";
 import { Post, PostQueryOptions } from "@/types";

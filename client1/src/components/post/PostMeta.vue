@@ -1,55 +1,57 @@
 <template>
   <div>
     <div class="post-info">
-      <username :user="post.user"></username>
-      <div>{{ date }}</div>
-      <span class="tags has-text-centered">
-        <span class="tag has-text-info" v-if="post.category">{{
-          post.category.name
-        }}</span>
-        <span v-if="!post.verified" class="tag has-text-danger"
-          >Unverified</span
-        >
-      </span>
-    </div>
-    <div class="post-options buttons are-small" v-if="showOptions">
-      <router-link
-        class="button is-primary"
-        v-if="byCurrentUser"
-        :to="{
-          name: 'EditPost',
-          params: {
-            id: post.id
-          }
-        }"
-      >
-        Edit
-      </router-link>
+      <username :user="post.user">
+        <span>{{ date }}</span>
+        <span class="tag has-text-info" v-if="post.category">
+          {{ post.category.name }}
+        </span>
+        <span v-if="!post.verified">
+          Unverified
+        </span>
+      </username>
 
-      <button
-        v-if="byCurrentUser || isModOrAbove"
-        @click="deletePost"
-        class="button is-danger"
-      >
-        Delete
-      </button>
-
-      <template v-if="isModOrAbove">
-        <button
-          v-if="!post.verified"
-          @click="verifyPost"
+      <div class="post-options buttons are-small" v-if="showOptions">
+        <router-link
           class="button is-primary"
+          v-if="byCurrentUser"
+          :to="{
+            name: 'EditPost',
+            params: {
+              id: post.id
+            }
+          }"
         >
-          Verify
-        </button>
+          <font-awesome-icon icon="pencil-alt" />
+          <!-- Edit -->
+        </router-link>
+
         <button
-          v-if="post.verified"
-          @click="unverifyPost"
+          v-if="byCurrentUser || isModOrAbove"
+          @click="deletePost"
           class="button is-danger"
         >
-          Unverify
+          <font-awesome-icon icon="trash" />
+          <!-- Delete -->
         </button>
-      </template>
+
+        <template v-if="isModOrAbove">
+          <button
+            v-if="!post.verified"
+            @click="verifyPost"
+            class="button is-primary"
+          >
+            Verify
+          </button>
+          <button
+            v-if="post.verified"
+            @click="unverifyPost"
+            class="button is-danger"
+          >
+            Unverify
+          </button>
+        </template>
+      </div>
     </div>
   </div>
 </template>

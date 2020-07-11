@@ -2,6 +2,6 @@ export interface User {
   id: number;
   name: string;
   level: number;
-  portalId: string;
+  email: string;
   type: string;
 }

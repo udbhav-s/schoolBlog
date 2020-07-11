@@ -32,52 +32,54 @@
         </div>
       </div>
 
-      <div class="field" v-if="categories">
-        <div class="control">
-          <span class="select">
-            <select v-model="post.categoryId">
-              <option :value="null" selected>Category</option>
-              <option
-                v-for="category in categories"
-                :key="category.id"
-                :value="category.id"
-              >
-                {{ category.name }}
-              </option>
-            </select>
-          </span>
-        </div>
-      </div>
-
-      <div class="field is-grouped">
-        <div class="control file">
-          <label class="file-label">
-            <input
-              class="file-input"
-              type="file"
-              @change="uploadThumbnail"
-              name="thumbnail"
-              ref="thumbnail"
-              accept=".png, .jpg, .jpeg, .gif"
-            />
-            <span class="file-cta">
-              Upload Thumbnail
+      <div class="v-margin">
+        <div class="field" v-if="categories">
+          <div class="control">
+            <span class="select">
+              <select v-model="post.categoryId">
+                <option :value="null" selected>Category</option>
+                <option
+                  v-for="category in categories"
+                  :key="category.id"
+                  :value="category.id"
+                >
+                  {{ category.name }}
+                </option>
+              </select>
             </span>
-          </label>
+          </div>
         </div>
-        <div class="control" v-if="post.thumbnail">
-          <button @click="removeThumbnail" class="button is-danger">
-            Remove
-          </button>
+
+        <div class="field is-grouped">
+          <div class="control file">
+            <label class="file-label">
+              <input
+                class="file-input"
+                type="file"
+                @change="uploadThumbnail"
+                name="thumbnail"
+                ref="thumbnail"
+                accept=".png, .jpg, .jpeg, .gif"
+              />
+              <span class="file-cta">
+                Upload Thumbnail
+              </span>
+            </label>
+          </div>
+          <div class="control" v-if="post.thumbnail">
+            <button @click="removeThumbnail" class="button is-danger">
+              Remove
+            </button>
+          </div>
         </div>
-      </div>
-      <div class="field">
-        <div class="image">
-          <img v-if="post.thumbnail" :src="`/api/file/${post.thumbnail}`" />
+        <div class="field">
+          <div class="image">
+            <img v-if="post.thumbnail" :src="`/api/file/${post.thumbnail}`" />
+          </div>
         </div>
       </div>
 
-      <div class="field">
+      <div class="field v-margin">
         <file-pond
           name="file"
           ref="pond"

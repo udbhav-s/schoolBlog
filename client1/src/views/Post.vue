@@ -1,6 +1,6 @@
 <template>
   <div class="section fixed-column post-page" v-if="post">
-    <h1 class="title">{{ post.title }}</h1>
+    <h1 class="post-title">{{ post.title }}</h1>
     <post-meta :post="post" @postDeleted="postDeleted" :showOptions="true" />
 
     <div v-if="post.thumbnail" class="image post-thumbnail">
@@ -15,7 +15,7 @@
     />
 
     <div>
-      <h2 class="title is-4">Comments:</h2>
+      <h2 class="title">Comments</h2>
 
       <comment-list
         v-if="post.id"

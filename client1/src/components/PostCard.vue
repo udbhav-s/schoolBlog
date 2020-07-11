@@ -1,21 +1,49 @@
 <template>
   <div>
     <div class="post-card">
-      <div class="post-thumbnail-container">
-        <div v-if="post.thumbnail">
-          <img :src="`/api/file/${post.thumbnail}`" />
-        </div>
-      </div>
-
-      <div class="post-preview-container">
+      <router-link
+        :to="{
+          name: 'Post',
+          params: {
+            id: post.id
+          }
+        }"
+      >
         <h1 class="post-title">{{ post.title }}</h1>
+      </router-link>
 
-        <div class="post-info">
-          <div class="post-user">By <username :user="post.user" /></div>
+      <div class="post-user">
+        <username :user="post.user">
           <span class="post-date">
             {{ postDate }}
           </span>
-          <span class="post-category"> {{ post.category.name }}</span>
+          <span v-if="post.category" class="post-category">
+            {{ post.category.name }}
+          </span>
+          <span v-if="!post.verified">
+            Unverified
+          </span>
+        </username>
+
+        <router-link
+          v-if="!post.published"
+          :to="{
+            name: 'EditPost',
+            params: {
+              id: post.id
+            }
+          }"
+          class="button"
+        >
+          <font-awesome-icon icon="pencil-alt" />
+        </router-link>
+      </div>
+
+      <template v-if="post.published">
+        <div class="post-thumbnail-container">
+          <div v-if="post.thumbnail">
+            <img :src="`/api/file/${post.thumbnail}`" />
+          </div>
         </div>
 
         <div v-html="postPreview" class="post-content"></div>
@@ -32,7 +60,7 @@
             Read Full
           </router-link>
         </div>
-      </div>
+      </template>
     </div>
 
     <div class="hr" />
@@ -40,7 +68,6 @@
 </template>
 
 <script lang="ts">
-import PostMeta from "@/components/post/PostMeta.vue";
 import Username from "@/components/user/Username.vue";
 import { defineComponent, computed } from "@vue/composition-api";
 import { Post } from "../types";
@@ -56,7 +83,6 @@ export default defineComponent({
     }
   },
   components: {
-    PostMeta,
     Username
   },
 
