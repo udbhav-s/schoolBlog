@@ -28,7 +28,7 @@ export class UserService {
 
   async createFromGoogleSaml(profile: GoogleSamlProfile): Promise<UserModel> {
     return await this.userModel.query().insert({
-      name: profile.name,
+      name: profile['urn:oid:2.16.840.1.113730.3.1.241'],
       email: profile.email,
     });
   }
