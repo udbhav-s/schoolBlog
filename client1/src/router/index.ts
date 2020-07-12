@@ -16,6 +16,9 @@ const routes: Array<RouteConfig> = [
         path: "/",
         alias: "posts",
         name: "posts",
+        props: {
+          searchable: true
+        },
         component: () => import("@/components/post/PostList.vue")
       },
       {
