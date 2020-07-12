@@ -1,33 +1,33 @@
 <template>
   <div v-if="categories">
-    <category
-      v-for="category in categories"
-      :key="category.id"
-      :category="category"
-      @categoryDeleted="categoryDeleted"
-      @categoryEdited="categoryEdited"
-    >
-    </category>
+    <div class="table-list">
+      <category
+        v-for="category in categories"
+        :key="category.id"
+        :category="category"
+        @categoryDeleted="categoryDeleted"
+        @categoryEdited="categoryEdited"
+        class="p-3"
+      >
+      </category>
+    </div>
 
-    <div v-if="!showAddCategory" @click="showAddCategory = true" class="field">
-      <div class="control has-text-centered">
-        <button class="button is-small">New Category</button>
+    <div v-if="!showAddCategory" @click="showAddCategory = true" class="my-2">
+      <div class="text-center">
+        <button class="button">New Category</button>
       </div>
     </div>
-    <div v-else class="field is-grouped is-grouped-centered">
-      <div class="control">
-        <input v-model="form.name" type="text" class="input is-small" />
+    <div v-else class="flex items-center justify-center space-x-2">
+      <div>
+        <input v-model="form.name" type="text" class="input-border" />
       </div>
-      <div class="control">
-        <button @click="addCategory" class="button is-primary is-small">
+      <div>
+        <button @click="addCategory" class="button">
           Add
         </button>
       </div>
-      <div class="control">
-        <button
-          @click="showAddCategory = false"
-          class="button is-danger is-small"
-        >
+      <div>
+        <button @click="showAddCategory = false" class="button button-danger">
           Cancel
         </button>
       </div>

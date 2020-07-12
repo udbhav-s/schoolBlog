@@ -1,40 +1,47 @@
 <template>
-  <div class="media reply">
-    <div class="media-content">
-      <div class="content">
-        <div v-if="adminView && reply.comment.post">
-          <router-link
-            :to="{ name: 'Post', params: { id: reply.comment.postId } }"
-            class="title is-6"
-          >
-            {{ reply.comment.post.title }}
-          </router-link>
-        </div>
-
-        <username :user="reply.user"></username>
-
-        <div v-if="!editReply" class="reply-body">{{ reply.body }}</div>
-        <div v-else>
-          <reply-edit
-            @replyEdited="replyEdited"
-            :editMode="true"
-            :editId="reply.id"
-            :commentId="reply.commentId"
-          />
-        </div>
-
-        <small>
-          <template v-if="byCurrentUser">
-            <a v-if="!editReply" @click="editReply = true">Edit</a>
-            <a v-else @click="editReply = false">Cancel</a>
-          </template>
-          <template v-if="byCurrentUser || isModOrAbove">
-            <a @click="deleteReply">Delete</a>
-          </template>
-          <span v-if="reply.edited">(Edited)</span>
-        </small>
-      </div>
+  <div>
+    <div v-if="adminView && reply.comment.post">
+      <router-link
+        :to="{ name: 'Post', params: { id: reply.comment.postId } }"
+        class="text-xl font-bold block mb-2"
+      >
+        {{ reply.comment.post.title }}
+      </router-link>
     </div>
+
+    <username :user="reply.user" class="mb-3">
+      <span v-if="reply.edited">(Edited)</span>
+    </username>
+
+    <div v-if="!editReply">{{ reply.body }}</div>
+    <div v-else>
+      <reply-edit
+        @replyEdited="replyEdited"
+        :editMode="true"
+        :editId="reply.id"
+        :commentId="reply.commentId"
+      />
+    </div>
+
+    <div class="text-sm text-gray-600 text-right">
+      <template v-if="byCurrentUser">
+        <button
+          v-if="!editReply"
+          @click="editReply = true"
+          class="button border-none"
+        >
+          Edit
+        </button>
+        <button v-else @click="editReply = false" class="button border-none">
+          Cancel
+        </button>
+      </template>
+      <template v-if="byCurrentUser || isModOrAbove">
+        <button @click="deleteReply" class="button border-none">Delete</button>
+      </template>
+    </div>
+
+    <hr class="mt-2 mb-4" />
   </div>
 </template>
 

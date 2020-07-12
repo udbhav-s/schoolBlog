@@ -13,10 +13,10 @@
       @commentDeleted="commentDeleted"
     />
 
-    <div class="has-text-centered">
+    <div class="text-center">
       <button
         v-if="hasMoreComments && adminView"
-        class="button is-info is-small"
+        class="button"
         @click="loadComments"
       >
         Load More

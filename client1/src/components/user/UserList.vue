@@ -1,17 +1,12 @@
 <template>
-  <div>
-    <div v-for="user in users" :key="user.id" class="level">
-      <div class="level-left">
-        <div class="level-item">
-          <username :user="user"></username>
-        </div>
-      </div>
-
-      <div class="level-right">
-        <div class="level-item">
-          {{ user.email }}
-        </div>
-      </div>
+  <div class="table-list">
+    <div
+      v-for="user in users"
+      :key="user.id"
+      class="md:flex flex-row flex-wrap items-center justify-between py-4 px-2"
+    >
+      <username :user="user"></username>
+      <div class="py-2">{{ user.email }}</div>
     </div>
   </div>
 </template>

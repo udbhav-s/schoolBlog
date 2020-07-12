@@ -1,72 +1,52 @@
 <template>
-  <div class="user-page">
-    <hero-section>
-      <h1 class="title">{{ user.name }}</h1>
-      <div class="subtitle">
-        <div>{{ user.email }}</div>
-        <div>{{ user.type }}</div>
-      </div>
+  <div>
+    <div class="p-4 shadow-lg text-center space-y-2 fixed-column">
+      <img
+        src="https://3.bp.blogspot.com/-qDc5kIFIhb8/UoJEpGN9DmI/AAAAAAABl1s/BfP6FcBY1R8/s1600/BlueHead.jpg"
+        class="w-20 h-20 rounded-full inline-block"
+      />
+      <h1 class="text-2xl">{{ user.name }}</h1>
+      <div>{{ user.email }}</div>
 
-      <template v-if="isCurrentUser">
-        <div class="field">
-          <button v-if="isCurrentUser" @click="logout" class="button">
-            Log Out
-          </button>
-        </div>
-
-        <!-- <div class="field">
-          <button class="button" @click="switchMode">
-            <template v-if="theme === 'dark'">
-              Light Mode
-            </template>
-            <template v-else>
-              Dark Mode
-            </template>
-          </button>
-        </div> -->
-      </template>
-    </hero-section>
+      <button v-if="isCurrentUser" @click="logout" class="button text-lg">
+        Log Out
+      </button>
+    </div>
 
     <section
-      class="section fixed-column"
       v-if="isAdminOrAbove && !isCurrentUser"
+      class="bg-gray-100 my-10 py-6"
     >
-      <div class="container has-text-centered">
-        <div class="field">
-          <label class="label">Level</label>
-          <div class="control has-text-centered">
-            <div class="select">
-              <select
-                name="level-select"
-                id="level-select"
-                v-model="user.level"
-              >
-                <option value="0">Reader</option>
-                <option value="1">Member</option>
-                <option value="2">Author</option>
-                <option value="3">Moderator</option>
-                <option value="4">Admin</option>
-              </select>
-            </div>
-          </div>
-        </div>
+      <div class="fixed-column mx-auto space-y-3">
+        <label class="text-3xl">Level</label>
+        <select
+          name="level-select"
+          id="level-select"
+          class="input-border block"
+          v-model="user.level"
+        >
+          <option value="0">Reader</option>
+          <option value="1">Member</option>
+          <option value="2">Author</option>
+          <option value="3">Moderator</option>
+          <option value="4">Admin</option>
+        </select>
 
-        <div class="field">
-          <div v-html="levelDescriptions[user.level]"></div>
-        </div>
+        <div v-html="levelDescriptions[user.level]"></div>
 
-        <div class="field">
-          <button class="button is-primary" @click="setUserLevel">
-            Set Level
-          </button>
-        </div>
+        <button class="button text-lg" @click="setUserLevel">
+          Set Level
+        </button>
       </div>
     </section>
 
-    <section class="section fixed-column">
+    <section class="fixed-column">
       <div v-if="isCurrentUser">
+        <div class="text-3xl my-6 text-gray-800">Drafts</div>
         <post-list v-if="user.id" :userId="user.id" :drafts="true" />
+        <hr class="my-6" />
       </div>
+      <div class="text-3xl my-6 text-gray-800">Posts</div>
       <post-list v-if="user.id" :userId="user.id" />
     </section>
   </div>
@@ -74,7 +54,6 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from "@vue/composition-api";
-import HeroSection from "@/components/HeroSection.vue";
 import { userService } from "@/services";
 import PostList from "@/components/post/PostList.vue";
 import { User } from "@/types";
@@ -90,8 +69,7 @@ export default defineComponent({
     }
   },
   components: {
-    PostList,
-    HeroSection
+    PostList
   },
 
   setup(props, { root }) {

@@ -1,19 +1,19 @@
 <template>
   <div>
-    <div class="post-info">
+    <div class="flex flex-row flex-wrap items-center justify-between">
       <username :user="post.user">
         <span>{{ date }}</span>
-        <span class="tag has-text-info" v-if="post.category">
+        <span v-if="post.category">
           {{ post.category.name }}
         </span>
-        <span v-if="!post.verified">
+        <span v-if="!post.verified" class="text-red-500">
           Unverified
         </span>
       </username>
 
-      <div class="post-options buttons are-small" v-if="showOptions">
+      <div v-if="showOptions" class="flex flex-row align-middle my-2">
         <router-link
-          class="button is-primary"
+          class="button"
           v-if="byCurrentUser"
           :to="{
             name: 'EditPost',
@@ -29,24 +29,20 @@
         <button
           v-if="byCurrentUser || isModOrAbove"
           @click="deletePost"
-          class="button is-danger"
+          class="button button-danger ml-2"
         >
           <font-awesome-icon icon="trash" />
           <!-- Delete -->
         </button>
 
         <template v-if="isModOrAbove">
-          <button
-            v-if="!post.verified"
-            @click="verifyPost"
-            class="button is-primary"
-          >
+          <button v-if="!post.verified" @click="verifyPost" class="button ml-2">
             Verify
           </button>
           <button
             v-if="post.verified"
             @click="unverifyPost"
-            class="button is-danger"
+            class="button button-danger ml-2"
           >
             Unverify
           </button>

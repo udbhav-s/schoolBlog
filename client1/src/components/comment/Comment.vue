@@ -1,57 +1,76 @@
 <template>
-  <div class="media comment">
-    <div class="media-content">
-      <div class="content">
-        <div>
-          <div v-if="adminView && comment.post">
-            <router-link
-              :to="{ name: 'Post', params: { id: comment.postId } }"
-              class="title is-6"
-            >
-              {{ comment.post.title }}
-            </router-link>
-          </div>
-
-          <div>
-            <username :user="comment.user"></username>
-          </div>
-
-          <div v-if="!editComment" class="comment-body">{{ comment.body }}</div>
-          <div v-else>
-            <comment-edit
-              @commentEdited="commentEdited"
-              :comment="comment"
-              :editMode="true"
-              :editId="comment.id"
-              :postId="comment.postId"
-            />
-          </div>
-
-          <small>
-            <a v-if="!addReply" @click="addReply = true">Reply</a>
-            <a v-else @click="addReply = false">Cancel</a>
-
-            <a v-if="byCurrentUser && !editComment" @click="editComment = true"
-              >Edit</a
-            >
-            <a v-if="editComment" @click="editComment = false">Cancel</a>
-
-            <a v-if="byCurrentUser || isModOrAbove" @click="deleteComment"
-              >Delete</a
-            >
-
-            <span v-if="comment.edited">(Edited)</span>
-          </small>
-        </div>
+  <div>
+    <div>
+      <div v-if="adminView && comment.post">
+        <router-link
+          :to="{ name: 'Post', params: { id: comment.postId } }"
+          class="text-xl font-bold block mb-2"
+        >
+          {{ comment.post.title }}
+        </router-link>
       </div>
 
-      <reply-list
-        v-if="comment.id"
-        :commentId="comment.id"
-        :showAddReply="addReply"
-        @replyAdded="addReply = false"
-      />
+      <username :user="comment.user" class="mb-3">
+        <span v-if="comment.edited">(Edited)</span>
+      </username>
+
+      <div v-if="!editComment">{{ comment.body }}</div>
+      <div v-else>
+        <comment-edit
+          @commentEdited="commentEdited"
+          :comment="comment"
+          :editMode="true"
+          :editId="comment.id"
+          :postId="comment.postId"
+        />
+      </div>
+
+      <div class="text-sm text-gray-600 text-right">
+        <button
+          v-if="!addReply"
+          @click="addReply = true"
+          class="button border-none"
+        >
+          Reply
+        </button>
+        <button v-else @click="addReply = false" class="button border-none">
+          Cancel
+        </button>
+
+        <button
+          v-if="byCurrentUser && !editComment"
+          @click="editComment = true"
+          class="button border-none"
+        >
+          Edit
+        </button>
+        <button
+          v-if="editComment"
+          @click="editComment = false"
+          class="button border-none"
+        >
+          Cancel
+        </button>
+
+        <button
+          v-if="byCurrentUser || isModOrAbove"
+          @click="deleteComment"
+          class="button border-none"
+        >
+          Delete
+        </button>
+      </div>
     </div>
+
+    <hr class="mt-2 mb-4" />
+
+    <reply-list
+      v-if="comment.id"
+      :commentId="comment.id"
+      :showAddReply="addReply"
+      @replyAdded="addReply = false"
+      class="ml-6 mb-6"
+    />
   </div>
 </template>
 

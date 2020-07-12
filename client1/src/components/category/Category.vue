@@ -1,48 +1,34 @@
 <template>
-  <div class="level is-mobile">
-    <div class="level-left">
+  <div class="flex flex-row items-center justify-between">
+    <div>
       <div v-if="!editMode">
         {{ category.name }}
       </div>
 
-      <div v-else class="field is-grouped">
-        <div class="control">
-          <input v-model="form.name" type="text" class="input is-small" />
-        </div>
+      <div v-else>
+        <input v-model="form.name" type="text" class="input-border" />
       </div>
     </div>
 
-    <div class="level-right field is-grouped">
-      <div class="control level-item">
-        <button
-          @click="editMode = true"
-          v-if="!editMode"
-          class="button is-primary is-small"
-        >
+    <div class="flex items-center space-x-2">
+      <div>
+        <button @click="editMode = true" v-if="!editMode" class="button">
           Edit
         </button>
-        <button
-          @click="categoryEdited"
-          v-else
-          class="button is-primary is-small"
-        >
+        <button @click="categoryEdited" v-else class="button">
           Submit
         </button>
       </div>
 
-      <div class="control level-item">
+      <div>
         <button
           v-if="!editMode"
           @click="categoryDeleted"
-          class="button is-danger is-small"
+          class="button button-danger"
         >
           Delete
         </button>
-        <button
-          @click="editMode = false"
-          v-else
-          class="button is-danger is-small"
-        >
+        <button @click="editMode = false" v-else class="button button-danger">
           Cancel
         </button>
       </div>

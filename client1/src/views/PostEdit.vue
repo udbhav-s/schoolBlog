@@ -6,80 +6,67 @@
       </div>
     </modal>
 
-    <div class="section fixed-column">
-      <div class="field">
-        <div class="control">
-          <input
-            class="input title-input"
-            type="text"
-            name="title"
-            v-model="post.title"
-            placeholder="Title"
-          />
-        </div>
+    <div class="fixed-column space-y-2 mb-10">
+      <input
+        class="text-4xl"
+        type="text"
+        name="title"
+        v-model="post.title"
+        placeholder="Title"
+      />
+
+      <div id="editor" class="post-content">
+        <quill-editor
+          v-model="post.body"
+          :options="quillOptions"
+          @ready="editorReady"
+        />
       </div>
 
-      <div class="field">
-        <!-- <label class="label">
-          Content
-        </label> -->
-        <div class="editor post-content">
-          <quill-editor
-            v-model="post.body"
-            :options="quillOptions"
-            @ready="editorReady"
-          />
-        </div>
-      </div>
-
-      <div class="v-margin">
-        <div class="field" v-if="categories">
-          <div class="control">
-            <span class="select">
-              <select v-model="post.categoryId">
-                <option :value="null" selected>Category</option>
-                <option
-                  v-for="category in categories"
-                  :key="category.id"
-                  :value="category.id"
-                >
-                  {{ category.name }}
-                </option>
-              </select>
-            </span>
-          </div>
+      <div>
+        <div class="my-4" v-if="categories">
+          <select v-model="post.categoryId" class="input-border">
+            <option :value="null" selected>Category</option>
+            <option
+              v-for="category in categories"
+              :key="category.id"
+              :value="category.id"
+            >
+              {{ category.name }}
+            </option>
+          </select>
         </div>
 
-        <div class="field is-grouped">
-          <div class="control file">
+        <div class="flex flex-row space-x-4 items-stretch">
+          <div>
             <label class="file-label">
               <input
-                class="file-input"
+                class="hidden"
                 type="file"
                 @change="uploadThumbnail"
                 name="thumbnail"
                 ref="thumbnail"
                 accept=".png, .jpg, .jpeg, .gif"
               />
-              <span class="file-cta">
+              <span class="button p-3 text-base inline-block cursor-pointer">
                 Upload Thumbnail
               </span>
             </label>
           </div>
-          <div class="control" v-if="post.thumbnail">
-            <button @click="removeThumbnail" class="button is-danger">
-              Remove
-            </button>
-          </div>
+          <button
+            v-if="post.thumbnail"
+            @click="removeThumbnail"
+            class="button button-danger text-base"
+          >
+            Remove
+          </button>
         </div>
-        <div class="field">
-          <div class="image">
-            <img v-if="post.thumbnail" :src="`/api/file/${post.thumbnail}`" />
-          </div>
+        <div class="my-2">
+          <img v-if="post.thumbnail" :src="`/api/file/${post.thumbnail}`" />
         </div>
       </div>
 
-      <div class="field v-margin">
+      <div class="py-4">
         <file-pond
           name="file"
           ref="pond"
@@ -91,30 +78,26 @@
         />
       </div>
 
-      <div class="field is-grouped">
-        <div class="control">
-          <button class="button is-small is-info" @click="savePost">
+      <div class="flex flex-row flex-wrap justify-end space-x-2">
+        <div>
+          <button class="button" @click="savePost">
             Save Draft
           </button>
         </div>
-        <div class="control">
+        <div>
           <button
             v-if="post.published"
-            class="button is-small is-danger"
+            class="button button-danger"
             @click="unpublishPost"
           >
             Unpublish
           </button>
-          <button
-            v-else
-            class="button is-small is-primary"
-            @click="publishPost"
-          >
+          <button v-else class="button" @click="publishPost">
             Publish
           </button>
         </div>
-        <div class="control">
-          <button class="button is-small is-danger" @click="deletePost">
+        <div>
+          <button class="button button-danger" @click="deletePost">
             Delete
           </button>
         </div>

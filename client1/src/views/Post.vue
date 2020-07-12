@@ -1,13 +1,13 @@
 <template>
   <div class="section fixed-column post-page" v-if="post">
-    <h1 class="post-title">{{ post.title }}</h1>
+    <h1 class="text-4xl">{{ post.title }}</h1>
     <post-meta :post="post" @postDeleted="postDeleted" :showOptions="true" />
 
-    <div v-if="post.thumbnail" class="image post-thumbnail">
-      <img :src="`/api/file/${post.thumbnail}`" />
+    <div v-if="post.thumbnail" class="mt-2">
+      <img :src="`/api/file/${post.thumbnail}`" class="w-full" />
     </div>
 
-    <div class="post-content" v-html="post.body"></div>
+    <div class="post-content mt-4" v-html="post.body"></div>
 
     <attachments
       v-if="post.attachments && post.attachments.length > 0"
@@ -15,7 +15,7 @@
     />
 
     <div>
-      <h2 class="title">Comments</h2>
+      <h2 class="text-3xl my-6">Comments</h2>
 
       <comment-list
         v-if="post.id"

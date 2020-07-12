@@ -4,20 +4,19 @@
       name: 'User',
       params: { id: user.id }
     }"
-    class="user"
+    class="flex flex-row items-center"
   >
-    <div class="user-photo">
-      <img
-        src="https://3.bp.blogspot.com/-qDc5kIFIhb8/UoJEpGN9DmI/AAAAAAABl1s/BfP6FcBY1R8/s1600/BlueHead.jpg"
-      />
-    </div>
-    <div class="username-container">
-      <div class="username">
+    <img
+      src="https://3.bp.blogspot.com/-qDc5kIFIhb8/UoJEpGN9DmI/AAAAAAABl1s/BfP6FcBY1R8/s1600/BlueHead.jpg"
+      class="w-10 h-10 rounded-full mr-2"
+    />
+    <div>
+      <div class="text-gray-800">
         {{ user.name }}
-        <span v-if="user.level == 3" class="has-text-danger">[M]</span>
-        <span v-if="user.level == 4" class="has-text-danger">[A]</span>
+        <span v-if="user.level == 3">[M]</span>
+        <span v-if="user.level == 4">[A]</span>
       </div>
-      <div class="username-subtext">
+      <div class="text-xs text-gray-600">
         <slot></slot>
       </div>
     </div>

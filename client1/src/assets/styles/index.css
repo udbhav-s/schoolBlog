@@ -1,0 +1,78 @@
+@tailwind base;
+
+@tailwind components;
+
+#main {
+  @apply pt-20;
+}
+
+.fixed-column {
+  @apply max-w-2xl mx-auto px-4;
+}
+
+.button {
+  @apply border border-gray-300 text-gray-700 text-sm px-2 py-1 rounded-sm;
+  transition: 0.1s;
+}
+.button:hover {
+  @apply border-transparent bg-gray-600 text-white;
+}
+.button:active {
+  @apply bg-gray-700;
+}
+
+.button.button-danger {
+  @apply border-red-500 text-red-500;
+}
+.button.button-danger:hover {
+  @apply bg-red-500 text-white;
+}
+.button.button-danger:active {
+  @apply bg-red-600;
+}
+
+.input-border {
+  @apply border border-gray-300 p-1;
+}
+.input-border:hover {
+  @apply border-gray-400;
+}
+.input-border:focus {
+  @apply border-blue-300;
+}
+
+.table-list > :nth-child(even) {
+  @apply bg-gray-100;
+}
+.table-list > :nth-child(odd) {
+  @apply bg-gray-200;
+}
+
+.post-content a {
+  @apply text-blue-500;
+}
+.post-content a:hover {
+  @apply underline;
+}
+
+@tailwind utilities;
+
+ /* quill editor overrides */
+
+#editor .ql-snow.ql-toolbar, #editor .ql-snow.ql-container {
+  border: none;
+}
+
+#editor .ql-toolbar.ql-snow, #editor .ql-header.ql-picker .ql-picker-label, #editor .ql-container .ql-editor {
+  padding-left: 0;
+}
+
+#editor .ql-editor {
+  @apply text-base;
+}
+
+#editor .ql-editor.ql-blank::before {
+  opacity: 0.5;
+  font-style: normal;
+  margin-left: -15px;
+}

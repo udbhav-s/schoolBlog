@@ -5,20 +5,14 @@
       @search="search"
       @close="showOptions = false"
     />
-    <div v-else class="level is-mobile post-list-head">
-      <div class="level-left">
-        <div class="level-item">
-          <h1 class="title">
-            <template v-if="drafts">Drafts</template>
-            <template v-else>Posts</template>
-          </h1>
-        </div>
-      </div>
-      <div v-if="showSearch" class="level-right">
-        <div class="level-item">
-          <a class="title is-5" @click="showOptions = true">Search</a>
-        </div>
-      </div>
+    <div v-else-if="searchable" class="text-center">
+      <button
+        class="button border-none text-xl px-4"
+        @click="showOptions = true"
+      >
+        <font-awesome-icon icon="search" class="mr-1" />
+        Search
+      </button>
     </div>
 
     <div class="hr"></div>
@@ -27,12 +21,12 @@
       <post-card :post="post" />
     </div>
 
-    <div v-if="posts.length == 0" class="has-text-centered">
+    <div v-if="posts.length == 0" class="text-center my-6">
       <h2>No Posts</h2>
     </div>
 
-    <div class="has-text-centered">
-      <button v-if="hasMorePosts" class="button is-info" @click="loadPosts">
+    <div class="my-6">
+      <button v-if="hasMorePosts" class="button" @click="loadPosts">
         Load More
       </button>
     </div>
@@ -55,7 +49,7 @@ export default defineComponent({
     drafts: {
       type: Boolean as () => boolean
     },
-    showSearch: {
+    searchable: {
       type: Boolean as () => boolean
     }
   },

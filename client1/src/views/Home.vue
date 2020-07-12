@@ -1,26 +1,28 @@
 <template>
   <div>
-    <hero-section>
-      <h1 class="title">THE HPS BLOG</h1>
-    </hero-section>
+    <div class="text-center mb-6">
+      <h1 class="text-5xl md:text-6xl m-auto">THE HPS BLOG</h1>
+    </div>
 
-    <section v-if="isModOrAbove" class="section fixed-column">
-      <div class="tabs is-centered is-boxed is-small">
-        <ul>
-          <li
+    <section v-if="isModOrAbove" class="fixed-column">
+      <div class="flex justify-center">
+        <div
+          class="text-gray-700 text-xs md:text-base mx-auto inline-flex flex-wrap justify-center rounded mb-6"
+        >
+          <router-link
+            :to="tab.route"
             v-for="tab in tabs"
             :key="tab.name"
             :class="{
               'is-active':
                 $route.path === tab.route ||
-                ($route.path === '/' && tab.name === 'Posts')
+                ($route.path === '/' && tab.name === 'Posts'),
+              tab: true
             }"
           >
-            <router-link :to="tab.route">
-              {{ tab.name }}
-            </router-link>
-          </li>
-        </ul>
+            {{ tab.name }}
+          </router-link>
+        </div>
       </div>
 
       <transition name="fade" mode="out-in">
@@ -28,23 +30,21 @@
       </transition>
     </section>
 
-    <section v-else class="section fixed-column">
-      <post-list :showSearch="true" />
+    <section v-else class="fixed-column">
+      <post-list :searchable="true" />
     </section>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive, computed } from "@vue/composition-api";
-import HeroSection from "@/components/HeroSection.vue";
 import PostList from "@/components/post/PostList.vue";
 import { userStore } from "@/store";
 
 export default defineComponent({
   name: "Home",
   components: {
-    PostList,
-    HeroSection
+    PostList
   },
 
   setup() {
@@ -79,3 +79,15 @@ export default defineComponent({
   }
 });
 </script>
+
+<style lang="postcss">
+.tab {
+  @apply border-b-2 px-4 py-2 cursor-pointer;
+  transition: 0.2s;
+}
+
+.tab:hover,
+.tab.is-active {
+  @apply bg-blue-100 border-blue-700;
+}
+</style>

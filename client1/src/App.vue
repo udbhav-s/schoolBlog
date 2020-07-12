@@ -11,22 +11,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from "@vue/composition-api";
+import { defineComponent } from "@vue/composition-api";
 import AppHeader from "@/components/AppHeader.vue";
 // import "@/assets/styles/main.scss";
-import "@/assets/styles/main2.scss";
+// import "@/assets/styles/main2.scss";
+import "@/assets/styles/index.css";
 
 export default defineComponent({
   name: "App",
   components: {
     AppHeader
-  },
-
-  setup() {
-    onMounted(() => {
-      // class to add navbar spacing
-      document.body.classList.add("has-navbar-fixed-top");
-    });
   }
 });
 </script>
