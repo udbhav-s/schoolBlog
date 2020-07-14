@@ -100,7 +100,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach(async (to, _from, next) => {
-  if (to.name !== "Login" && !userStore.getters.isAuthenticated()) {
+  if (!userStore.getters.isAuthenticated()) {
     // the user still might be authenticated
     // since the store is reset on page refresh
     try {
@@ -110,10 +110,10 @@ router.beforeEach(async (to, _from, next) => {
         userStore.mutations.setUser(result.data);
         // continute to route
         return next();
-      } else return next({ name: "Login" });
+      } else return window.location.replace("/api/user/oauth/google") // next({ name: "Login" });
     } catch (error) {
       // if not authenticated redirect to login
-      return next({ name: "Login" });
+      return window.location.replace("api/user/oauth/google") // next({ name: "Login" });
     }
   } else return next();
 });
