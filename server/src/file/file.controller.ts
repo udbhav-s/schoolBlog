@@ -22,10 +22,16 @@ import { FileService } from './file.service';
 import { PostService } from 'src/post/post.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FileUploadDto } from './dto/fileUpload.dto';
-import * as multer from "multer";
-import * as fs from 'fs';
+import * as aws from 'aws-sdk';
+import * as multerS3 from 'multer-s3';
 import { FileModel } from 'src/database/models/file.model';
 import { FormatResponseInterceptor } from 'src/common/interceptors/formatResponse.interceptor';
+
+const s3 = new aws.S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+});
+const bucketName = process.env.S3_BUCKET_NAME;
 
 @ApiTags('file')
 @UseGuards(AuthenticatedGuard)
@@ -35,22 +41,6 @@ export class FileController {
     private fileService: FileService,
     private postService: PostService,
   ) {}
-
-  @Get("thumbnail/:postId")
-  async getPostThumbnail(
-    @Param('postId') postId: number,
-    @Request() req,
-    @Response() res
-  ) {
-    // check if thumbnail exists
-    const file = await this.fileService.getByPost(postId, true)[0];
-    if (!file) throw new NotFoundException();
-    // check if user can access
-    if (!file.post.canAccess(req.user)) throw new ForbiddenException();
-    // send the file
-    const uploadsPath = process.env.UPLOADS_PATH;
-    res.sendFile(path.join(uploadsPath, file.filename));
-  }
 
   @Get(':filename')
   async getImageByName(
@@ -63,18 +53,27 @@ export class FileController {
     if (!file) throw new NotFoundException();
     // check if user can access
     if (!file.post.canAccess(req.user)) throw new ForbiddenException();
-    // send the file
-    const uploadsPath = process.env.UPLOADS_PATH;
-    res.sendFile(path.join(uploadsPath, filename));
+
+    // redirect to a pre signed url to access the file
+    const url = s3.getSignedUrl('getObject', {
+      Bucket: bucketName,
+      Key: filename,
+      Expires: 180 // url expires in 3 minutes
+    });
+    res.redirect(url);
   }
 
   @UseInterceptors(
     FormatResponseInterceptor,
     FileInterceptor('file', {
-      storage: multer.diskStorage({
-        destination: process.env.UPLOADS_PATH,
-        filename: (_req, file, cb) => {
-          cb(null, Date.now() + path.extname(file.originalname))
+      storage: multerS3({
+        s3: s3,
+        bucket: bucketName,
+        contentType: multerS3.AUTO_CONTENT_TYPE,
+        key: (_req, file, cb) => {
+          const ext = path.extname(file.originalname);
+          const basename = path.basename(file.originalname, ext);
+          cb(null, basename + "_" + Date.now().toString() + ext);
         }
       })
     })
@@ -93,9 +92,12 @@ export class FileController {
       const post = await this.postService.getById(body.postId);
       if (!post) throw new NotFoundException();
       if (!post.canAccess(req.user)) throw new ForbiddenException();
+
+      console.log(file);
+
       // validate if image
       if (body.type === "image" || body.type === "thumbnail") {
-        if (!file.filename.match(/\.(jpg|jpeg|png|gif)$/)) {
+        if (!file.contentType.match(/image\/(jpg|jpeg|png|gif)$/)) {
           throw new BadRequestException("File isn't a valid image");
         }
       }
@@ -103,22 +105,25 @@ export class FileController {
       if (body.type === "thumbnail") {
         const thumbnail = (await this.fileService.getByPost(body.postId, true))[0];
         if (thumbnail) {
-          fs.unlinkSync(path.join(process.env.UPLOADS_PATH, thumbnail.filename));
+          // delete from s3
+          await s3.deleteObject({ Bucket: bucketName, Key: thumbnail.filename }).promise();
+          // remove from database
           await this.fileService.removeFilename(thumbnail.filename);
         }
       }
       // store filename in database
       await this.fileService.storeFilename({
         postId: body.postId,
-        filename: file.filename,
+        filename: file.key,
         type: body.type
       });
 
-      return file.filename;
+      // return key
+      return file.key;
     }
     catch (err) {
       // delete file
-      fs.unlinkSync(path.join(file.destination, file.filename));
+      await s3.deleteObject({ Bucket: bucketName, Key: file.key }).promise();
       throw err;
     }
   }
@@ -133,8 +138,8 @@ export class FileController {
     if (!file) throw new NotFoundException();
     // check if user can modify
     if (!file.post.canDelete(req.user)) throw new ForbiddenException();
-    // delete file
-    fs.unlinkSync(path.join(process.env.UPLOADS_PATH, filename));
+    // delete file from s3
+    await s3.deleteObject({ Bucket: bucketName, Key: filename }).promise();
     // delete from database
     return await this.fileService.removeFilename(filename);
   }
