@@ -1,9 +1,8 @@
 import { Injectable, Inject } from '@nestjs/common';
-import * as fs from 'fs';
-import * as path from 'path';
 import { ModelClass } from 'objection';
 import { FileModel } from '../database/models/file.model';
 import FileStoreDto from './dto/fileStore.dto';
+import { s3, bucketName } from './s3';
 
 @Injectable()
 export class FileService {
@@ -44,7 +43,6 @@ export class FileService {
 
   // delete files associated with a post
   async removePostFiles(postId: number): Promise<void> {
-    const uploadsPath = process.env.UPLOADS_PATH;
     // delete files from database
     const rows = await this.fileModel
       .query()
@@ -55,8 +53,7 @@ export class FileService {
     rows.forEach(row => {
       const { filename } = row;
       // delete the file from the folder
-      const filePath = path.join(uploadsPath, filename);
-      fs.unlinkSync(filePath);
+      s3.deleteObject({ Bucket: bucketName, Key: filename }).promise();
     });
   }
 }

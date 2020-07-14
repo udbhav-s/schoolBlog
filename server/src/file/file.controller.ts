@@ -22,16 +22,10 @@ import { FileService } from './file.service';
 import { PostService } from 'src/post/post.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FileUploadDto } from './dto/fileUpload.dto';
-import * as aws from 'aws-sdk';
 import * as multerS3 from 'multer-s3';
 import { FileModel } from 'src/database/models/file.model';
 import { FormatResponseInterceptor } from 'src/common/interceptors/formatResponse.interceptor';
-
-const s3 = new aws.S3({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-});
-const bucketName = process.env.S3_BUCKET_NAME;
+import { s3, bucketName } from './s3';
 
 @ApiTags('file')
 @UseGuards(AuthenticatedGuard)
