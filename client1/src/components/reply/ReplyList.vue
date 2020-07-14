@@ -80,7 +80,7 @@ export default defineComponent({
 
     const replyEdited = async (reply: Reply) => {
       const index = replies.value.findIndex(r => r.id === reply.id);
-      replies.value[index] = reply;
+      replies.value.splice(index, 1, reply);
     };
 
     const replyDeleted = async (reply: Reply) => {

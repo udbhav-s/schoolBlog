@@ -80,7 +80,7 @@ export default defineComponent({
 
     const commentEdited = async (comment: PostComment) => {
       const index = comments.value.findIndex(c => c.id === comment.id);
-      comments.value[index] = comment;
+      comments.value.splice(index, 1, comment);
     };
 
     const commentDeleted = async (comment: PostComment) => {
