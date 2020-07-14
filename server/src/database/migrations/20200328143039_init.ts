@@ -13,7 +13,7 @@ export async function up(knex: Knex): Promise<any> {
           .unique()
           .notNullable();
         // student/teacher/etc
-        table.string('type');
+        table.string('picture');
         // decides which permissons the user has
         table
           .integer('level')

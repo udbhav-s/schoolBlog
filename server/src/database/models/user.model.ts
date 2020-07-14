@@ -10,7 +10,7 @@ export class UserModel extends BaseModel {
   name!: string;
   email!: string;
   level!: number;
-  type!: string;
+  picture: string;
 
   posts?: PostModel[];
   comments?: CommentModel[];
