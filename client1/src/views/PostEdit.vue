@@ -109,9 +109,10 @@
 <script lang="ts">
 import HeroSection from "@/components/HeroSection.vue";
 import Modal from "@/components/Modal.vue";
-import { postService, categoryService, fileService } from "@/services";
+import { postService, fileService } from "@/services";
 import { defineComponent, ref, computed, watch } from "@vue/composition-api";
 import { PostCreate, Category, ImageDropData } from "@/types";
+import { categoryStore } from "../store";
 
 // quill
 import Quill from "quill";
@@ -143,10 +144,13 @@ export default defineComponent({
 
   setup(props, { root }) {
     const post = ref<PostCreate>(null);
-    const categories = ref<Category[]>(null);
+    const categories = computed<Category[]>(categoryStore.getters.categories);
     const quillOptions = ref(quillConfig);
     const thumbnail = ref<HTMLInputElement>(null);
     const imageUploading = ref<boolean>(false);
+
+    // reload categories
+    categoryStore.mutations.loadCategories();
 
     // mock files which show up as attachments (not actually loaded from server)
     const attachedFiles = computed(() => {
@@ -207,18 +211,6 @@ export default defineComponent({
         if (id) loadPost(id);
       }
     );
-
-    // load categories
-    const loadCategories = async () => {
-      const result = await categoryService.getAll();
-      if ("error" in result) {
-        root.$toasted.error("Error loading categories");
-        throw result.message;
-      } else {
-        categories.value = result.data;
-      }
-    };
-    loadCategories();
 
     const uploadAndInsertImage = async (file: File, editor: Quill) => {
       if (!post.value?.id) return;

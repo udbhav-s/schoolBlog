@@ -1,11 +1,14 @@
 <template>
   <div>
-    <div class="p-4 shadow-lg text-center space-y-2 fixed-column">
-      <img :src="user.picture" class="w-20 h-20 rounded-full inline-block" />
+    <div class="p-4 shadow-lg text-center fixed-column">
+      <img
+        :src="user.picture"
+        class="w-20 h-20 rounded-full inline-block my-2"
+      />
       <h1 class="text-2xl">{{ user.name }}</h1>
       <div>{{ user.email }}</div>
 
-      <button v-if="isCurrentUser" @click="logout" class="button text-lg">
+      <button v-if="isCurrentUser" @click="logout" class="button text-lg my-2">
         Log Out
       </button>
     </div>

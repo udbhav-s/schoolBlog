@@ -38,8 +38,9 @@
 <script lang="ts">
 import { categoryService } from "@/services";
 import CategoryComponent from "@/components/category/Category.vue";
-import { defineComponent, ref, reactive } from "@vue/composition-api";
+import { defineComponent, ref, reactive, computed } from "@vue/composition-api";
 import { Category, CategoryCreate } from "@/types";
+import { categoryStore } from "@/store";
 
 export default defineComponent({
   name: "CategoryList",
@@ -48,21 +49,14 @@ export default defineComponent({
   },
 
   setup(props, { root }) {
-    const categories = ref<Category[]>([]);
+    const categories = computed<Category[]>(categoryStore.getters.categories);
     const showAddCategory = ref<boolean>(false);
     const form = reactive<CategoryCreate>({
       name: ""
     });
 
-    const loadCategories = async () => {
-      const result = await categoryService.getAll();
-      if ("error" in result) {
-        root.$toasted.error("Error getting categories");
-        throw result.message;
-      }
-      categories.value = result.data;
-    };
-    loadCategories();
+    // reload categories
+    categoryStore.mutations.loadCategories();
 
     const addCategory = async () => {
       const result = await categoryService.create(form);
@@ -72,7 +66,7 @@ export default defineComponent({
       }
       root.$toasted.success("Category created");
       showAddCategory.value = false;
-      categories.value.push(result.data);
+      categoryStore.mutations.loadCategories();
     };
 
     const categoryDeleted = async (id: number) => {
@@ -82,7 +76,7 @@ export default defineComponent({
         throw result.message;
       } else {
         root.$toasted.success("Category deleted");
-        categories.value = categories.value.filter(c => c.id !== id);
+        categoryStore.mutations.loadCategories();
       }
     };
 
@@ -94,15 +88,13 @@ export default defineComponent({
         root.$toasted.error("Error while updating category");
         throw result.message;
       }
-      const index = categories.value.findIndex(c => c.id === category.id);
-      categories.value[index] = category;
+      categoryStore.mutations.loadCategories();
     };
 
     return {
       categories,
       showAddCategory,
       form,
-      loadCategories,
       addCategory,
       categoryEdited,
       categoryDeleted

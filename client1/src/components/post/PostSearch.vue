@@ -55,16 +55,15 @@
 </template>
 
 <script lang="ts">
-import { categoryService } from "@/services";
 import { defineComponent, computed, ref } from "@vue/composition-api";
 import { PostQueryOptions, Category } from "../../types";
-import { userStore } from "@/store";
+import { userStore, categoryStore } from "@/store";
 
 export default defineComponent({
   name: "PostSearch",
 
   setup(props, { emit, root }) {
-    const categories = ref<Category[]>(null);
+    const categories = computed<Category[]>(categoryStore.getters.categories);
     const isModOrAbove = computed<boolean>(userStore.getters.isModOrAbove);
     const options = ref<Partial<PostQueryOptions>>({
       verified: "",
@@ -74,13 +73,8 @@ export default defineComponent({
       categoryId: ""
     });
 
-    const loadCategories = async () => {
-      const result = await categoryService.getAll();
-      if ("error" in result)
-        root.$toasted.error("Could not load category list");
-      else categories.value = result.data;
-    };
-    loadCategories();
+    // reload categories
+    categoryStore.mutations.loadCategories();
 
     const submit = () => {
       const opts = { ...options.value };
@@ -101,7 +95,6 @@ export default defineComponent({
       isModOrAbove,
       options,
       categories,
-      loadCategories,
       submit,
       close
     };

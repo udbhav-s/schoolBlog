@@ -13,14 +13,18 @@
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
 import AppHeader from "@/components/AppHeader.vue";
-// import "@/assets/styles/main.scss";
-// import "@/assets/styles/main2.scss";
 import "@/assets/styles/index.css";
+import { categoryStore } from "./store";
 
 export default defineComponent({
   name: "App",
   components: {
     AppHeader
+  },
+
+  setup() {
+    // load categories into store
+    categoryStore.mutations.loadCategories();
   }
 });
 </script>

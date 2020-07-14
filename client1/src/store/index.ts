@@ -1,9 +1,10 @@
 import Vue from "vue";
-import { userService } from "@/services";
-import { User } from "@/types";
+import { userService, categoryService } from "@/services";
+import { User, Category } from "@/types";
 
 const store = Vue.observable({
-  user: {} as User
+  user: {} as User,
+  categories: [] as Category[]
 });
 
 export const userStore = {
@@ -28,7 +29,24 @@ export const userStore = {
   }
 };
 
+export const categoryStore = {
+  getters: {
+    categories: () => store.categories
+  },
+
+  mutations: {
+    loadCategories: async () => {
+      const result = await categoryService.getAll();
+      if ("error" in result) throw result;
+      else {
+        store.categories = result.data;
+      }
+    }
+  }
+}
+
 export default {
   store,
-  userStore
+  userStore,
+  categoryStore
 };

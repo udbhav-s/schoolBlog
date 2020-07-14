@@ -15,7 +15,7 @@
         <button @click="editMode = true" v-if="!editMode" class="button">
           Edit
         </button>
-        <button @click="categoryEdited" v-else class="button">
+        <button @click="rditCategory" v-else class="button">
           Submit
         </button>
       </div>
@@ -23,7 +23,7 @@
       <div>
         <button
           v-if="!editMode"
-          @click="categoryDeleted"
+          @click="deleteCategory"
           class="button button-danger"
         >
           Delete
@@ -53,11 +53,11 @@ export default defineComponent({
     const editMode = ref<boolean>(false);
     const form = ref<Category>(props.category);
 
-    const categoryDeleted = () => {
+    const editCategory = () => {
       emit("categoryDeleted", props.category.id);
     };
 
-    const categoryEdited = () => {
+    const deleteCategory = () => {
       editMode.value = false;
       emit("categoryEdited", form.value);
     };
@@ -65,8 +65,8 @@ export default defineComponent({
     return {
       editMode,
       form,
-      categoryDeleted,
-      categoryEdited
+      editCategory,
+      deleteCategory
     };
   }
 });
