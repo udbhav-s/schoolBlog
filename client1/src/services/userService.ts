@@ -1,5 +1,5 @@
 import api from "./apiService";
-import { User, ApiResponse, Credentials } from "@/types";
+import { User, ApiResponse } from "@/types";
 
 export const userService = {
   getCurrent() {
@@ -10,9 +10,6 @@ export const userService = {
   },
   getAll() {
     return api.get<ApiResponse<User[]>>(`/user/all`);
-  },
-  login(credentials: Credentials) {
-    return api.post<ApiResponse<User>>("/user/login", credentials);
   },
   logout() {
     return api.get("/user/logout");
