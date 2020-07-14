@@ -10,19 +10,16 @@ export async function seed(knex: Knex) {
         {
           email: 'st9999@hpsbegumpet.fake.in',
           name: 'Example Admin Account',
-          type: 'student',
           level: 4,
         },
         {
           email: 'st1234@hpsbegumpet.fake.in',
           name: 'Tom Hanks',
-          type: 'student',
           level: 1,
         },
         {
           email: 'sen1234@hpsbegumpet.fake.in',
           name: 'Heath Ledger',
-          type: 'teacher',
           level: 2,
         },
       ]);
