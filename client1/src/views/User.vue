@@ -1,10 +1,7 @@
 <template>
   <div>
     <div class="p-4 shadow-lg text-center space-y-2 fixed-column">
-      <img
-        src="https://3.bp.blogspot.com/-qDc5kIFIhb8/UoJEpGN9DmI/AAAAAAABl1s/BfP6FcBY1R8/s1600/BlueHead.jpg"
-        class="w-20 h-20 rounded-full inline-block"
-      />
+      <img :src="user.picture" class="w-20 h-20 rounded-full inline-block" />
       <h1 class="text-2xl">{{ user.name }}</h1>
       <div>{{ user.email }}</div>
 
