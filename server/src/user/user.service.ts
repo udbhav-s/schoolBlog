@@ -3,7 +3,7 @@ import { ModelClass } from 'objection';
 import { UserModel } from '../database/models/user.model';
 import { GetOptionsDto } from 'src/common/dto/getOptions.dto';
 import { GET_OPTIONS } from 'src/database/modifiers';
-import { GoogleSamlProfile } from 'src/auth/dto/googleSamlProfile.dto';
+import { CreateProfileData } from 'src/auth/dto/createProfileData.dto';
 
 @Injectable()
 export class UserService {
@@ -26,11 +26,23 @@ export class UserService {
     return await query;
   }
 
-  async createFromGoogleSaml(profile: GoogleSamlProfile): Promise<UserModel> {
+  async createFromProfileData(profile: CreateProfileData): Promise<UserModel> {
     return await this.userModel.query().insert({
-      name: profile['urn:oid:2.16.840.1.113730.3.1.241'],
+      name: profile.name,
       email: profile.email,
+      picture: profile.picture
     });
+  }
+
+  async updateProfile(profile: CreateProfileData): Promise<UserModel> {
+    return await this.userModel.query()
+      .where({ email: profile.email })
+      .patch({
+        name: profile.name,
+        picture: profile.picture
+      })
+      .returning('*')
+      .first();
   }
 
   async setLevel(id: number, level: number): Promise<UserModel> {

@@ -23,7 +23,8 @@ import { LevelGuard } from 'src/common/guards/level.guard';
 import { Level } from 'src/common/decorators/level.decorator';
 import { Levels } from 'src/common/util/level.enum';
 import { GetOptionsDto } from 'src/common/dto/getOptions.dto';
-import { GoogleSamlGuard } from 'src/common/guards/saml.guard';
+// import { GoogleSamlGuard } from 'src/common/guards/saml.guard';
+import { GoogleOAuthGuard } from 'src/common/guards/oauth.guard';
 
 @ApiTags('user')
 @UseInterceptors(FormatResponseInterceptor)
@@ -31,15 +32,31 @@ import { GoogleSamlGuard } from 'src/common/guards/saml.guard';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @UseGuards(GoogleSamlGuard)
-  @Get('/google')
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  googleLogin(): void {}
+  // SAML LOGIN
 
-  @ApiOperation({ summary: 'Callback for Gsuite initiated SAML login' })
-  @UseGuards(GoogleSamlGuard)
-  @Post("/google/callback")
-  googleCallback(@Res() res) {
+  // @UseGuards(GoogleSamlGuard)
+  // @Get('/saml/google')
+  // // eslint-disable-next-line @typescript-eslint/no-empty-function
+  // googleSamlLogin(): void {}
+
+  // @ApiOperation({ summary: 'Callback for Gsuite initiated SAML login' })
+  // @UseGuards(GoogleSamlGuard)
+  // @Post("/saml/google/callback")
+  // googleSamlCallback(@Res() res) {
+  //   res.redirect("/")
+  // }
+
+  // OAUTH LOGIN
+
+  @UseGuards(GoogleOAuthGuard)
+  @Get('/oauth/google')
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  googleOauthLogin(): void {}
+
+  @ApiOperation({ summary: 'Callback for Google OAuth login' })
+  @UseGuards(GoogleOAuthGuard)
+  @Get("/oauth/google/callback")
+  googleOauthCallback(@Res() res) {
     res.redirect("/")
   }
 
