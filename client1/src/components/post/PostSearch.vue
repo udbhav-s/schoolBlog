@@ -62,7 +62,7 @@ import { userStore, categoryStore } from "@/store";
 export default defineComponent({
   name: "PostSearch",
 
-  setup(props, { emit, root }) {
+  setup(props, { emit }) {
     const categories = computed<Category[]>(categoryStore.getters.categories);
     const isModOrAbove = computed<boolean>(userStore.getters.isModOrAbove);
     const options = ref<Partial<PostQueryOptions>>({
