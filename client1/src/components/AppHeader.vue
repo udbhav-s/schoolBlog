@@ -1,6 +1,6 @@
 <template>
   <header
-    class="fixed top-0 left-0 w-full bg-gray-200 flex flex-wrap items-center justify-between px-4 py-2 lg:px-16 lg:py-0 select-none z-50"
+    class="fixed top-0 left-0 w-full bg-gray-200 flex flex-wrap items-center justify-between px-4 py-2 lg:px-16 lg:py-0 select-none z-40"
   >
     <router-link
       to="/"
@@ -30,7 +30,7 @@
     >
       <nav>
         <ul
-          class="text-xl lg:text-base lg:flex items-center justify-between text-base text-gray-800 pt-4 lg:pt-0"
+          class="lg:text-xl lg:flex items-center justify-between text-base text-gray-800 pt-4 lg:pt-0"
         >
           <router-link
             class="navbar-item"

@@ -1,9 +1,7 @@
 <template>
   <div class="post-edit-container" v-if="post">
     <modal :class="{ 'is-active': imageUploading }">
-      <div class="card">
-        <h1 class="title is-3">Uploading image</h1>
-      </div>
+      <h1 class="text-4xl p-8 bg-white rounded">Uploading image</h1>
     </modal>
 
     <div class="fixed-column space-y-2 mb-10">
@@ -81,7 +79,7 @@
       <div class="flex flex-row flex-wrap justify-end space-x-2">
         <div>
           <button class="button" @click="savePost">
-            Save Draft
+            Save
           </button>
         </div>
         <div>
@@ -280,7 +278,11 @@ export default defineComponent({
           root.$toasted.error("Error uploading thumbnail");
           throw result.message;
         } else {
-          post.value.thumbnail = result.data;
+          // since thumbnail might not exist
+          // and new properties do not trigger reactivity
+          post.value = Object.assign({}, post.value, {
+            thumbnail: result.data
+          });
         }
       }
     };
