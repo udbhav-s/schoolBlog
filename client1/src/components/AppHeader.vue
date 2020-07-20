@@ -30,7 +30,7 @@
     >
       <nav>
         <ul
-          class="lg:text-xl lg:flex items-center justify-between text-base text-gray-800 pt-4 lg:pt-0"
+          class="lg:flex items-center justify-between text-base text-gray-800 pt-4 lg:pt-0"
         >
           <router-link
             class="navbar-item"
@@ -113,6 +113,6 @@ export default defineComponent({
 }
 
 #menu.navbar-expanded {
-  height: 100vh;
+  @apply h-screen;
 }
 </style>
