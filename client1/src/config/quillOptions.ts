@@ -1,12 +1,15 @@
 export default {
   modules: {
     toolbar: [
-      [{ header: [2, 3, 4, 5, 6, false] }],
+      [{ header: [2, 3, false] }],
       ["bold", "italic", "underline"],
       ["blockquote", "code-block"],
       [{ list: "ordered" }, { list: "bullet" }],
       ["link", "image"]
     ],
+    clipboard: {
+      matchVisual: false
+    },
     imageDropAndPaste: {
       handler: () => alert("The editor has not loaded completely")
     }
