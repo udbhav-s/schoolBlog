@@ -1,5 +1,7 @@
 <template>
   <div>
+    <hr class="my-6" />
+
     <router-link
       :to="{
         name: post.published ? 'Post' : 'EditPost',
@@ -8,24 +10,44 @@
         }
       }"
     >
-      <div class="box is-paddingless post-card">
-        <div class="thumbnail-container" v-if="post.thumbnail">
-          <img class="thumbnail" :src="`/api/file/${post.thumbnail}`" />
-        </div>
-
-        <div class="content-container">
-          <h3 class="title is-4">{{ post.title }}</h3>
-          <post-meta :post="post" />
-        </div>
-      </div>
+      <h1 class="text-4xl font-semibold">{{ post.title }}</h1>
     </router-link>
+
+    <post-meta :post="post" :showOptions="false" dateType="relative" />
+
+    <template v-if="post.published">
+      <div v-if="post.thumbnail">
+        <img
+          :src="`/api/file/${post.thumbnail}`"
+          class="thumbnail w-full my-2 mb-3 object-cover"
+        />
+      </div>
+      <div v-else class="my-2"></div>
+
+      <div v-html="postPreview" class="prose"></div>
+
+      <router-link
+        :to="{
+          name: 'Post',
+          params: {
+            id: post.id
+          }
+        }"
+        class="block text-center text-blue-600 my-2"
+      >
+        Read Full
+      </router-link>
+    </template>
   </div>
 </template>
 
 <script lang="ts">
+import Username from "@/components/user/Username.vue";
 import PostMeta from "@/components/post/PostMeta.vue";
+import { defineComponent, computed } from "@vue/composition-api";
 import { Post } from "@/types";
-import { defineComponent } from "@vue/composition-api";
+import timeDifference from "@/util/timeDifference";
+import clip from "text-clipper";
 
 export default defineComponent({
   name: "PostCard",
@@ -36,7 +58,34 @@ export default defineComponent({
     }
   },
   components: {
+    Username,
     PostMeta
+  },
+
+  setup(props) {
+    const postDate = computed<string>(() =>
+      timeDifference(new Date(), new Date(props.post.createdAt))
+    );
+
+    const postPreview = computed<string>(() => {
+      if (props.post.body) {
+        return clip(props.post.body, 300, {
+          html: true,
+          imageWeight: 301
+        });
+      } else return "";
+    });
+
+    return {
+      postDate,
+      postPreview
+    };
   }
 });
 </script>
+
+<style scoped>
+.thumbnail {
+  max-height: 25rem;
+}
+</style>
