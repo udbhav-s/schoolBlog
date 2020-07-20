@@ -6,22 +6,23 @@
 
     <div class="fixed-column space-y-2 mb-10">
       <input
-        class="text-4xl"
+        class="text-2xl md:text-5xl font-bold"
         type="text"
         name="title"
         v-model="post.title"
         placeholder="Title"
       />
 
-      <div id="editor" class="post-content">
+      <div id="editor">
         <quill-editor
           v-model="post.body"
           :options="quillOptions"
           @ready="editorReady"
+          class="prose prose-lg"
         />
       </div>
 
-      <div>
+      <div class="bg-gray-100 p-2">
         <div class="my-4" v-if="categories">
           <select v-model="post.categoryId" class="input-border">
             <option :value="null" selected>Category</option>
@@ -118,7 +119,7 @@ import { quillEditor } from "vue-quill-editor";
 import quillConfig from "@/config/quillOptions";
 import QuillImageDropAndPaste from "quill-image-drop-and-paste";
 Quill.register("modules/imageDropAndPaste", QuillImageDropAndPaste);
-import "quill/dist/quill.snow.css";
+import "@/assets/styles/quill.snow.css";
 
 // file uploader
 import vueFilePond from "vue-filepond";
