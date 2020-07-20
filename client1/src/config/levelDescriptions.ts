@@ -22,10 +22,10 @@ export default [
   Submitted posts are automatically verified. <br>
   Can delete any post or comment.
   `,
-  // Admin
-  `
-  All the permissions of moderator. <br>
-  Can change the permission level of other user. <br>
-  (Such as setting new moderators or authors, or demoting them).
-  `
+  // Admin - disabled
+  // `
+  // All the permissions of moderator. <br>
+  // Can change the permission level of other user. <br>
+  // (Such as setting new moderators or authors, or demoting them).
+  // `
 ];

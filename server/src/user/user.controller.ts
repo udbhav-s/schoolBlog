@@ -12,6 +12,9 @@ import {
   UseInterceptors,
   Query,
   Res,
+  BadRequestException,
+  NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserModel } from '../database/models/user.model';
@@ -110,10 +113,16 @@ export class UserController {
   @Level(Levels.Admin)
   @UsePipes(ParseIntPipe)
   @Post('/level/:id')
-  setLevel(
+  async setLevel(
     @Param('id') id: number,
     @Body('level') level: number,
   ): Promise<UserModel> {
+    // get user 
+    const user = await this.userService.getById(id);
+    if (!user) throw new NotFoundException();
+    // admins are set manually from the db so 4 is excluded
+    if (user.level === Levels.Admin) throw new UnauthorizedException("Cannot change level of admin");
+    if (level >= Levels.Admin || level < Levels.Reader) throw new BadRequestException("Invalid level");
     return this.userService.setLevel(id, level);
   }
 }

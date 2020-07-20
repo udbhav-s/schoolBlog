@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="p-4 shadow-lg text-center fixed-column">
+    <div class="p-4 rounded border border-gray-300 text-center fixed-column">
       <img
         :src="user.picture"
         class="w-20 h-20 rounded-full inline-block my-2"
@@ -14,7 +14,7 @@
     </div>
 
     <section
-      v-if="isAdminOrAbove && !isCurrentUser"
+      v-if="isAdminOrAbove && !isCurrentUser && user.level !== 4"
       class="bg-gray-100 my-10 py-6"
     >
       <div class="fixed-column mx-auto space-y-3">
@@ -29,7 +29,7 @@
           <option value="1">Member</option>
           <option value="2">Author</option>
           <option value="3">Moderator</option>
-          <option value="4">Admin</option>
+          <!-- <option value="4">Admin</option> -->
         </select>
 
         <div v-html="levelDescriptions[user.level]"></div>
