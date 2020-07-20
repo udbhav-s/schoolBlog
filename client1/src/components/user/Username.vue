@@ -4,11 +4,14 @@
       name: 'User',
       params: { id: user.id }
     }"
-    class="flex flex-row items-center"
+    class="group flex flex-row items-center"
   >
-    <img :src="user.picture" class="w-10 h-10 rounded-full mr-2" />
+    <img
+      :src="user.picture"
+      class="w-10 h-10 rounded-full mr-2 border-2 border-transparent hover:border-blue-300"
+    />
     <div>
-      <div class="text-gray-800">
+      <div class="text-gray-800 leading-tight">
         {{ user.name }}
         <span v-if="user.level == 3">[M]</span>
         <span v-if="user.level == 4">[A]</span>

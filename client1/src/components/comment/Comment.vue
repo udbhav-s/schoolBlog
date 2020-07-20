@@ -14,7 +14,7 @@
         <span v-if="comment.edited">(Edited)</span>
       </username>
 
-      <div v-if="!editComment">{{ comment.body }}</div>
+      <div v-if="!editComment" class="leading-tight">{{ comment.body }}</div>
       <div v-else>
         <comment-edit
           @commentEdited="commentEdited"
@@ -22,10 +22,11 @@
           :editMode="true"
           :editId="comment.id"
           :postId="comment.postId"
+          :body="comment.body"
         />
       </div>
 
-      <div class="text-sm text-gray-600 text-right">
+      <div class="text-sm text-gray-600 text-right leading-none">
         <button
           v-if="!addReply"
           @click="addReply = true"

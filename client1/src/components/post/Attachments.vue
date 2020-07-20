@@ -1,6 +1,5 @@
 <template>
   <div class="attachments">
-    <h2 class="title is-4">Attachments</h2>
     <div>
       <a
         :href="`/api/file/${attachment}`"
@@ -8,7 +7,11 @@
         v-for="attachment in attachments"
         :key="attachment"
       >
-        <div class="card">{{ attachment }}</div>
+        <div
+          class="border border-solid border-gray-300 text-gray-600 font-bold rounded p-2"
+        >
+          {{ attachment }}
+        </div>
       </a>
     </div>
   </div>

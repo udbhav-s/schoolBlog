@@ -13,17 +13,18 @@
       <span v-if="reply.edited">(Edited)</span>
     </username>
 
-    <div v-if="!editReply">{{ reply.body }}</div>
+    <div v-if="!editReply" class="leading-tight">{{ reply.body }}</div>
     <div v-else>
       <reply-edit
         @replyEdited="replyEdited"
         :editMode="true"
         :editId="reply.id"
         :commentId="reply.commentId"
+        :body="reply.body"
       />
     </div>
 
-    <div class="text-sm text-gray-600 text-right">
+    <div class="text-sm text-gray-600 text-right leading-none">
       <template v-if="byCurrentUser">
         <button
           v-if="!editReply"
