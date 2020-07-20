@@ -1,21 +1,28 @@
 <template>
   <div class="section fixed-column post-page" v-if="post">
-    <h1 class="text-4xl">{{ post.title }}</h1>
-    <post-meta :post="post" @postDeleted="postDeleted" :showOptions="true" />
+    <h1 class="text-5xl leading-tight font-bold">{{ post.title }}</h1>
+    <post-meta
+      :post="post"
+      @postDeleted="postDeleted"
+      @post-verified="postVerified"
+      @post-unverified="postUnverified"
+      :showOptions="true"
+      class="my-4"
+    />
 
     <div v-if="post.thumbnail" class="mt-2">
       <img :src="`/api/file/${post.thumbnail}`" class="w-full" />
     </div>
 
-    <div class="post-content mt-4" v-html="post.body"></div>
+    <div class="prose prose-lg mt-4" v-html="post.body"></div>
 
-    <attachments
-      v-if="post.attachments && post.attachments.length > 0"
-      :attachments="post.attachments"
-    />
+    <div v-if="post.attachments && post.attachments.length > 0">
+      <h2 class="text-3xl my-6 font-bold">Attachments</h2>
+      <attachments :attachments="post.attachments" />
+    </div>
 
     <div>
-      <h2 class="text-3xl my-6">Comments</h2>
+      <h2 class="text-3xl my-6 font-bold">Comments</h2>
 
       <comment-list
         v-if="post.id"
@@ -60,6 +67,8 @@ export default defineComponent({
         if (result.status === 403) root.$router.push("/");
         else root.$toasted.error("Couldn't load post data");
       } else post.value = result.data;
+      // set title
+      document.title = post.value?.title || "The HPS Blog";
     };
     loadPost();
 
@@ -67,11 +76,21 @@ export default defineComponent({
       root.$router.push("/");
     };
 
+    const postVerified = () => {
+      if (post.value) post.value.verified = true;
+    };
+
+    const postUnverified = () => {
+      if (post.value) post.value.verified = false;
+    };
+
     return {
       isMemberOrAbove,
       post,
       loadPost,
-      postDeleted
+      postDeleted,
+      postVerified,
+      postUnverified
     };
   }
 });
