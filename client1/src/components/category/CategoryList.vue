@@ -66,6 +66,7 @@ export default defineComponent({
       }
       root.$toasted.success("Category created");
       showAddCategory.value = false;
+      form.name = "";
       categoryStore.mutations.loadCategories();
     };
 
