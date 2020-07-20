@@ -6,7 +6,7 @@
 
     <div class="fixed-column space-y-2 mb-10">
       <input
-        class="text-2xl md:text-5xl font-bold"
+        class="text-2xl md:text-5xl font-bold focus:outline-none"
         type="text"
         name="title"
         v-model="post.title"
