@@ -46,7 +46,10 @@ export class PostModel extends BaseModel {
       query.modify(GET_OPTIONS, options);
 
       if (options.verifiedOrUser && options.userId) {
-        query.where({ verified: true }).orWhere({ userId: options.userId });
+        // internal OR so AND precedence with other conditions doesn't interfere
+        query.where(function() {
+          this.where({ verified: true }).orWhere({ userId: options.userId });
+        });
       } else if (options.userId) {
         query.where({ userId: options.userId });
       }
@@ -66,6 +69,8 @@ export class PostModel extends BaseModel {
       if (options.categoryId) {
         query.where({ categoryId: options.categoryId });
       }
+
+      // query.debug();
     },
 
     search(query: QueryBuilder<PostModel>, str: string) {
@@ -73,14 +78,16 @@ export class PostModel extends BaseModel {
       let terms = str.split(/\s+/);
       terms = terms.map(term => term.trim());
 
-      for (const column of columns) {
-        for (const term of terms) {
-          query.orWhere(
-            raw(`LOWER(??) like LOWER('%' || ? || '%')`, column, term),
-          );
+      query.where(function() {
+        for (const column of columns) {
+          for (const term of terms) {
+            this.orWhere(
+              raw(`LOWER(??) like LOWER('%' || ? || '%')`, column, term),
+            );
+          }
         }
-      }
-      query.debug();
+      })
+      // query.debug();
     },
 
     ...BaseModel.modifiers,
