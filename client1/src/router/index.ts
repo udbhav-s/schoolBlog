@@ -93,7 +93,7 @@ const router = new VueRouter({
   routes
 });
 
-router.beforeEach(async (_to, _from, next) => {
+router.beforeEach(async (to, _from, next) => {
   if (!userStore.getters.isAuthenticated()) {
     // the user still might be authenticated
     // since the store is reset on page refresh
@@ -102,14 +102,16 @@ router.beforeEach(async (_to, _from, next) => {
       if ("success" in result) {
         // set the user in store
         userStore.mutations.setUser(result.data);
-        // continute to route
-        return next();
       } else return window.location.replace("/api/user/oauth/google") // next({ name: "Login" });
     } catch (error) {
       // if not authenticated redirect to login
       return window.location.replace("api/user/oauth/google") // next({ name: "Login" });
     }
   } else return next();
+  // set title
+  document.title = to.meta.title || "The HPS Blog";
+  // continute to route
+  return next();
 });
 
 export default router;
