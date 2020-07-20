@@ -3,7 +3,7 @@
     <div class="flex flex-row flex-wrap items-center justify-between">
       <username :user="post.user">
         <span>{{ date }}</span>
-        <span v-if="post.category">
+        <span v-if="post.category" class="font-bold">
           {{ post.category.name }}
         </span>
         <span v-if="!post.verified" class="text-red-500">
@@ -11,7 +11,7 @@
         </span>
       </username>
 
-      <div v-if="showOptions" class="flex flex-row align-middle my-2">
+      <div v-if="showOptions" class="flex flex-row align-middle mt-2">
         <router-link
           class="button"
           v-if="byCurrentUser"
@@ -58,6 +58,7 @@ import { postService } from "@/services";
 import { defineComponent, computed } from "@vue/composition-api";
 import { Post, User } from "@/types";
 import { userStore } from "@/store";
+import timeDifference from "@/util/timeDifference";
 
 export default defineComponent({
   name: "PostMeta",
@@ -68,6 +69,9 @@ export default defineComponent({
     },
     showOptions: {
       type: Boolean as () => boolean
+    },
+    dateType: {
+      type: String as () => string
     }
   },
   components: {
@@ -80,9 +84,11 @@ export default defineComponent({
     const byCurrentUser = computed<boolean>(
       () => props.post.userId === currentUser.value.id
     );
-    const date = computed<string>(() =>
-      new Date(props.post.createdAt).toDateString()
-    );
+    const date = computed<string>(() => {
+      if (props.dateType === "relative")
+        return timeDifference(new Date(), new Date(props.post.createdAt));
+      else return new Date(props.post.createdAt).toDateString();
+    });
 
     const deletePost = async () => {
       const result = await postService.delete(props.post.id);
@@ -98,6 +104,7 @@ export default defineComponent({
       if ("error" in result) root.$toasted.error(result.message);
       else {
         root.$toasted.success("Post verified!");
+        emit("post-verified");
       }
     };
 
@@ -106,6 +113,7 @@ export default defineComponent({
       if ("error" in result) root.$toasted.error(result.message);
       else {
         root.$toasted.success("Post unverified");
+        emit("post-unverified");
       }
     };
 
