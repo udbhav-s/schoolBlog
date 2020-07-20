@@ -25,6 +25,8 @@ export default defineComponent({
   setup() {
     // load categories into store
     categoryStore.mutations.loadCategories();
+    // set title
+    document.title = "The HPS Blog";
   }
 });
 </script>
