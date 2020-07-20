@@ -1,10 +1,6 @@
 <template>
   <div>
-    <post-search
-      v-if="showOptions"
-      @search="search"
-      @close="showOptions = false"
-    />
+    <post-search v-if="showOptions" @search="search" @close="cancelSearch" />
     <div v-else-if="searchable" class="text-center">
       <button
         class="button border-none text-xl px-4"
@@ -25,7 +21,7 @@
       <h2>No Posts</h2>
     </div>
 
-    <div class="my-6">
+    <div class="my-6 text-center">
       <button v-if="hasMorePosts" class="button" @click="loadPosts">
         Load More
       </button>
@@ -34,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import PostCard from "@/components/PostCard.vue";
+import PostCard from "@/components/post/PostCard.vue";
 import PostSearch from "@/components/post/PostSearch.vue";
 import { postService } from "@/services";
 import { Post, PostQueryOptions } from "@/types";
@@ -69,6 +65,12 @@ export default defineComponent({
       offset: 0
     };
 
+    const resetSearchOptions = () => {
+      searchOptions = {} as PostQueryOptions;
+      options.limit = 10;
+      options.offset = 10;
+    };
+
     const loadPosts = async (reset?: boolean) => {
       if (reset) {
         posts.value = [];
@@ -98,12 +100,19 @@ export default defineComponent({
       loadPosts(true);
     };
 
+    const cancelSearch = () => {
+      resetSearchOptions();
+      showOptions.value = false;
+      loadPosts(true);
+    };
+
     return {
       posts,
       hasMorePosts,
       showOptions,
       loadPosts,
-      search
+      search,
+      cancelSearch
     };
   }
 });
