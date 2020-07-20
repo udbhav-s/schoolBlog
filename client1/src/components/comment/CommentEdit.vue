@@ -34,12 +34,16 @@ export default defineComponent({
     },
     editId: {
       type: Number as () => number
+    },
+    // preload the current comment body to hide load delay
+    body: {
+      type: String as () => string
     }
   },
 
   setup(props, { root, emit }) {
     const form = reactive<CommentCreate>({
-      body: "",
+      body: props.body || "",
       postId: undefined
     });
 
