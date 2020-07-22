@@ -46,14 +46,14 @@ export class PostController {
   ): Promise<PostModel[]> {
     // set restrictions for < mod
     if (req.user.level < Levels.Moderator) {
-      // if user wants to get posts by a specific user
+      // if user wants to get posts by another user
       // get only verified posts by that user
-      if (options.userId) {
+      if (options.userId && options.userId !== req.user.id) {
         options.verified = true;
       }
       // if user wants all posts
       // get posts which are either verified or by the user themself
-      else {
+      else if (!options.userId) {
         options.verifiedOrUser = true;
         options.userId = req.user.id;
       }
