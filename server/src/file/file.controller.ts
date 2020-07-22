@@ -87,8 +87,6 @@ export class FileController {
       if (!post) throw new NotFoundException();
       if (!post.canAccess(req.user)) throw new ForbiddenException();
 
-      console.log(file);
-
       // validate if image
       if (body.type === "image" || body.type === "thumbnail") {
         if (!file.contentType.match(/image\/(jpg|jpeg|png|gif)$/)) {

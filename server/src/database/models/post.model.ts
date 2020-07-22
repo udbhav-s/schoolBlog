@@ -46,7 +46,6 @@ export class PostModel extends BaseModel {
       query.modify(GET_OPTIONS, options);
 
       if (options.verifiedOrUser && options.userId) {
-        // internal OR so AND precedence with other conditions doesn't interfere
         query.where(function() {
           this.where({ verified: true }).orWhere({ userId: options.userId });
         });
