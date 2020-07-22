@@ -40,16 +40,6 @@
 .table-list > :nth-child(even) {
   @apply bg-gray-100;
 }
-/* .table-list > :nth-child(odd) {
-  @apply bg-gray-200;
-} */
-
-/* .post-content a {
-  @apply text-blue-500;
-}
-.post-content a:hover {
-  @apply underline;
-} */
 
 /* quill editor overrides */
 
