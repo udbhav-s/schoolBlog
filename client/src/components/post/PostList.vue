@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="!loading">
+    <div>
       <post-search v-if="showOptions" @search="search" @close="cancelSearch" />
       <div v-else-if="searchable" class="text-center">
         <button
@@ -18,17 +18,21 @@
         <post-card :post="post" />
       </div>
 
-      <div v-if="posts.length == 0" class="text-center my-6">
+      <div v-if="posts.length == 0 && !loading" class="text-center my-6">
         <h2>No Posts</h2>
       </div>
 
       <div class="my-6 text-center">
-        <button v-if="hasMorePosts" class="button" @click="loadPosts">
+        <button
+          v-if="hasMorePosts && !loading"
+          class="button"
+          @click="loadPosts"
+        >
           Load More
         </button>
       </div>
     </div>
-    <spinner v-else />
+    <spinner v-if="loading" />
   </div>
 </template>
 
