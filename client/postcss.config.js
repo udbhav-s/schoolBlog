@@ -3,7 +3,8 @@ module.exports = {
     tailwindcss: {},
     "vue-cli-plugin-tailwind/purgecss": {
       whitelist: ["pre"],
-      whitelistPatterns: [/^ql/, /^filepond/]
+      whitelistPatterns: [/^ql/, /filepond/],
+      whitelistPatternsChildren: [/^ql/, /filepond/]
     },
     autoprefixer: {}
   }
