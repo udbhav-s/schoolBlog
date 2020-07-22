@@ -10,7 +10,8 @@
     </div>
 
     <username :user="reply.user" class="mb-3">
-      <span v-if="reply.edited">(Edited)</span>
+      <span>{{ replyDate }}</span>
+      <span v-if="reply.edited" class="ml-1">(Edited)</span>
     </username>
 
     <div v-if="!editReply" class="leading-tight">{{ reply.body }}</div>
@@ -53,6 +54,7 @@ import Username from "@/components/user/Username.vue";
 import { userStore } from "@/store";
 import { Reply, User } from "@/types";
 import { defineComponent, ref, computed } from "@vue/composition-api";
+import timeDifference from "@/util/timeDifference";
 
 export default defineComponent({
   name: "Reply",
@@ -78,6 +80,10 @@ export default defineComponent({
       () => props.reply.userId === currentUser.value.id
     );
 
+    const replyDate = computed<string>(() =>
+      timeDifference(new Date(), new Date(props.reply.createdAt))
+    );
+
     const replyEdited = (reply: Reply) => {
       editReply.value = false;
       emit("replyEdited", reply);
@@ -101,7 +107,8 @@ export default defineComponent({
       byCurrentUser,
       currentUser,
       replyEdited,
-      deleteReply
+      deleteReply,
+      replyDate
     };
   }
 });

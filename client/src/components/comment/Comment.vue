@@ -11,7 +11,8 @@
       </div>
 
       <username :user="comment.user" class="mb-3">
-        <span v-if="comment.edited">(Edited)</span>
+        <span>{{ commentDate }}</span>
+        <span v-if="comment.edited" class="ml-1">(Edited)</span>
       </username>
 
       <div v-if="!editComment" class="leading-tight">{{ comment.body }}</div>
@@ -84,6 +85,7 @@ import Username from "@/components/user/Username.vue";
 import { PostComment } from "@/types";
 import { userStore } from "@/store";
 import { User } from "@/types";
+import timeDifference from "@/util/timeDifference";
 
 export default defineComponent({
   name: "Comment",
@@ -112,6 +114,10 @@ export default defineComponent({
       () => props.comment.userId === currentUser.value.id
     );
 
+    const commentDate = computed<string>(() =>
+      timeDifference(new Date(), new Date(props.comment.createdAt))
+    );
+
     const commentEdited = async (comment: PostComment) => {
       editComment.value = false;
       // emit event to change comment data from parent since it's a prop
@@ -137,7 +143,8 @@ export default defineComponent({
       deleteComment,
       currentUser,
       isModOrAbove,
-      byCurrentUser
+      byCurrentUser,
+      commentDate
     };
   }
 });
