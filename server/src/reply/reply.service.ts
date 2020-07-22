@@ -30,6 +30,11 @@ export class ReplyService {
       });
     // add search options
     if (options) query.modify(GET_OPTIONS, options);
+    // default sort latest first
+    else query.modify(GET_OPTIONS, {
+      orderBy: 'createdAt',
+      order: 'desc'
+    });
     return await query;
   }
 

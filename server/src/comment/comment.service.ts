@@ -31,14 +31,27 @@ export class CommentService {
       });
     // add search options
     if (options) query.modify(GET_OPTIONS, options);
+    // default sort latest first
+    else query.modify(GET_OPTIONS, {
+      orderBy: 'createdAt',
+      order: 'desc'
+    });
     return await query;
   }
 
-  async getByPost(postId: number): Promise<CommentModel[]> {
-    return await this.commentModel
+  async getByPost(postId: number, options?: GetOptionsDto): Promise<CommentModel[]> {
+    const query = this.commentModel
       .query()
       .where({ postId })
       .withGraphFetched('user');
+    // add search options
+    if (options) query.modify(GET_OPTIONS, options);
+    // default sort latest first
+    else query.modify(GET_OPTIONS, {
+      orderBy: 'createdAt',
+      order: 'desc'
+    });
+    return await query;
   }
 
   async getPost(id: number): Promise<PostModel> {
