@@ -16,7 +16,7 @@
 
       <div class="my-6 text-center">
         <button
-          v-if="hasMoreComments && adminView"
+          v-if="hasMoreComments && adminView && !loading"
           class="button"
           @click="loadComments"
         >

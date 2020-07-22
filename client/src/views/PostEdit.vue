@@ -1,7 +1,10 @@
 <template>
   <div class="post-edit-container" v-if="post">
     <modal :class="{ 'is-active': imageUploading }">
-      <h1 class="text-4xl p-8 bg-white rounded">Uploading image</h1>
+      <div class="p-8 bg-white rounded">
+        <spinner />
+        <h1 class="text-4xl">Uploading image</h1>
+      </div>
     </modal>
 
     <div class="fixed-column space-y-2 mb-10">
@@ -108,10 +111,11 @@
 <script lang="ts">
 import HeroSection from "@/components/HeroSection.vue";
 import Modal from "@/components/Modal.vue";
+import Spinner from "@/components/Spinner.vue";
 import { postService, fileService } from "@/services";
 import { defineComponent, ref, computed, watch } from "@vue/composition-api";
 import { PostCreate, Category, ImageDropData } from "@/types";
-import { categoryStore } from "../store";
+import { categoryStore } from "@/store";
 
 // quill
 import Quill from "quill";
@@ -133,7 +137,8 @@ export default defineComponent({
     HeroSection,
     quillEditor,
     FilePond,
-    Modal
+    Modal,
+    Spinner
   },
   props: {
     postId: {
