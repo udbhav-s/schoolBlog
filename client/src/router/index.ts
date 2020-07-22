@@ -108,8 +108,6 @@ router.beforeEach(async (to, _from, next) => {
       return window.location.replace("api/user/oauth/google") // next({ name: "Login" });
     }
   } else return next();
-  // set title
-  document.title = to.meta.title || "The HPS Blog";
   // continute to route
   return next();
 });

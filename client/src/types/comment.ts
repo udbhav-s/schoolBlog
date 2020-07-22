@@ -6,6 +6,7 @@ export interface PostComment {
   edited: boolean;
   userId: number;
   postId: number;
+  createdAt: string;
 
   post?: Post;
   user?: User;

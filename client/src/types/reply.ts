@@ -6,6 +6,7 @@ export interface Reply {
   edited: boolean;
   userId: number;
   commentId: number;
+  createdAt: string;
 
   comment?: PostComment;
   user?: User;
