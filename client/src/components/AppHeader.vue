@@ -101,6 +101,15 @@ export default defineComponent({
 </script>
 
 <style lang="postcss">
+@keyframes pop {
+  0% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 .navbar-item {
   @apply p-3 block border-b-2 border-transparent;
 }
@@ -114,5 +123,6 @@ export default defineComponent({
 
 #menu.navbar-expanded {
   @apply h-screen;
+  animation: pop 0.3s ease-in-out;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="p-4 rounded border border-gray-300 text-center fixed-column">
+    <div class="p-4 border border-gray-300 text-center fixed-column">
       <img
         :src="user.picture"
         class="w-20 h-20 rounded-full inline-block my-2"
@@ -42,11 +42,15 @@
 
     <section class="fixed-column">
       <div v-if="isCurrentUser">
-        <div class="text-3xl my-6 text-gray-800">Drafts</div>
+        <div class="text-3xl my-6 text-gray-800 text-center bg-gray-100 p-2">
+          Drafts
+        </div>
         <post-list v-if="user.id" :userId="user.id" :drafts="true" />
         <hr class="my-6" />
       </div>
-      <div class="text-3xl my-6 text-gray-800">Posts</div>
+      <div class="text-3xl my-6 text-gray-800 text-center bg-gray-100 p-2">
+        Posts
+      </div>
       <post-list v-if="user.id" :userId="user.id" />
     </section>
   </div>

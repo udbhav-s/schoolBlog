@@ -4,11 +4,11 @@
       name: 'User',
       params: { id: user.id }
     }"
-    class="group flex flex-row items-center"
+    class="username flex flex-row items-center"
   >
     <img
       :src="user.picture"
-      class="w-10 h-10 rounded-full mr-2 border-2 border-transparent hover:border-blue-300"
+      class="w-10 h-10 rounded-full mr-2 border-2 border-transparent"
     />
     <div>
       <div class="text-gray-800 leading-tight">
@@ -36,3 +36,9 @@ export default defineComponent({
   }
 });
 </script>
+
+<style lang="postcss">
+.username:hover img {
+  @apply border-blue-300;
+}
+</style>
