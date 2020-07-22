@@ -71,6 +71,11 @@ export default defineComponent({
     };
 
     const categoryDeleted = async (id: number) => {
+      if (
+        !confirm("Are you sure you want to permanently delete this category?")
+      )
+        return;
+
       const result = await categoryService.delete(id);
       if ("error" in result) {
         root.$toasted.error("Error while deleting category");

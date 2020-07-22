@@ -354,6 +354,8 @@ export default defineComponent({
 
     const deletePost = async () => {
       if (!post.value?.id) return;
+      if (!confirm("Are you sure you want to permanently delete this post?"))
+        return;
 
       const result = await postService.delete(post.value.id);
       if ("error" in result) {

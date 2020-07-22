@@ -90,6 +90,9 @@ export default defineComponent({
     };
 
     const deleteReply = async () => {
+      if (!confirm("Are you sure you want to permanently delete this reply?"))
+        return;
+
       // delete the reply
       const result = await replyService.delete(props.reply.id);
       if ("error" in result) {

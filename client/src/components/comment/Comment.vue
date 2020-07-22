@@ -125,6 +125,9 @@ export default defineComponent({
     };
 
     const deleteComment = async () => {
+      if (!confirm("Are you sure you want to permanently delete this post?"))
+        return;
+
       // delete the comment
       const result = await commentService.delete(props.comment.id);
       if ("error" in result) {

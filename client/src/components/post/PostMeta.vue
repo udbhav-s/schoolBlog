@@ -91,6 +91,9 @@ export default defineComponent({
     });
 
     const deletePost = async () => {
+      if (!confirm("Are you sure you want to permanently delete this post?"))
+        return;
+
       const result = await postService.delete(props.post.id);
       if ("error" in result) root.$toasted.error(result.message);
       else {
