@@ -16,6 +16,9 @@
 .button:active {
   @apply bg-gray-700;
 }
+.button:disabled {
+  @apply opacity-50 cursor-not-allowed;
+}
 
 .button.button-danger {
   @apply border-red-500 text-red-500;
