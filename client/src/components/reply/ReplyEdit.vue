@@ -9,7 +9,11 @@
     </div>
     <div>
       <div class="text-center my-2">
-        <button @click="submitReply" class="button">
+        <button
+          @click="submitReply"
+          :disabled="!form.body.trim()"
+          class="button"
+        >
           Submit
         </button>
       </div>
