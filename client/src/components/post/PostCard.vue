@@ -10,7 +10,9 @@
         }
       }"
     >
-      <h1 class="text-4xl font-semibold">{{ post.title }}</h1>
+      <h1 class="text-4xl font-semibold leading-tight py-2">
+        {{ post.title }}
+      </h1>
     </router-link>
 
     <post-meta :post="post" :showOptions="false" dateType="relative" />
@@ -24,7 +26,7 @@
       </div>
       <div v-else class="my-2"></div>
 
-      <div v-html="postPreview" class="prose"></div>
+      <div v-html="postPreview" class="prose max-w-full"></div>
 
       <router-link
         :to="{

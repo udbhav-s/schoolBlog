@@ -1,6 +1,8 @@
 <template>
   <div class="section fixed-column post-page" v-if="post">
-    <h1 class="text-5xl leading-tight font-bold">{{ post.title }}</h1>
+    <h1 class="text-4xl md:text-5xl leading-tight font-bold">
+      {{ post.title }}
+    </h1>
     <post-meta
       :post="post"
       @postDeleted="postDeleted"
@@ -14,7 +16,7 @@
       <img :src="`/api/file/${post.thumbnail}`" class="w-full" />
     </div>
 
-    <div class="prose prose-lg mt-4" v-html="post.body"></div>
+    <div class="prose prose-lg max-w-full mt-4" v-html="post.body"></div>
 
     <div v-if="post.attachments && post.attachments.length > 0">
       <h2 class="text-3xl my-6 font-bold">Attachments</h2>
@@ -67,8 +69,6 @@ export default defineComponent({
         if (result.status === 403) root.$router.push("/");
         else root.$toasted.error("Couldn't load post data");
       } else post.value = result.data;
-      // set title
-      document.title = post.value?.title || "The HPS Blog";
     };
     loadPost();
 
