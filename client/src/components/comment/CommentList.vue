@@ -13,7 +13,7 @@
       @commentDeleted="commentDeleted"
     />
 
-    <div class="text-center">
+    <div class="my-2 text-center">
       <button
         v-if="hasMoreComments && adminView"
         class="button"

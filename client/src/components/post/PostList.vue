@@ -95,7 +95,6 @@ export default defineComponent({
       loading.value = false;
       if ("error" in result) throw result.message;
 
-
       if (result.data.length > 0) {
         result.data.forEach(post => posts.value.push(post));
         options.offset += options.limit;
