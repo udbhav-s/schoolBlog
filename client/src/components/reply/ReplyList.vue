@@ -33,8 +33,8 @@ import { replyService } from "@/services";
 import ReplyComponent from "@/components/reply/Reply.vue";
 import ReplyEdit from "@/components/reply/ReplyEdit.vue";
 import Spinner from "@/components/Spinner.vue";
-import { defineComponent, ref } from "@vue/composition-api";
-import { Reply } from "@/types";
+import { defineComponent, ref, watch } from "@vue/composition-api";
+import { Reply, QueryOptions } from "@/types";
 
 export default defineComponent({
   name: "ReplyList",
@@ -62,7 +62,17 @@ export default defineComponent({
     const options = {
       limit: 20,
       offset: 0
-    };
+    } as QueryOptions;
+
+    watch(
+      () => props.adminView,
+      adminView => {
+        if (adminView) {
+          options.orderBy = "createdAt";
+          options.order = "desc";
+        }
+      }
+    );
 
     const loadReplies = async () => {
       loading.value = true;

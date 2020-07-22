@@ -33,7 +33,7 @@ import { commentService } from "@/services";
 import Comment from "@/components/comment/Comment.vue";
 import CommentEdit from "@/components/comment/CommentEdit.vue";
 import Spinner from "@/components/Spinner.vue";
-import { PostComment, ApiResponse } from "@/types";
+import { PostComment, ApiResponse, QueryOptions } from "@/types";
 import { defineComponent, ref } from "@vue/composition-api";
 
 export default defineComponent({
@@ -57,12 +57,14 @@ export default defineComponent({
 
   setup(props) {
     const comments = ref<PostComment[]>([]);
-    const hasMoreComments = ref<boolean>(false);
+    const hasMoreComments = ref<boolean>(true);
     const loading = ref<boolean>(false);
     const options = {
       limit: 20,
-      offset: 0
-    };
+      offset: 0,
+      orderBy: "createdAt",
+      order: "desc"
+    } as QueryOptions;
 
     const loadComments = async () => {
       loading.value = true;

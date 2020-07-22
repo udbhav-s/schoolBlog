@@ -26,7 +26,7 @@
         <button
           v-if="hasMorePosts && !loading"
           class="button"
-          @click="loadPosts"
+          @click="loadPosts(false)"
         >
           Load More
         </button>
