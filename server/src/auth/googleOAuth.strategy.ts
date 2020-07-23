@@ -13,7 +13,6 @@ export class GoogleOAuthStrategy extends PassportStrategy(Strategy, 'google-oaut
       clientSecret: process.env.GOOGLE_OAUTH_CLIENT_SECRET,
       callbackURL: '/api/user/oauth/google/callback',
       scope: ['email', 'profile'],
-      // hd: 'hpsbegumpet.org.in'
     });
   }
 
@@ -28,5 +27,12 @@ export class GoogleOAuthStrategy extends PassportStrategy(Strategy, 'google-oaut
 
     const user = await this.authService.findOrCreateUser(profileData);
     done(null, user);
+  }
+
+  // for passport.authenticate() params
+  authorizationParams(options: any): any {
+    return Object.assign(options, {
+      hd: 'hpsbegumpet.org.in'
+    });
   }
 }
