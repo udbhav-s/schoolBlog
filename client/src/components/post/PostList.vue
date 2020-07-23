@@ -30,7 +30,8 @@
     </div>
 
     <div v-if="posts.length == 0 && !loading" class="text-center my-6">
-      <h2>No Posts</h2>
+      <div v-if="drafts">No Drafts</div>
+      <div v-else>No Posts</div>
     </div>
 
     <spinner v-if="loading" />
