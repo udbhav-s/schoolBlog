@@ -275,11 +275,17 @@ export default defineComponent({
 
       if (thumbnail.value?.files?.[0]) {
         const file = thumbnail.value.files[0];
+
+        imageUploading.value = true;
+
         const result = await fileService.uploadFile(
           post.value.id,
           file,
           "thumbnail"
         );
+
+        imageUploading.value = false;
+
         if ("error" in result) {
           root.$toasted.error("Error uploading thumbnail");
           throw result.message;
