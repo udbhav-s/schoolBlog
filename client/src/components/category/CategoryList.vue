@@ -1,5 +1,5 @@
 <template>
-  <div v-if="categories">
+  <div v-if="categories" class="animate-fade-up">
     <div class="table-list">
       <category
         v-for="category in categories"

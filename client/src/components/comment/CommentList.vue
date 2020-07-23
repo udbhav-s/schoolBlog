@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="comments">
+    <div v-if="comments.length > 0" class="animate-fade-up">
       <div v-if="showAddComment" class="add-comment mb-4">
         <comment-edit @commentAdded="commentAdded" :postId="postId" />
       </div>

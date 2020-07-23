@@ -18,10 +18,6 @@
         <post-card :post="post" />
       </div>
 
-      <div v-if="posts.length == 0 && !loading" class="text-center my-6">
-        <h2>No Posts</h2>
-      </div>
-
       <div class="my-6 text-center">
         <button
           v-if="hasMorePosts && !loading"
@@ -32,6 +28,11 @@
         </button>
       </div>
     </div>
+
+    <div v-if="posts.length == 0 && !loading" class="text-center my-6">
+      <h2>No Posts</h2>
+    </div>
+
     <spinner v-if="loading" />
   </div>
 </template>
