@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="replies.length > 0" class="animate-fade-up">
+    <div>
       <div v-if="showAddReply">
         <reply-edit @replyAdded="replyAdded" :commentId="commentId" />
       </div>

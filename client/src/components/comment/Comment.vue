@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="animate-fade-up">
     <div>
       <div v-if="adminView && comment.post">
         <router-link

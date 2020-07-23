@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="animate-fade-up">
     <div v-if="adminView && reply.comment.post">
       <router-link
         :to="{ name: 'Post', params: { id: reply.comment.postId } }"
