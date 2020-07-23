@@ -1,7 +1,9 @@
 <template>
   <div>
     <div class="text-center mb-6">
-      <h1 class="title-text text-5xl md:text-6xl m-auto">THE HPS BLOG</h1>
+      <h1 class="animate-fade-down text-5xl md:text-6xl m-auto">
+        THE HPS BLOG
+      </h1>
     </div>
 
     <section v-if="isModOrAbove" class="fixed-column">
@@ -81,17 +83,6 @@ export default defineComponent({
 </script>
 
 <style lang="postcss">
-@keyframes fade-down {
-  0% {
-    opacity: 0;
-    transform: translate(0, -15%);
-  }
-  100% {
-    opacity: 1;
-    transform: translate(0, 0);
-  }
-}
-
 .tab {
   @apply border-b-2 px-4 py-2 cursor-pointer;
   transition: 0.2s;
@@ -102,7 +93,16 @@ export default defineComponent({
   @apply bg-blue-100 border-blue-700;
 }
 
-.title-text {
-  animation: fade-down ease-in 0.3s;
+/* router transition */
+.fade-enter-active,
+.fade-leave-active {
+  transition-duration: 0.3s;
+  transition-property: opacity;
+  transition-timing-function: ease;
+}
+
+.fade-enter,
+.fade-leave-active {
+  opacity: 0;
 }
 </style>

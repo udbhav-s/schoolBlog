@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div v-if="posts.length > 0" class="animate-fade-up">
       <post-search v-if="showOptions" @search="search" @close="cancelSearch" />
       <div v-else-if="searchable" class="text-center">
         <button

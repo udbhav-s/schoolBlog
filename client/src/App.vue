@@ -4,9 +4,9 @@
 
     <app-header />
 
-    <transition name="fade" mode="out-in">
-      <router-view id="main" />
-    </transition>
+    <!-- <transition name="fade" mode="out-in"> -->
+    <router-view id="main" />
+    <!-- </transition> -->
   </div>
 </template>
 

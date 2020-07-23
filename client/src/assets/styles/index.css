@@ -4,4 +4,6 @@
 
 @import "./styles.css";
 
+@import "./animations.css";
+
 @tailwind utilities;
