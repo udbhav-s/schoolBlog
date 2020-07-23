@@ -1,12 +1,15 @@
 <template>
   <div>
-    <div class="p-4 border border-gray-300 text-center fixed-column">
+    <div
+      class="p-4 border border-gray-300 text-gray-800 text-center fixed-column"
+    >
       <img
         :src="user.picture"
         class="w-20 h-20 rounded-full inline-block my-2"
       />
-      <h1 class="text-2xl">{{ user.name }}</h1>
+      <h1 class="text-2xl leading-tight">{{ user.name }}</h1>
       <div>{{ user.email }}</div>
+      <div class="text-xl font-semibold text-gray-600">{{ userLevelName }}</div>
 
       <button v-if="isCurrentUser" @click="logout" class="button text-lg my-2">
         Log Out
@@ -84,6 +87,11 @@ export default defineComponent({
     const isCurrentUser = computed<boolean>(
       () => user.value.id === currentUser.value.id
     );
+    const userLevelName = computed<string>(() => {
+      return user.value?.level
+        ? ["Reader", "Member", "Author", "Moderator", "Admin"][user.value.level]
+        : ""
+    });
 
     const loadUser = async () => {
       const result = await userService.getById(props.userId);
@@ -127,7 +135,8 @@ export default defineComponent({
       isAdminOrAbove,
       isCurrentUser,
       logout,
-      setUserLevel
+      setUserLevel,
+      userLevelName
     };
   }
 });
