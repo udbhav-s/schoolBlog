@@ -1,14 +1,24 @@
 import axios from "axios";
+import app from "@/main";
 
 const api = axios.create({
   baseURL: "/api",
   withCredentials: true
 });
 
+api.interceptors.request.use(config => {
+  app.$Progress.start();
+  return config;
+});
+
 api.interceptors.response.use(
-  res => res.data,
+  res => {
+    app.$Progress.finish();
+    return res.data;
+  },
   // error
   res => {
+    app.$Progress.fail();
     console.log({ ...res });
     // redirect to server auth route if 401
     if (res.response.status === 401) {
