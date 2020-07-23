@@ -2,6 +2,14 @@
   <div class="loader"></div>
 </template>
 
+<script lang="ts">
+import { defineComponent } from "@vue/composition-api";
+
+export default defineComponent({
+  name: "Spinner"
+});
+</script>
+
 <style lang="postcss">
 .loader,
 .loader:after {
