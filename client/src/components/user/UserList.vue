@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="table-list">
+    <div v-if="users && users.length > 0" class="table-list animate-fade-up">
       <div
         v-for="user in users"
         :key="user.id"
