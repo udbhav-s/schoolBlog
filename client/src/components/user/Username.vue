@@ -8,7 +8,8 @@
   >
     <img
       :src="user.picture"
-      class="w-10 h-10 rounded-full mr-2 border-2 border-transparent"
+      class="rounded-full mr-2 border-2 border-transparent"
+      :class="smallPicture ? ['w-6', 'h-6'] : ['w-10', 'h-10']"
     />
     <div>
       <div class="text-gray-800 leading-tight">
@@ -32,6 +33,9 @@ export default defineComponent({
   props: {
     user: {
       type: Object as () => User
+    },
+    smallPicture: {
+      type: Boolean as () => boolean
     }
   }
 });
