@@ -363,7 +363,9 @@ export default defineComponent({
         throw result.message;
       } else {
         root.$toasted.success("Post deleted");
-        root.$router.push("/");
+        // redirect
+        if (post.value.published) root.$router.push("/");
+        else root.$router.push({ name: "CurrentUser" });
       }
     };
 
