@@ -40,23 +40,23 @@
             About
           </router-link>
 
-          <router-link
-            class="navbar-item"
-            :to="{ name: 'CurrentUser' }"
-            @click.native="isActive = false"
-          >
-            Profile
-          </router-link>
-
           <template v-if="currentUser.level >= 1">
             <router-link
               class="navbar-item"
               to=""
               @click.native.prevent="createPost"
             >
-              New Post
+              New Draft
             </router-link>
           </template>
+
+          <router-link
+            class="navbar-item"
+            :to="{ name: 'CurrentUser' }"
+            @click.native="isActive = false"
+          >
+            <username :user="currentUser" smallPicture />
+          </router-link>
         </ul>
       </nav>
     </div>
@@ -65,11 +65,16 @@
 
 <script lang="ts">
 import { defineComponent, computed, ref } from "@vue/composition-api";
+import Username from "@/components/user/Username.vue";
 import { userStore } from "@/store";
 import { postService } from "@/services";
 
 export default defineComponent({
   name: "AppHeader",
+  components: {
+    Username
+  },
+
   setup(props, { root }) {
     const currentUser = computed(userStore.getters.user);
     const isActive = ref<boolean>(false);
