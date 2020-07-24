@@ -82,8 +82,6 @@ export class FileController {
     if (!post) throw new NotFoundException();
     if (!post.canAccess(req.user)) throw new ForbiddenException();
 
-    let ext = path.extname(file.originalname);
-
     // validate if image
     if (body.type === "image" || body.type === "thumbnail") {
       if (!file.mimetype.match(/image\/(jpg|jpeg|png|gif)$/)) {
@@ -92,12 +90,14 @@ export class FileController {
 
       // convert to jpeg
       file.buffer = await this.fileService.imageToJpeg(file.buffer);
-      ext = '.jpeg';
     }
 
     // set file name
+    const ext = path.extname(file.originalname);
     const basename = path.basename(file.originalname, ext);
-    const filename = basename + "_" + shortid.generate() + ext;
+    let filename = basename + "_" + shortid.generate();
+    // add extension
+    filename += (body.type === "image" || body.type === "thumbnail") ? '.jpeg' : ext;
 
     // if thumbnail remove old thumbnail
     if (body.type === "thumbnail") {
