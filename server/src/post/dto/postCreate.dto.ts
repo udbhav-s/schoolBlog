@@ -1,4 +1,5 @@
 import { IsString, IsOptional, IsInt } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class PostCreateDto {
   @IsString()
@@ -6,6 +7,7 @@ export class PostCreateDto {
 
   @IsOptional()
   @IsString()
+  @Transform(body => body ? body : "")
   body?: string;
 
   @IsOptional()

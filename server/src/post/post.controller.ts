@@ -93,7 +93,7 @@ export class PostController {
   @ApiOperation({ summary: 'Update a post' })
   @Post('/update/:id')
   async update(
-    @Body(ValidationPipe) data: PostCreateDto,
+    @Body(new ValidationPipe({ transform: true })) data: PostCreateDto,
     @Param('id', ParseIntPipe) id: number,
     @Request() req,
   ): Promise<PostModel> {
