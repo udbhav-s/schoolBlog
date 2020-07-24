@@ -1,7 +1,6 @@
-import { IsOptional, IsInt, IsString } from 'class-validator';
+import { IsInt, IsString } from 'class-validator';
 
 export class ReplyCreateDto {
-  @IsOptional()
   @IsString()
   body: string;
 
