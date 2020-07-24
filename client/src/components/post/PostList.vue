@@ -87,6 +87,7 @@ export default defineComponent({
       if (reset) {
         posts.value = [];
         options.offset = 0;
+        hasMorePosts.value = true;
       }
 
       const opts = {
@@ -102,7 +103,7 @@ export default defineComponent({
       if (!("success" in result)) throw result.message;
 
       if (result.data.length > 0) {
-        result.data.forEach(post => posts.value.push(post));
+        posts.value.push(...result.data);
         options.offset += options.limit;
       }
       if (result.data.length < options.limit) hasMorePosts.value = false;

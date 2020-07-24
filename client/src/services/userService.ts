@@ -1,5 +1,5 @@
 import api from "./apiService";
-import { User, ApiResponse } from "@/types";
+import { User, ApiResponse, QueryOptions } from "@/types";
 
 export const userService = {
   getCurrent() {
@@ -8,8 +8,8 @@ export const userService = {
   getById(id: number) {
     return api.get<ApiResponse<User>>(`/user/${id}`);
   },
-  getAll() {
-    return api.get<ApiResponse<User[]>>(`/user/all`);
+  getAll(options?: QueryOptions) {
+    return api.get<ApiResponse<User[]>>(`/user/all`, { params: options });
   },
   logout() {
     return api.get("/user/logout");
