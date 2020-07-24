@@ -1,6 +1,11 @@
 <template>
   <div>
-    <list-query-options v-if="showListOptions" v-model="sortOptions" />
+    <list-query-options
+      v-if="showListOptions"
+      v-model="sortOptions"
+      class="text-right my-2"
+    />
+
     <div v-if="users && users.length > 0" class="table-list animate-fade-up">
       <div
         v-for="user in users"

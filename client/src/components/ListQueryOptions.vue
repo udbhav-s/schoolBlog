@@ -1,5 +1,5 @@
 <template>
-  <div class="text-right my-2">
+  <div>
     <select
       v-model="value.order"
       @input="update($event.target.value)"
