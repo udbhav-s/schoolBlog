@@ -3,6 +3,9 @@ import { ModelClass } from 'objection';
 import { FileModel } from '../database/models/file.model';
 import FileStoreDto from './dto/fileStore.dto';
 import { s3, bucketName } from './s3';
+import * as fs from 'fs';
+import * as path from 'path';
+import * as sharp from "sharp";
 
 @Injectable()
 export class FileService {
@@ -24,7 +27,7 @@ export class FileService {
     return await this.fileModel.query().where(options);
   }
 
-  async storeFilename(data: FileStoreDto): Promise<FileModel> {
+  async storeFilenameDB(data: FileStoreDto): Promise<FileModel> {
     return await this.fileModel
       .query()
       .insert(data)
@@ -32,7 +35,7 @@ export class FileService {
       .first();
   }
 
-  async removeFilename(filename: string): Promise<FileModel> {
+  async removeFilenameDB(filename: string): Promise<FileModel> {
     return await this.fileModel
       .query()
       .where({ filename })
@@ -53,7 +56,34 @@ export class FileService {
     rows.forEach(row => {
       const { filename } = row;
       // delete the file from the folder
-      s3.deleteObject({ Bucket: bucketName, Key: filename }).promise();
+      this.deleteFile(filename);
     });
+  }
+
+  async storeFile(filename: string, file: Buffer) {
+    if (process.env.STORAGE === 's3') {
+      return await s3.putObject({
+        Bucket: bucketName,
+        Key: filename,
+        Body: file
+      }).promise();
+    } else if (process.env.STORAGE === 'local') {
+      return fs.writeFileSync(path.join(process.env.UPLOADS_PATH, filename), file); 
+    }
+  }
+
+  async deleteFile(filename: string) {
+    if (process.env.STORAGE === 's3') {
+      return await s3.deleteObject({ Bucket: bucketName, Key: filename }).promise();
+    } else if (process.env.STORAGE === 'local') {
+      return fs.unlinkSync(path.join(process.env.UPLOADS_PATH, filename)); 
+    }
+  }
+
+  async imageToJpeg(file: Buffer) {
+    return await sharp(file)
+      .flatten({ background: '#ffffff' })
+      .toFormat('jpeg')
+      .toBuffer();
   }
 }

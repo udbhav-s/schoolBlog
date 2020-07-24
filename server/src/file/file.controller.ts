@@ -22,7 +22,8 @@ import { FileService } from './file.service';
 import { PostService } from 'src/post/post.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FileUploadDto } from './dto/fileUpload.dto';
-import * as multerS3 from 'multer-s3';
+import * as multer from 'multer';
+import * as shortid from 'shortid';
 import { FileModel } from 'src/database/models/file.model';
 import { FormatResponseInterceptor } from 'src/common/interceptors/formatResponse.interceptor';
 import { s3, bucketName } from './s3';
@@ -48,28 +49,23 @@ export class FileController {
     // check if user can access
     if (!file.post.canAccess(req.user)) throw new ForbiddenException();
 
-    // redirect to a pre signed url to access the file
-    const url = s3.getSignedUrl('getObject', {
-      Bucket: bucketName,
-      Key: filename,
-      Expires: 180 // url expires in 3 minutes
-    });
-    res.redirect(url);
+    if (process.env.STORAGE === 's3') {
+      // redirect to a pre signed url to access the file
+      const url = s3.getSignedUrl('getObject', {
+        Bucket: bucketName,
+        Key: filename,
+        Expires: 60 // url expires in 1 minute
+      });
+      res.redirect(url);
+    } else if (process.env.STORAGE === 'local') {
+      res.sendFile(path.join(process.env.UPLOADS_PATH, filename));
+    }
   }
 
   @UseInterceptors(
     FormatResponseInterceptor,
     FileInterceptor('file', {
-      storage: multerS3({
-        s3: s3,
-        bucket: bucketName,
-        contentType: multerS3.AUTO_CONTENT_TYPE,
-        key: (_req, file, cb) => {
-          const ext = path.extname(file.originalname);
-          const basename = path.basename(file.originalname, ext);
-          cb(null, basename + "_" + Date.now().toString() + ext);
-        }
-      })
+      storage: multer.memoryStorage()
     })
   )
   @Post('/upload')
@@ -81,43 +77,51 @@ export class FileController {
     })) body: FileUploadDto,
     @Request() req,
   ): Promise<string> {
-    try {
-      // get post
-      const post = await this.postService.getById(body.postId);
-      if (!post) throw new NotFoundException();
-      if (!post.canAccess(req.user)) throw new ForbiddenException();
+    // get post
+    const post = await this.postService.getById(body.postId);
+    if (!post) throw new NotFoundException();
+    if (!post.canAccess(req.user)) throw new ForbiddenException();
 
-      // validate if image
-      if (body.type === "image" || body.type === "thumbnail") {
-        if (!file.contentType.match(/image\/(jpg|jpeg|png|gif)$/)) {
-          throw new BadRequestException("File isn't a valid image");
-        }
-      }
-      // if thumbnail remove old thumbnail
-      if (body.type === "thumbnail") {
-        const thumbnail = (await this.fileService.getByPost(body.postId, true))[0];
-        if (thumbnail) {
-          // delete from s3
-          await s3.deleteObject({ Bucket: bucketName, Key: thumbnail.filename }).promise();
-          // remove from database
-          await this.fileService.removeFilename(thumbnail.filename);
-        }
-      }
-      // store filename in database
-      await this.fileService.storeFilename({
-        postId: body.postId,
-        filename: file.key,
-        type: body.type
-      });
+    let ext = path.extname(file.originalname);
 
-      // return key
-      return file.key;
+    // validate if image
+    if (body.type === "image" || body.type === "thumbnail") {
+      if (!file.mimetype.match(/image\/(jpg|jpeg|png|gif)$/)) {
+        throw new BadRequestException("File isn't a valid image");
+      }
+
+      // convert to jpeg
+      file.buffer = await this.fileService.imageToJpeg(file.buffer);
+      ext = '.jpeg';
     }
-    catch (err) {
-      // delete file
-      await s3.deleteObject({ Bucket: bucketName, Key: file.key }).promise();
-      throw err;
+
+    // set file name
+    const basename = path.basename(file.originalname, ext);
+    const filename = basename + "_" + shortid.generate() + ext;
+
+    // if thumbnail remove old thumbnail
+    if (body.type === "thumbnail") {
+      const thumbnail = (await this.fileService.getByPost(body.postId, true))[0];
+      if (thumbnail) {
+        // delete file
+        await this.fileService.deleteFile(thumbnail.filename);
+        // remove from database
+        await this.fileService.removeFilenameDB(thumbnail.filename);
+      }
     }
+
+    // store file
+    await this.fileService.storeFile(filename, file.buffer)
+
+    // store filename in database
+    await this.fileService.storeFilenameDB({
+      postId: body.postId,
+      filename: filename,
+      type: body.type
+    });
+
+    // return key
+    return filename;
   }
 
   @Delete(":filename")
@@ -131,8 +135,8 @@ export class FileController {
     // check if user can modify
     if (!file.post.canDelete(req.user)) throw new ForbiddenException();
     // delete file from s3
-    await s3.deleteObject({ Bucket: bucketName, Key: filename }).promise();
+    await this.fileService.deleteFile(filename);
     // delete from database
-    return await this.fileService.removeFilename(filename);
+    return await this.fileService.removeFilenameDB(filename);
   }
 }
