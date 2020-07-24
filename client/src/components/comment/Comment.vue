@@ -125,7 +125,7 @@ export default defineComponent({
     };
 
     const deleteComment = async () => {
-      if (!confirm("Are you sure you want to permanently delete this post?"))
+      if (!confirm("Are you sure you want to permanently delete this comment?"))
         return;
 
       // delete the comment
