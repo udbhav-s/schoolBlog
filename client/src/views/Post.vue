@@ -65,10 +65,12 @@ export default defineComponent({
     const loadPost = async () => {
       // get post
       const result = await postService.getById(props.id);
-      if ("error" in result) {
+      if ("success" in result) {
+        post.value = result.data;
+      } else {
         if (result.status === 403) root.$router.push("/");
         else root.$toasted.error("Couldn't load post data");
-      } else post.value = result.data;
+      }
     };
     loadPost();
 

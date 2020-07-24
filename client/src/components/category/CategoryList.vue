@@ -60,7 +60,7 @@ export default defineComponent({
 
     const addCategory = async () => {
       const result = await categoryService.create(form);
-      if ("error" in result) {
+      if (!("success" in result)) {
         root.$toasted.error("Error while adding category");
         throw result.message;
       }
@@ -77,12 +77,12 @@ export default defineComponent({
         return;
 
       const result = await categoryService.delete(id);
-      if ("error" in result) {
-        root.$toasted.error("Error while deleting category");
-        throw result.message;
-      } else {
+      if ("success" in result) {
         root.$toasted.success("Category deleted");
         categoryStore.mutations.loadCategories();
+      } else {
+        root.$toasted.error("Error while deleting category");
+        throw result.message;
       }
     };
 
@@ -90,7 +90,7 @@ export default defineComponent({
       const result = await categoryService.update(category.id, {
         name: category.name
       });
-      if ("error" in result) {
+      if (!("success" in result)) {
         root.$toasted.error("Error while updating category");
         throw result.message;
       }

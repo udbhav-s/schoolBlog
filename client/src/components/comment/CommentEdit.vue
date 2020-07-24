@@ -53,10 +53,11 @@ export default defineComponent({
 
     const setComment = async (id: number) => {
       const result = await commentService.getById(id);
-      if ("error" in result) {
+      if ("success" in result) form.body = result.data.body;
+      else {
         root.$toasted.error("Error while getting comment data");
         throw result.message;
-      } else form.body = result.data.body;
+      }
     };
     if (props.editMode && props.editId) setComment(props.editId);
 
@@ -72,15 +73,15 @@ export default defineComponent({
         result = await commentService.create(form);
       }
 
-      if ("error" in result) {
-        root.$toasted.error(result.message);
-        throw result;
-      } else {
+      if ("success" in result) {
         // clear input
         form.body = "";
         // emit event
         if (props.editMode) emit("commentEdited", result.data);
         else emit("commentAdded", result.data);
+      } else {
+        root.$toasted.error(result.message);
+        throw result;
       }
     };
 

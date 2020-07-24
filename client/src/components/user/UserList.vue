@@ -36,11 +36,11 @@ export default defineComponent({
       loading.value = true;
       const result = await userService.getAll();
       loading.value = false;
-      if ("error" in result) {
+      if ("success" in result) users.value = result.data;
+      else {
         root.$toasted.error("Error while loading users");
         throw result.message;
       }
-      users.value = result.data;
     };
     loadUsers();
 

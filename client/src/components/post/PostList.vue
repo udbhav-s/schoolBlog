@@ -99,7 +99,7 @@ export default defineComponent({
       loading.value = true;
       const result = await postService.getAll(opts);
       loading.value = false;
-      if ("error" in result) throw result.message;
+      if (!("success" in result)) throw result.message;
 
       if (result.data.length > 0) {
         result.data.forEach(post => posts.value.push(post));

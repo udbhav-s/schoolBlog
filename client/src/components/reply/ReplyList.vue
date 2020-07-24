@@ -84,7 +84,7 @@ export default defineComponent({
 
       loading.value = false;
 
-      if ("error" in result) throw result.message;
+      if (!("success" in result)) throw result.message;
 
       if (result.data.length > 0) {
         result.data.forEach(r => replies.value.push(r));

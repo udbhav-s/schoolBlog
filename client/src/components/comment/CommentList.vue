@@ -75,14 +75,13 @@ export default defineComponent({
 
       loading.value = false;
 
-      if ("error" in result) throw result.message;
-      else {
+      if ("success" in result) {
         if (result.data.length > 0) {
           result.data.forEach(c => comments.value.push(c));
           options.offset += options.limit;
         }
         if (result.data.length < options.limit) hasMoreComments.value = false;
-      }
+      } else throw result.message;
     };
     loadComments();
 

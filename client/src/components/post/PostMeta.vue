@@ -95,28 +95,31 @@ export default defineComponent({
         return;
 
       const result = await postService.delete(props.post.id);
-      if ("error" in result) root.$toasted.error(result.message);
-      else {
+      if ("success" in result) {
         root.$toasted.success("Post deleted");
         emit("postDeleted");
+      } else {
+        root.$toasted.error(result.message);
       }
     };
 
     const verifyPost = async () => {
       const result = await postService.verify(props.post.id);
-      if ("error" in result) root.$toasted.error(result.message);
-      else {
+      if ("success" in result) {
         root.$toasted.success("Post verified!");
         emit("post-verified");
+      } else {
+        root.$toasted.error(result.message);
       }
     };
 
     const unverifyPost = async () => {
       const result = await postService.unverify(props.post.id);
-      if ("error" in result) root.$toasted.error(result.message);
-      else {
+      if ("success" in result) {
         root.$toasted.success("Post unverified");
         emit("post-unverified");
+      } else {
+        root.$toasted.error(result.message);
       }
     };
 

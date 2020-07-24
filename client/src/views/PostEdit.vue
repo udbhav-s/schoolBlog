@@ -201,12 +201,12 @@ export default defineComponent({
     // load the post
     const loadPost = async (id: number) => {
       const result = await postService.getById(id);
-      if ("error" in result) {
-        root.$toasted.error("Error loading post");
-        throw result.message;
-      } else {
+      if ("success" in result) {
         // set post
         post.value = result.data;
+      } else {
+        root.$toasted.error("Error loading post");
+        throw result.message;
       }
     };
     watch(
@@ -225,8 +225,12 @@ export default defineComponent({
 
       imageUploading.value = false;
 
-      if ("error" in result) {
+      if (!("success" in result)) {
         root.$toasted.error("Error uploading file");
+        if (result.status === 413) {
+          // 413 request entitiy too large
+          root.$toasted.error("File too large\nLimit is 100MB");
+        }
         throw result.message;
       }
       const filename = result.data;
@@ -286,15 +290,18 @@ export default defineComponent({
 
         imageUploading.value = false;
 
-        if ("error" in result) {
-          root.$toasted.error("Error uploading thumbnail");
-          throw result.message;
-        } else {
+        if ("success" in result) {
           // since thumbnail might not exist
           // and new properties do not trigger reactivity
           post.value = Object.assign({}, post.value, {
             thumbnail: result.data
           });
+        } else if (result.status === 413) {
+          // 413 request entitiy too large
+          root.$toasted.error("File too large\nLimit is 100MB");
+        } else {
+          root.$toasted.error("Error uploading thumbnail");
+          throw result.message;
         }
       }
     };
@@ -303,11 +310,11 @@ export default defineComponent({
       if (!post.value?.thumbnail) return;
 
       const result = await fileService.deleteFile(post.value.thumbnail);
-      if ("error" in result) {
+      if ("success" in result) {
+        post.value.thumbnail = "";
+      } else {
         root.$toasted.error("Error deleting file");
         throw result.message;
-      } else {
-        post.value.thumbnail = "";
       }
     };
 
@@ -315,11 +322,11 @@ export default defineComponent({
       if (!post.value?.id) return;
 
       const result = await postService.update(post.value.id, post.value);
-      if ("error" in result) {
+      if ("success" in result) {
+        root.$toasted.success("Saved!");
+      } else {
         root.$toasted.error("Error saving result");
         throw result.message;
-      } else {
-        root.$toasted.success("Saved!");
       }
     };
 
@@ -329,10 +336,7 @@ export default defineComponent({
       await savePost();
 
       const result = await postService.publish(post.value.id);
-      if ("error" in result) {
-        root.$toasted.error("Error publishing post");
-        throw result.message;
-      } else {
+      if ("success" in result) {
         root.$toasted.success("Post published!");
         root.$router.push({
           name: "Post",
@@ -340,6 +344,9 @@ export default defineComponent({
             id: post.value.id.toString()
           }
         });
+      } else {
+        root.$toasted.error("Error publishing post");
+        throw result.message;
       }
     };
 
@@ -349,12 +356,12 @@ export default defineComponent({
       await savePost();
 
       const result = await postService.unpublish(post.value.id);
-      if ("error" in result) {
-        root.$toasted.error("An error occured");
-        throw result.message;
-      } else {
+      if ("success" in result) {
         root.$toasted.success("Post unpublished!");
         post.value.published = false;
+      } else {
+        root.$toasted.error("An error occured");
+        throw result.message;
       }
     };
 
@@ -364,14 +371,14 @@ export default defineComponent({
         return;
 
       const result = await postService.delete(post.value.id);
-      if ("error" in result) {
-        root.$toasted.error("Error deleting post");
-        throw result.message;
-      } else {
+      if ("success" in result) {
         root.$toasted.success("Post deleted");
         // redirect
         if (post.value.published) root.$router.push("/");
         else root.$router.push({ name: "CurrentUser" });
+      } else {
+        root.$toasted.error("Error deleting post");
+        throw result.message;
       }
     };
 

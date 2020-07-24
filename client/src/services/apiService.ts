@@ -22,9 +22,11 @@ api.interceptors.response.use(
     console.log({ ...res });
     // redirect to server auth route if 401
     if (res.response.status === 401) {
-      window.location.replace("/api/user/oauth/google")
+      app.$toasted.success("Logging in");
+      window.location.replace("/api/user/oauth/google");
     }
-    if (res.response.data?.message instanceof Array) {
+    // pass any other errors along
+    else if (res.response.data?.message instanceof Array) {
       res.response.data.message = res.response.data.message.join(", ");
     }
     return res.response.data;

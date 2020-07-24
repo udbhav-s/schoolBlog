@@ -130,12 +130,12 @@ export default defineComponent({
 
       // delete the comment
       const result = await commentService.delete(props.comment.id);
-      if ("error" in result) {
-        root.$toasted.error("Error while deleting comment");
-        throw result.error;
-      } else {
+      if ("success" in result) {
         root.$toasted.success("Comment deleted");
         emit("commentDeleted", result.data);
+      } else {
+        root.$toasted.error("Error while deleting comment");
+        throw result.error;
       }
     };
 

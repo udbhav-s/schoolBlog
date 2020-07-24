@@ -83,16 +83,16 @@ export default defineComponent({
       isActive.value = false;
 
       const result = await postService.create();
-      if ("error" in result) {
-        root.$toasted.error("Error creating post");
-        throw result.message;
-      } else {
+      if ("success" in result) {
         root.$router.push({
           name: "EditPost",
           params: {
             id: result.data.id.toString()
           }
         });
+      } else {
+        root.$toasted.error("Error creating post");
+        throw result.message;
       }
     };
 

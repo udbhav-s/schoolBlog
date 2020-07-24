@@ -90,13 +90,13 @@ export default defineComponent({
     const userLevelName = computed<string>(() => {
       return user.value?.level
         ? ["Reader", "Member", "Author", "Moderator", "Admin"][user.value.level]
-        : ""
+        : "";
     });
 
     const loadUser = async () => {
       const result = await userService.getById(props.userId);
-      if ("error" in result) throw result.error;
-      else user.value = result.data;
+      if ("success" in result) user.value = result.data;
+      else throw result.error;
     };
     watch(
       () => props.userId,
@@ -118,11 +118,10 @@ export default defineComponent({
           user.value.id,
           user.value.level
         );
-        if ("error" in result) throw result.message;
-        else {
+        if ("success" in result) {
           user.value = result.data;
           root.$toasted.success("User level changed");
-        }
+        } else throw result.message;
       } catch (err) {
         root.$toasted.error("An error occured");
       }
