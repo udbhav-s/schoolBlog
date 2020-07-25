@@ -83,18 +83,12 @@
       <div class="flex flex-row flex-wrap justify-end space-x-2">
         <div>
           <button class="button" @click="savePost">
-            Save
+            <template v-if="post.published">Save Changes</template>
+            <template v-else>Save Draft</template>
           </button>
         </div>
         <div>
-          <button
-            v-if="post.published"
-            class="button button-danger"
-            @click="unpublishPost"
-          >
-            Unpublish
-          </button>
-          <button v-else class="button" @click="publishPost">
+          <button v-if="!post.published" class="button" @click="publishPost">
             Publish
           </button>
         </div>
@@ -350,21 +344,6 @@ export default defineComponent({
       }
     };
 
-    const unpublishPost = async () => {
-      if (!post.value?.id) return;
-
-      await savePost();
-
-      const result = await postService.unpublish(post.value.id);
-      if ("success" in result) {
-        root.$toasted.success("Post unpublished!");
-        post.value.published = false;
-      } else {
-        root.$toasted.error("An error occured");
-        throw result.message;
-      }
-    };
-
     const deletePost = async () => {
       if (!post.value?.id) return;
       if (!confirm("Are you sure you want to permanently delete this post?"))
@@ -388,7 +367,6 @@ export default defineComponent({
       quillOptions,
       savePost,
       publishPost,
-      unpublishPost,
       deletePost,
       editorReady,
       thumbnail,

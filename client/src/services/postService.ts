@@ -30,8 +30,5 @@ export const postService = {
   },
   publish(id: number) {
     return api.post<ApiResponse<Post>>(`/post/publish/${id}`);
-  },
-  unpublish(id: number) {
-    return api.post<ApiResponse<Post>>(`/post/unpublish/${id}`);
   }
 };

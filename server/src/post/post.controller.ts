@@ -140,27 +140,6 @@ export class PostController {
     return await this.postService.publish(id);
   }
 
-  @ApiOperation({ summary: 'Unpublish a post' })
-  @UseGuards(LevelGuard)
-  @Level(Levels.Member)
-  @UsePipes(ValidationPipe)
-  @Post('/unpublish/:id')
-  async unpublish(
-    @Param('id', ParseIntPipe) id: number,
-    @Request() req,
-  ): Promise<PostModel> {
-    // get post to be published
-    const post = await this.postService.getById(id);
-    if (!post) throw new NotFoundException();
-
-    // check if post is by user
-    if (post.userId !== req.user.id) {
-      throw new ForbiddenException();
-    }
-
-    return await this.postService.unpublish(id);
-  }
-
   @ApiOperation({ summary: 'Verify a post' })
   @UsePipes(ParseIntPipe)
   @UseGuards(LevelGuard)

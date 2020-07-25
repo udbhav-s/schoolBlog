@@ -59,13 +59,6 @@ export class PostService {
       .withGraphFetched('[user, category]');
   }
 
-  async unpublish(id: number): Promise<PostModel> {
-    return await this.postModel
-      .query()
-      .patchAndFetchById(id, { published: false })
-      .withGraphFetched('[user, category]');
-  }
-
   async verify(id: number): Promise<PostModel> {
     return await this.postModel
       .query()
