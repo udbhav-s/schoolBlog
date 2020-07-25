@@ -1,0 +1,19 @@
+:root {
+  --foreground-primary: theme("colors.gray.800");
+  --foreground-dark: theme("colors.gray.900");
+  --foreground-light: theme("colors.gray.700");
+  --background: theme("colors.white");
+  --background-secondary: theme("colors.gray.100");
+  --primary: theme("colors.blue.600");
+  --primary-light: theme("colors.blue.100");
+}
+
+.dark {
+  --foreground-primary: theme("colors.gray.400");
+  --foreground-dark: theme("colors.gray.300");
+  --foreground-light: theme("colors.gray.500");
+  --background: theme("colors.gray.900");
+  --background-secondary: theme("colors.gray.800");
+  --primary: theme("colors.blue.600");
+  --primary-light: theme("colors.blue.900");
+}
