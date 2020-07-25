@@ -58,6 +58,12 @@ export default defineComponent({
     },
     searchable: {
       type: Boolean as () => boolean
+    },
+    verified: {
+      type: Boolean as () => boolean
+    },
+    categoryId: {
+      type: Number as () => number
     }
   },
   components: {
@@ -72,7 +78,9 @@ export default defineComponent({
       return {
         ...searchOptions.value,
         userId: props.userId,
-        drafts: props.drafts
+        published: !props.drafts,
+        verified: props.verified,
+        categoryId: props.categoryId
       };
     });
 

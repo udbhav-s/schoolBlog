@@ -13,12 +13,38 @@ const routes: Array<RouteConfig> = [
     children: [
       {
         path: "/",
-        alias: "posts",
-        name: "posts",
-        props: {
-          searchable: true
-        },
-        component: () => import("@/components/post/PostList.vue")
+        component: () => import("@/components/post/PostListTabs.vue"),
+        children: [
+          {
+            path: "/",
+            alias: "all",
+            name: "all",
+            component: () => import("@/components/post/PostList.vue"),
+            props: {
+              searchable: true,
+              verified: true
+            }
+          },
+          {
+            path: "/unverified",
+            name: "unverified",
+            component: () => import("@/components/post/PostList.vue"),
+            props: {
+              searchable: true,
+              verified: false
+            }
+          },
+          {
+            path: "/category/:categoryId",
+            name: "category",
+            component: () => import("@/components/post/PostList.vue"),
+            props: route => ({
+              searchable: true,
+              verified: true,
+              categoryId: parseInt(route.params.categoryId)
+            })
+          },
+        ]
       },
       {
         path: "users",

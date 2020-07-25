@@ -18,9 +18,9 @@
             :class="{
               'is-active':
                 $route.path === tab.route ||
-                ($route.path === '/' && tab.name === 'Posts'),
-              tab: true
+                ($route.path === '/' && tab.name === 'Posts')
             }"
+            class="tab"
           >
             {{ tab.name }}
           </router-link>
@@ -33,20 +33,20 @@
     </section>
 
     <section v-else class="fixed-column">
-      <post-list :searchable="true" />
+      <post-list-tabs />
     </section>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive, computed } from "@vue/composition-api";
-import PostList from "@/components/post/PostList.vue";
+import PostListTabs from "@/components/post/PostListTabs.vue";
 import { userStore } from "@/store";
 
 export default defineComponent({
   name: "Home",
   components: {
-    PostList
+    PostListTabs
   },
 
   setup() {
@@ -54,7 +54,7 @@ export default defineComponent({
     const tabs = reactive([
       {
         name: "Posts",
-        route: "/posts"
+        route: "/"
       },
       {
         name: "Users",
@@ -83,16 +83,6 @@ export default defineComponent({
 </script>
 
 <style lang="postcss">
-.tab {
-  @apply border-b-2 px-4 py-2 cursor-pointer;
-  transition: 0.2s;
-}
-
-.tab:hover,
-.tab.is-active {
-  @apply bg-blue-100 border-blue-700;
-}
-
 /* router transition */
 .fade-enter-active,
 .fade-leave-active {
