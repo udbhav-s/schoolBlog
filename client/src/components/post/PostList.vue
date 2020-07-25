@@ -12,8 +12,6 @@
         </button>
       </div>
 
-      <div class="hr"></div>
-
       <div v-for="post in posts" :key="post.id">
         <post-card :post="post" />
       </div>
