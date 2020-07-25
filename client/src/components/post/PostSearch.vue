@@ -23,9 +23,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref } from "@vue/composition-api";
-import { QueryOptions, PostQueryOptions, Category } from "../../types";
-import { userStore, categoryStore } from "@/store";
+import { defineComponent, ref } from "@vue/composition-api";
+import { QueryOptions, PostQueryOptions } from "../../types";
+import { categoryStore } from "@/store";
 import ListQueryOptions from "@/components/ListQueryOptions.vue";
 
 export default defineComponent({
@@ -35,8 +35,6 @@ export default defineComponent({
   },
 
   setup(props, { emit }) {
-    const categories = computed<Category[]>(categoryStore.getters.categories);
-    const isModOrAbove = computed<boolean>(userStore.getters.isModOrAbove);
     const search = ref<string>("");
     const sortOptions = ref<Partial<QueryOptions>>({
       orderBy: "createdAt",
@@ -63,10 +61,8 @@ export default defineComponent({
     const close = () => emit("close");
 
     return {
-      isModOrAbove,
       sortOptions,
       search,
-      categories,
       submit,
       close
     };

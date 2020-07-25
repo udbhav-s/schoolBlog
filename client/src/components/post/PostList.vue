@@ -44,7 +44,8 @@ import PostSearch from "@/components/post/PostSearch.vue";
 import Spinner from "@/components/Spinner.vue";
 import { postService } from "@/services";
 import { Post, PostQueryOptions } from "@/types";
-import { defineComponent, ref } from "@vue/composition-api";
+import { defineComponent, ref, computed } from "@vue/composition-api";
+import useList from "@/composables/use-list";
 
 export default defineComponent({
   name: "PostList",
@@ -66,59 +67,31 @@ export default defineComponent({
   },
 
   setup(props) {
-    const posts = ref<Post[]>([]);
-    const hasMorePosts = ref<boolean>(true);
-    const showOptions = ref<boolean>(false);
-    const loading = ref<boolean>(false);
-
-    let searchOptions = {} as PostQueryOptions;
-    const options: PostQueryOptions = {
-      limit: 10,
-      offset: 0
-    };
-
-    const resetSearchOptions = () => {
-      searchOptions = {} as PostQueryOptions;
-      options.limit = 10;
-      options.offset = 10;
-    };
-
-    const loadPosts = async (reset?: boolean) => {
-      if (reset) {
-        posts.value = [];
-        options.offset = 0;
-        hasMorePosts.value = true;
-      }
-
-      const opts = {
-        ...searchOptions,
-        ...options
+    const searchOptions = ref<Partial<PostQueryOptions>>({});
+    const options = computed<Partial<PostQueryOptions>>(() => {
+      return {
+        ...searchOptions.value,
+        userId: props.userId,
+        drafts: props.drafts
       };
-      if (props.userId) opts.userId = props.userId;
-      if (props.drafts) opts.published = false;
+    });
 
-      loading.value = true;
-      const result = await postService.getAll(opts);
-      loading.value = false;
-      if (!("success" in result)) throw result.message;
+    const {
+      items: posts,
+      hasMoreItems: hasMorePosts,
+      loading,
+      loadItems: loadPosts
+    } = useList<Post>(postService.getAll, 10, options);
 
-      if (result.data.length > 0) {
-        posts.value.push(...result.data);
-        options.offset += options.limit;
-      }
-      if (result.data.length < options.limit) hasMorePosts.value = false;
-    };
-    loadPosts();
+    const showOptions = ref<boolean>(false);
 
     const search = async (options: PostQueryOptions) => {
-      searchOptions = options;
-      loadPosts(true);
+      searchOptions.value = options;
     };
 
     const cancelSearch = () => {
-      resetSearchOptions();
+      searchOptions.value = {} as PostQueryOptions;
       showOptions.value = false;
-      loadPosts(true);
     };
 
     return {

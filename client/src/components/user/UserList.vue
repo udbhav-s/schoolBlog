@@ -36,8 +36,9 @@ import Username from "@/components/user/Username.vue";
 import Spinner from "@/components/Spinner.vue";
 import ListQueryOptions from "@/components/ListQueryOptions.vue";
 import { userService } from "@/services";
-import { defineComponent, ref, watch } from "@vue/composition-api";
+import { defineComponent, ref } from "@vue/composition-api";
 import { User, QueryOptions } from "@/types";
+import useList from "@/composables/use-list";
 
 export default defineComponent({
   name: "UserList",
@@ -53,45 +54,18 @@ export default defineComponent({
     }
   },
 
-  setup(props, { root }) {
-    const users = ref<User[]>([]);
-    const loading = ref<boolean>(false);
-    const hasMoreUsers = ref<boolean>(true);
-    const options = {
-      limit: 20,
-      offset: 0
-    };
+  setup() {
     const sortOptions = ref<Partial<QueryOptions>>({
       orderBy: "createdAt",
       order: "desc"
     });
 
-    const loadUsers = async (reset?: boolean) => {
-      if (reset) {
-        users.value = [];
-        options.offset = 0;
-        hasMoreUsers.value = true;
-      }
-
-      loading.value = true;
-      const result = await userService.getAll({
-        ...options,
-        ...sortOptions.value
-      });
-      loading.value = false;
-
-      if (!("success" in result)) {
-        root.$toasted.error("Error while loading users");
-        throw result.message;
-      }
-
-      if (result.data.length > 0) {
-        users.value.push(...result.data);
-        options.offset += options.limit;
-      }
-      if (result.data.length < options.limit) hasMoreUsers.value = false;
-    };
-    watch(sortOptions, () => loadUsers(true));
+    const {
+      items: users,
+      hasMoreItems: hasMoreUsers,
+      loading,
+      loadItems: loadUsers
+    } = useList<User>(userService.getAll, 20, sortOptions);
 
     return {
       users,

@@ -16,7 +16,7 @@
 
       <div class="my-6 text-center">
         <button
-          v-if="hasMoreComments && adminView && !loading"
+          v-if="hasMoreComments && !loading"
           class="button"
           @click="loadComments"
         >
@@ -33,8 +33,9 @@ import { commentService } from "@/services";
 import Comment from "@/components/comment/Comment.vue";
 import CommentEdit from "@/components/comment/CommentEdit.vue";
 import Spinner from "@/components/Spinner.vue";
-import { PostComment, ApiResponse, QueryOptions } from "@/types";
-import { defineComponent, ref } from "@vue/composition-api";
+import { PostComment, QueryOptions, CommentQueryOptions } from "@/types";
+import { defineComponent, ref, computed } from "@vue/composition-api";
+import useList from "@/composables/use-list";
 
 export default defineComponent({
   name: "CommentList",
@@ -56,34 +57,23 @@ export default defineComponent({
   },
 
   setup(props) {
-    const comments = ref<PostComment[]>([]);
-    const hasMoreComments = ref<boolean>(true);
-    const loading = ref<boolean>(false);
-    const options = {
-      limit: 20,
-      offset: 0,
+    const sortOptions = ref<QueryOptions>({
       orderBy: "createdAt",
       order: "desc"
-    } as QueryOptions;
+    });
+    const options = computed<CommentQueryOptions>(() => {
+      return {
+        ...sortOptions?.value,
+        postId: props.postId
+      };
+    });
 
-    const loadComments = async () => {
-      loading.value = true;
-
-      let result: ApiResponse<PostComment[]>;
-      if (props.postId) result = await commentService.getByPost(props.postId);
-      else result = await commentService.getAll(options);
-
-      loading.value = false;
-
-      if ("success" in result) {
-        if (result.data.length > 0) {
-          result.data.forEach(c => comments.value.push(c));
-          options.offset += options.limit;
-        }
-        if (result.data.length < options.limit) hasMoreComments.value = false;
-      } else throw result.message;
-    };
-    loadComments();
+    const {
+      items: comments,
+      hasMoreItems: hasMoreComments,
+      loading,
+      loadItems: loadComments
+    } = useList<PostComment>(commentService.getAll, 20, options);
 
     const commentAdded = async (comment: PostComment) => {
       comments.value.push(comment);

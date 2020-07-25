@@ -16,7 +16,7 @@
 
       <div class="my-6 text-center">
         <button
-          v-if="hasMoreReplies && adminView && !loading"
+          v-if="hasMoreReplies && !loading"
           class="button is-info is-small"
           @click="loadReplies"
         >
@@ -33,8 +33,9 @@ import { replyService } from "@/services";
 import ReplyComponent from "@/components/reply/Reply.vue";
 import ReplyEdit from "@/components/reply/ReplyEdit.vue";
 import Spinner from "@/components/Spinner.vue";
-import { defineComponent, ref, watch } from "@vue/composition-api";
-import { Reply, QueryOptions } from "@/types";
+import { defineComponent, ref, computed } from "@vue/composition-api";
+import { Reply, QueryOptions, ReplyQueryOptions } from "@/types";
+import useList from "@/composables/use-list";
 
 export default defineComponent({
   name: "ReplyList",
@@ -56,43 +57,23 @@ export default defineComponent({
   },
 
   setup(props, { emit }) {
-    const replies = ref<Reply[]>([]);
-    const hasMoreReplies = ref<boolean>(true);
-    const loading = ref<boolean>(false);
-    const options = {
-      limit: 20,
-      offset: 0
-    } as QueryOptions;
+    const sortOptions = ref<QueryOptions>({
+      orderBy: "createdAt",
+      order: "desc"
+    });
+    const options = computed<ReplyQueryOptions>(() => {
+      return {
+        ...sortOptions?.value,
+        commentId: props.commentId
+      };
+    });
 
-    watch(
-      () => props.adminView,
-      adminView => {
-        if (adminView) {
-          options.orderBy = "createdAt";
-          options.order = "desc";
-        }
-      }
-    );
-
-    const loadReplies = async () => {
-      loading.value = true;
-
-      let result;
-      if (props.commentId)
-        result = await replyService.getByComment(props.commentId);
-      else result = await replyService.getAll(options);
-
-      loading.value = false;
-
-      if (!("success" in result)) throw result.message;
-
-      if (result.data.length > 0) {
-        result.data.forEach(r => replies.value.push(r));
-        options.offset += options.limit;
-      }
-      if (result.data.length < options.limit) hasMoreReplies.value = false;
-    };
-    loadReplies();
+    const {
+      items: replies,
+      hasMoreItems: hasMoreReplies,
+      loading,
+      loadItems: loadReplies
+    } = useList<Reply>(replyService.getAll, 20, options);
 
     const replyAdded = async (reply: Reply) => {
       emit("replyAdded");
