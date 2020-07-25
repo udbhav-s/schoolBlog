@@ -1,17 +1,14 @@
 import api from "./apiService";
-import { ApiResponse, PostComment, QueryOptions, CommentCreate } from "@/types";
+import { ApiResponse, PostComment, CommentQueryOptions, CommentCreate } from "@/types";
 
 export const commentService = {
   getById(id: number) {
     return api.get<ApiResponse<PostComment>>(`/comment/${id}`);
   },
-  getAll(options: QueryOptions) {
+  getAll(options: CommentQueryOptions) {
     return api.get<ApiResponse<PostComment[]>>("/comment/all", {
       params: options
     });
-  },
-  getByPost(id: number) {
-    return api.get(`/comment/post/${id}`);
   },
 
   create(data: CommentCreate) {

@@ -3,8 +3,8 @@ import { ModelClass } from 'objection';
 import { CommentModel } from '../database/models/comment.model';
 import { PostModel } from '../database/models/post.model';
 import { CommentCreateDto } from './dto/commentCreate.dto';
-import { GetOptionsDto } from 'src/common/dto/getOptions.dto';
 import { GET_OPTIONS } from 'src/database/modifiers';
+import { CommentGetOptionsDto } from './dto/commentGetOptions.dto';
 
 @Injectable()
 export class CommentService {
@@ -19,8 +19,7 @@ export class CommentService {
       .withGraphFetched('user');
   }
 
-  // (no verified checks - route only for mods)
-  async getAll(options?: GetOptionsDto): Promise<CommentModel[]> {
+  async getAll(options?: CommentGetOptionsDto): Promise<CommentModel[]> {
     const query = this.commentModel
       .query()
       .withGraphFetched('[user, post(title)]')
@@ -29,23 +28,13 @@ export class CommentService {
           builder.select('title');
         },
       });
-    // add search options
-    if (options) query.modify(GET_OPTIONS, options);
-    // default sort latest first
-    else query.modify(GET_OPTIONS, {
-      orderBy: 'createdAt',
-      order: 'desc'
-    });
-    return await query;
-  }
-
-  async getByPost(postId: number, options?: GetOptionsDto): Promise<CommentModel[]> {
-    const query = this.commentModel
-      .query()
-      .where({ postId })
-      .withGraphFetched('user');
-    // add search options
-    if (options) query.modify(GET_OPTIONS, options);
+    // add options
+    if (options) {
+      // get comments on post
+      if (options.postId) query.where({ postId: options.postId });
+      // apply other options
+      query.modify(GET_OPTIONS, options);
+    }
     // default sort latest first
     else query.modify(GET_OPTIONS, {
       orderBy: 'createdAt',

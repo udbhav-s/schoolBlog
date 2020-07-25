@@ -24,7 +24,7 @@ import { Levels } from 'src/common/util/level.enum';
 import { ReplyCreateDto } from './dto/replyCreate.dto';
 import { LevelGuard } from 'src/common/guards/level.guard';
 import { Level } from 'src/common/decorators/level.decorator';
-import { GetOptionsDto } from 'src/common/dto/getOptions.dto';
+import { ReplyGetOptionsDto } from './dto/replyGetOptions.dto';
 
 @ApiTags('reply')
 @ApiBasicAuth()
@@ -42,25 +42,18 @@ export class ReplyController {
   @Level(Levels.Moderator)
   @Get('/all')
   async getAll(
-    @Query(new ValidationPipe({ transform: true })) options: GetOptionsDto,
+    @Query(new ValidationPipe({ transform: true })) options: ReplyGetOptionsDto,
+    @Request() req
   ): Promise<ReplyModel[]> {
+    if (options.commentId) {
+      // get the comment and post, check if comment exists
+      const comment = await this.commentService.getById(options.commentId);
+      if (!comment) throw new NotFoundException();
+      // check if user can access post
+      const post = await this.commentService.getPost(comment.id);
+      if (!post.canAccess(req.user)) throw new ForbiddenException();
+    }
     return await this.replyService.getAll(options);
-  }
-
-  @ApiOperation({ summary: 'Get replies by comment' })
-  @Get('comment/:id')
-  async getByComment(
-    @Param('id', ParseIntPipe) id: number,
-    @Request() req,
-  ): Promise<ReplyModel[]> {
-    // get the comment and post, check if comment exists
-    const comment = await this.commentService.getById(id);
-    if (!comment) throw new NotFoundException();
-    // check if user can access post
-    const post = await this.commentService.getPost(comment.id);
-    if (!post.canAccess(req.user)) throw new ForbiddenException();
-    // return reply
-    return await this.replyService.getByComment(id);
   }
 
   @ApiOperation({ summary: 'Get reply by id' })

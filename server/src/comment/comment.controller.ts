@@ -24,7 +24,7 @@ import { PostService } from 'src/post/post.service';
 import { CommentCreateDto } from './dto/commentCreate.dto';
 import { LevelGuard } from 'src/common/guards/level.guard';
 import { Level } from 'src/common/decorators/level.decorator';
-import { GetOptionsDto } from 'src/common/dto/getOptions.dto';
+import { CommentGetOptionsDto } from './dto/commentGetOptions.dto';
 
 @ApiTags('comment')
 @ApiBasicAuth()
@@ -38,28 +38,19 @@ export class CommentController {
   ) {}
 
   @ApiOperation({ summary: 'Get all comments' })
-  @UseGuards(LevelGuard)
-  @Level(Levels.Moderator)
   @Get('/all')
   async getAll(
-    @Query(new ValidationPipe({ transform: true })) options: GetOptionsDto,
+    @Query(new ValidationPipe({ transform: true })) options: CommentGetOptionsDto,
+    @Request() req
   ): Promise<CommentModel[]> {
+    if (options.postId) {
+      // get the post
+      const post = await this.postService.getById(options.postId);
+      if (!post) throw new NotFoundException();
+      // check if user can access
+      if (!post.canAccess(req.user)) throw new ForbiddenException();
+    }
     return await this.commentService.getAll(options);
-  }
-
-  @ApiOperation({ summary: 'Get comments by post' })
-  @Get('post/:id')
-  async getByPost(
-    @Param('id', ParseIntPipe) id: number,
-    @Request() req,
-  ): Promise<CommentModel[]> {
-    // get the post
-    const post = await this.postService.getById(id);
-    if (!post) throw new NotFoundException();
-    // check if user can access
-    if (!post.canAccess(req.user)) throw new ForbiddenException();
-    // return comment
-    return await this.commentService.getByPost(id);
   }
 
   @ApiOperation({ summary: 'Get a comment by id' })

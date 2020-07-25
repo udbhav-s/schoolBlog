@@ -1,15 +1,12 @@
-import { ApiResponse, Reply, QueryOptions, ReplyCreate } from "@/types";
+import { ApiResponse, Reply, ReplyQueryOptions, ReplyCreate } from "@/types";
 import api from "./apiService";
 
 export const replyService = {
   getById(id: number) {
     return api.get<ApiResponse<Reply>>(`/reply/${id}`);
   },
-  getAll(options: QueryOptions) {
+  getAll(options: ReplyQueryOptions) {
     return api.get<ApiResponse<Reply[]>>("/reply/all", { params: options });
-  },
-  getByComment(id: number) {
-    return api.get<ApiResponse<Reply[]>>(`/reply/comment/${id}`);
   },
 
   create(data: ReplyCreate) {

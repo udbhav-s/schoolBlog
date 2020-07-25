@@ -2,8 +2,8 @@ import { Injectable, Inject } from '@nestjs/common';
 import { ModelClass } from 'objection';
 import { ReplyModel } from '../database/models/reply.model';
 import { ReplyCreateDto } from './dto/replyCreate.dto';
-import { GetOptionsDto } from 'src/common/dto/getOptions.dto';
 import { GET_OPTIONS } from 'src/database/modifiers';
+import { ReplyGetOptionsDto } from './dto/replyGetOptions.dto';
 
 @Injectable()
 export class ReplyService {
@@ -19,7 +19,7 @@ export class ReplyService {
   }
 
   // (no verified checks - route only for mods)
-  async getAll(options?: GetOptionsDto): Promise<ReplyModel[]> {
+  async getAll(options?: ReplyGetOptionsDto): Promise<ReplyModel[]> {
     const query = this.replyModel
       .query()
       .withGraphFetched('[user, comment.post(title)]')
@@ -28,6 +28,8 @@ export class ReplyService {
           builder.select('title');
         },
       });
+    // get replies by comment
+    if (options.commentId) query.where({ commentId: options.commentId })
     // add search options
     if (options) query.modify(GET_OPTIONS, options);
     // default sort latest first
@@ -36,13 +38,6 @@ export class ReplyService {
       order: 'desc'
     });
     return await query;
-  }
-
-  async getByComment(commentId: number): Promise<ReplyModel[]> {
-    return await this.replyModel
-      .query()
-      .where({ commentId })
-      .withGraphFetched('user');
   }
 
   async create(data: ReplyCreateDto): Promise<ReplyModel> {
