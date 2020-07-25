@@ -1,19 +1,30 @@
 :root {
-  --foreground-primary: theme("colors.gray.800");
-  --foreground-dark: theme("colors.gray.900");
-  --foreground-light: theme("colors.gray.700");
-  --background: theme("colors.white");
-  --background-secondary: theme("colors.gray.100");
-  --primary: theme("colors.blue.600");
-  --primary-light: theme("colors.blue.100");
+  --clr-text: theme("colors.gray.800");
+  --clr-text-dark: theme("colors.gray.900");
+  --clr-text-light: theme("colors.gray.700");
+  --clr-text-lighter: theme("colors.gray.600");
+
+  --clr-bg: theme("colors.white");
+  --clr-bg-secondary: theme("colors.gray.200");
+
+  --clr-primary: theme("colors.blue.600");
+  --clr-primary-lightest: theme("colors.blue.100");
+
+  --clr-input: theme("colors.gray.600");
+  --clr-input-active: theme("colors.gray.700");
 }
 
 .dark {
-  --foreground-primary: theme("colors.gray.400");
-  --foreground-dark: theme("colors.gray.300");
-  --foreground-light: theme("colors.gray.500");
-  --background: theme("colors.gray.900");
-  --background-secondary: theme("colors.gray.800");
-  --primary: theme("colors.blue.600");
-  --primary-light: theme("colors.blue.900");
+  --clr-text: theme("colors.gray.300");
+  --clr-text-dark: theme("colors.gray.200");
+  --clr-text-light: theme("colors.gray.400");
+  --clr-text-lighter: theme("colors.gray.500");
+
+  --clr-bg: #222831;
+  --clr-bg-secondary: #282f39;
+
+  --clr-primary: theme("colors.blue.600");
+  --clr-primary-lightest: theme("colors.blue.900");
+
+  /* --clr-input */
 }

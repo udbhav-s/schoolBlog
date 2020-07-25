@@ -1,12 +1,10 @@
 <template>
-  <div id="app">
+  <div id="app" class="text-clr-text bg-clr-bg dark">
     <vue-progress-bar></vue-progress-bar>
 
     <app-header />
 
-    <!-- <transition name="fade" mode="out-in"> -->
     <router-view id="main" />
-    <!-- </transition> -->
   </div>
 </template>
 
