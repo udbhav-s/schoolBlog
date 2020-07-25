@@ -2,8 +2,8 @@
 
 @tailwind components;
 
+@import "./themes.css";
 @import "./styles.css";
-
 @import "./animations.css";
 
 @tailwind utilities;

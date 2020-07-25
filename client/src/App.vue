@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="text-gray-800">
+  <div id="app">
     <vue-progress-bar></vue-progress-bar>
 
     <app-header />

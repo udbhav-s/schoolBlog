@@ -12,7 +12,7 @@
       :class="smallPicture ? ['w-6', 'h-6'] : ['w-10', 'h-10']"
     />
     <div>
-      <div class="text-gray-800 leading-tight">
+      <div class="leading-tight">
         {{ user.name }}
         <span v-if="user.level == 3">[M]</span>
         <span v-if="user.level == 4">[A]</span>

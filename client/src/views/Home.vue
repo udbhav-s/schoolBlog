@@ -1,7 +1,9 @@
 <template>
   <div>
     <div class="text-center mb-6">
-      <h1 class="animate-fade-down text-5xl md:text-6xl m-auto">
+      <h1
+        class="text-foreground-dark animate-fade-down text-5xl md:text-6xl m-auto"
+      >
         THE HPS BLOG
       </h1>
     </div>
@@ -9,7 +11,7 @@
     <section v-if="isModOrAbove" class="fixed-column">
       <div class="flex justify-center">
         <div
-          class="text-gray-700 text-xs md:text-base mx-auto inline-flex flex-wrap justify-center rounded mb-6"
+          class="text-foreground-light text-xs md:text-base mx-auto inline-flex flex-wrap justify-center rounded mb-6"
         >
           <router-link
             :to="tab.route"
