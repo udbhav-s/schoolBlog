@@ -60,7 +60,8 @@ export default defineComponent({
       type: Boolean as () => boolean
     },
     verified: {
-      type: Boolean as () => boolean
+      type: Boolean as () => boolean,
+      default: undefined
     },
     categoryId: {
       type: Number as () => number
@@ -75,13 +76,15 @@ export default defineComponent({
   setup(props) {
     const searchOptions = ref<Partial<PostQueryOptions>>({});
     const options = computed<Partial<PostQueryOptions>>(() => {
-      return {
+      const opts = {
         ...searchOptions.value,
         userId: props.userId,
         published: !props.drafts,
-        verified: props.verified,
         categoryId: props.categoryId
       };
+
+      if (props.verified !== undefined) opts.verified = props.verified;
+      return opts;
     });
 
     const {
