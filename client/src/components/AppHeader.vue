@@ -1,6 +1,6 @@
 <template>
   <header
-    class="fixed top-0 left-0 w-full bg-gray-200 flex flex-wrap items-center justify-between px-4 py-2 lg:px-16 lg:py-0 select-none z-40"
+    class="fixed top-0 left-0 w-full bg-clr-bg-secondary flex flex-wrap items-center justify-between px-4 py-2 lg:px-16 lg:py-0 select-none z-40"
   >
     <router-link
       to="/"
@@ -12,7 +12,7 @@
 
     <div @click="isActive = !isActive" class="cursor-pointer lg:hidden">
       <svg
-        class="fill-current text-gray-900"
+        class="fill-current text-clr-text-dark"
         xmlns="http://www.w3.org/2000/svg"
         width="20"
         height="20"
@@ -29,9 +29,7 @@
       id="menu"
     >
       <nav>
-        <ul
-          class="lg:flex items-center justify-between text-base text-gray-800 pt-4 lg:pt-0"
-        >
+        <ul class="lg:flex items-center justify-between text-base pt-4 lg:pt-0">
           <router-link
             class="navbar-item"
             to="/about"
@@ -119,7 +117,7 @@ export default defineComponent({
   @apply p-3 block border-b-2 border-transparent;
 }
 .navbar-item:hover {
-  @apply bg-gray-300 border-blue-600;
+  @apply bg-clr-primary-lightest border-clr-primary;
 }
 
 #menu {

@@ -36,7 +36,11 @@
         </button>
 
         <template v-if="isModOrAbove">
-          <button v-if="!post.verified" @click="verifyPost" class="button ml-2">
+          <button
+            v-if="!post.verified"
+            @click="verifyPost"
+            class="button button-success ml-2"
+          >
             Verify
           </button>
           <button

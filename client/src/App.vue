@@ -1,12 +1,10 @@
 <template>
-  <div id="app" class="text-gray-800">
+  <div id="app">
     <vue-progress-bar></vue-progress-bar>
 
     <app-header />
 
-    <!-- <transition name="fade" mode="out-in"> -->
     <router-view id="main" />
-    <!-- </transition> -->
   </div>
 </template>
 
@@ -14,7 +12,7 @@
 import { defineComponent } from "@vue/composition-api";
 import AppHeader from "@/components/AppHeader.vue";
 import "@/assets/styles/index.css";
-import { categoryStore } from "./store";
+import { categoryStore, themeStore } from "./store";
 
 export default defineComponent({
   name: "App",
@@ -27,6 +25,10 @@ export default defineComponent({
     categoryStore.mutations.loadCategories();
     // set title
     document.title = "The HPS Blog";
+    // load theme
+    themeStore.mutations.loadTheme();
+    // add theme classes
+    document.documentElement.classList.add("text-clr-text", "bg-clr-bg");
   }
 });
 </script>

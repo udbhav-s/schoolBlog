@@ -3,7 +3,7 @@
     <section>
       <div class="flex">
         <div
-          class="text-gray-700 text-xs md:text-base mx-auto inline-flex flex-wrap justify-center rounded mb-6"
+          class="text-xs md:text-base mx-auto inline-flex flex-wrap justify-center rounded mb-6"
         >
           <router-link
             :to="tab.route"

@@ -1,7 +1,7 @@
 <template>
   <div class="post-edit-container" v-if="post">
     <modal :class="{ 'is-active': imageUploading }">
-      <div class="p-8 bg-white rounded">
+      <div class="p-8 bg-clr-bg-secondary rounded">
         <spinner />
         <h1 class="text-4xl">Uploading image</h1>
       </div>
@@ -9,7 +9,7 @@
 
     <div class="fixed-column space-y-2 mb-10">
       <input
-        class="text-2xl md:text-5xl font-bold focus:outline-none"
+        class="input text-2xl md:text-5xl font-bold focus:outline-none"
         type="text"
         name="title"
         v-model="post.title"
@@ -25,9 +25,9 @@
         />
       </div>
 
-      <div class="bg-gray-100 p-2">
+      <div class="bg-clr-bg-secondary p-2">
         <div class="my-4" v-if="categories">
-          <select v-model="post.categoryId" class="input-border">
+          <select v-model="post.categoryId" class="input">
             <option :value="null" selected>Category</option>
             <option
               v-for="category in categories"
@@ -82,13 +82,17 @@
 
       <div class="flex flex-row flex-wrap justify-end space-x-2">
         <div>
-          <button class="button" @click="savePost">
+          <button class="button button-success" @click="savePost">
             <template v-if="post.published">Save Changes</template>
             <template v-else>Save Draft</template>
           </button>
         </div>
         <div>
-          <button v-if="!post.published" class="button" @click="publishPost">
+          <button
+            v-if="!post.published"
+            class="button button-success"
+            @click="publishPost"
+          >
             Publish
           </button>
         </div>

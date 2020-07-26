@@ -4,7 +4,7 @@
       <textarea
         placeholder="Write a reply"
         v-model="form.body"
-        class="input-border w-full h-24 p-2"
+        class="input w-full h-24 p-2"
       ></textarea>
     </div>
     <div>

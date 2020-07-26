@@ -10,7 +10,7 @@
         }
       }"
     >
-      <h1 class="text-4xl font-semibold leading-tight py-2">
+      <h1 class="text-4xl text-clr-text-dark font-semibold leading-tight py-2">
         {{ post.title }}
       </h1>
     </router-link>

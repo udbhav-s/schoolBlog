@@ -3,7 +3,7 @@
     <select
       v-model="value.order"
       @input="update($event.target.value)"
-      class="input-border"
+      class="input"
     >
       <!-- <option value="" selected>Sort</option> -->
       <option value="desc">

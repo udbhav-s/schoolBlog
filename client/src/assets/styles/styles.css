@@ -7,54 +7,73 @@
 }
 
 .button {
-  @apply border border-gray-300 text-gray-700 text-sm px-2 py-1 rounded-sm;
+  @apply border border-clr-input text-sm px-2 py-1 rounded-sm;
   transition: 0.1s;
 }
 .button:hover {
-  @apply border-transparent bg-gray-600 text-white;
+  @apply border-transparent bg-clr-input-hover text-clr-input-text;
 }
 .button:active {
-  @apply bg-gray-700;
+  @apply bg-clr-input-active;
 }
 .button:disabled {
   @apply opacity-50 cursor-not-allowed;
 }
 
 .button.button-danger {
-  @apply border-red-500 text-red-500;
+  @apply border-clr-input-danger text-clr-input-danger;
 }
 .button.button-danger:hover {
-  @apply bg-red-500 text-white;
+  @apply bg-clr-input-danger text-clr-input-text;
 }
 .button.button-danger:active {
-  @apply bg-red-600;
+  @apply bg-clr-input-danger-active text-clr-input-text;
 }
 
-.input-border {
-  @apply border border-gray-300 p-1;
+.button.button-success {
+  @apply border-clr-input-success text-clr-input-success;
 }
-.input-border:hover {
-  @apply border-gray-400;
+.button.button-success:hover {
+  @apply bg-clr-input-success text-clr-input-text;
 }
-.input-border:focus {
+.button.button-success:active {
+  @apply bg-clr-input-success-active text-clr-input-text;
+}
+
+.input {
+  @apply border bg-clr-bg border-clr-input p-1;
+}
+.input:hover {
+  @apply border-clr-input-hover;
+}
+.input:focus {
   @apply border-blue-300;
 }
 
 .tab {
-  @apply border-b-2 px-4 py-2 cursor-pointer;
+  @apply border-b-2 border-clr-bg-secondary px-4 py-2 cursor-pointer;
   transition: 0.2s;
 }
 
 .tab:hover,
 .tab.is-active {
-  @apply bg-blue-100 border-blue-700;
+  @apply bg-clr-primary-lightest border-clr-primary;
 }
 
 .table-list > :nth-child(even) {
-  @apply bg-gray-100;
+  @apply bg-clr-bg-secondary;
+}
+
+hr {
+  @apply border-clr-bg-secondary;
 }
 
 /* quill editor overrides */
+
+#editor .ql-snow.ql-toolbar {
+  background: var(--clr-quill-bg);
+  width: 100%;
+}
 
 #editor .ql-snow.ql-toolbar, #editor .ql-snow.ql-container {
   border: none;

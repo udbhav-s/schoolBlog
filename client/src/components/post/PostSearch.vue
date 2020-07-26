@@ -3,7 +3,7 @@
     <input
       v-model="search"
       type="text"
-      class="w-full input-border p-2 flex-grow my-2"
+      class="w-full input p-2 flex-grow my-2"
       placeholder="Search (leave empty to search all)"
     />
     <div
