@@ -2,7 +2,7 @@ module.exports = {
   plugins: {
     tailwindcss: {},
     "vue-cli-plugin-tailwind/purgecss": {
-      whitelist: ["pre"],
+      whitelist: ["pre", "dark"],
       whitelistPatterns: [/^ql/, /filepond/],
       whitelistPatternsChildren: [/^ql/, /filepond/, /prose/]
     },
