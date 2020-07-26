@@ -9,21 +9,27 @@
       <div>{{ user.email }}</div>
       <div class="text-xl font-semibold">{{ userLevelName }}</div>
 
-      <button v-if="isCurrentUser" @click="logout" class="button text-lg my-2">
-        Log Out
-      </button>
+      <div class="flex my-2 justify-center space-x-1">
+        <button v-if="isCurrentUser" @click="logout" class="button text-lg">
+          Log Out
+        </button>
+        <button @click="toggleDarkMode" class="button text-lg">
+          <template v-if="isDarkMode">Light Mode</template>
+          <template v-else>Join the Dark Side</template>
+        </button>
+      </div>
     </div>
 
     <section
       v-if="isAdminOrAbove && !isCurrentUser && user.level !== 4"
-      class="bg-gray-100 my-10 py-6"
+      class="bg-clr-bg-secondary my-10 py-6"
     >
       <div class="fixed-column mx-auto space-y-3">
         <label class="text-3xl">Level</label>
         <select
           name="level-select"
           id="level-select"
-          class="input-border block"
+          class="input block"
           v-model="user.level"
         >
           <option value="0">Reader</option>
@@ -63,7 +69,7 @@ import { userService } from "@/services";
 import PostList from "@/components/post/PostList.vue";
 import { User } from "@/types";
 import levelDescriptionsArray from "@/config/levelDescriptions";
-import { userStore } from "@/store";
+import { userStore, themeStore } from "@/store";
 
 export default defineComponent({
   name: "User",
@@ -90,6 +96,7 @@ export default defineComponent({
         ? ["Reader", "Member", "Author", "Moderator", "Admin"][user.value.level]
         : "";
     });
+    const isDarkMode = computed(themeStore.getters.darkMode);
 
     const loadUser = async () => {
       const result = await userService.getById(props.userId);
@@ -125,6 +132,10 @@ export default defineComponent({
       }
     };
 
+    const toggleDarkMode = () => {
+      themeStore.mutations.toggleDarkMode();
+    };
+
     return {
       user,
       levelDescriptions,
@@ -133,7 +144,9 @@ export default defineComponent({
       isCurrentUser,
       logout,
       setUserLevel,
-      userLevelName
+      userLevelName,
+      isDarkMode,
+      toggleDarkMode
     };
   }
 });

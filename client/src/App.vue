@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="text-clr-text bg-clr-bg dark">
+  <div id="app">
     <vue-progress-bar></vue-progress-bar>
 
     <app-header />
@@ -12,7 +12,7 @@
 import { defineComponent } from "@vue/composition-api";
 import AppHeader from "@/components/AppHeader.vue";
 import "@/assets/styles/index.css";
-import { categoryStore } from "./store";
+import { categoryStore, themeStore } from "./store";
 
 export default defineComponent({
   name: "App",
@@ -25,6 +25,10 @@ export default defineComponent({
     categoryStore.mutations.loadCategories();
     // set title
     document.title = "The HPS Blog";
+    // load theme
+    themeStore.mutations.loadTheme();
+    // add theme classes
+    document.documentElement.classList.add("text-clr-text", "bg-clr-bg");
   }
 });
 </script>
