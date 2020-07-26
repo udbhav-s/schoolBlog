@@ -110,6 +110,11 @@ const routes: Array<RouteConfig> = [
     props: () => ({
       userId: userStore.getters.user().id
     })
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: () => import("@/views/Login.vue")
   }
 ];
 
@@ -120,7 +125,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach(async (to, _from, next) => {
-  if (!userStore.getters.isAuthenticated()) {
+  if (!userStore.getters.isAuthenticated() && to.name !== "Login") {
     // the user still might be authenticated
     // since the store is reset on page refresh
     try {

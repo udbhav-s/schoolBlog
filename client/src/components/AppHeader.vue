@@ -49,6 +49,7 @@
           </template>
 
           <router-link
+            v-if="isAuthenticated"
             class="navbar-item"
             :to="{ name: 'CurrentUser' }"
             @click.native="isActive = false"
@@ -75,6 +76,7 @@ export default defineComponent({
 
   setup(props, { root }) {
     const currentUser = computed(userStore.getters.user);
+    const isAuthenticated = computed(userStore.getters.isAuthenticated);
     const isActive = ref<boolean>(false);
 
     const createPost = async () => {
@@ -97,7 +99,8 @@ export default defineComponent({
     return {
       isActive,
       currentUser,
-      createPost
+      createPost,
+      isAuthenticated
     };
   }
 });

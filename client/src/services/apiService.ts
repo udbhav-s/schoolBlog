@@ -1,5 +1,6 @@
 import axios from "axios";
 import app from "@/main";
+import loginRedirect from '@/util/loginRedirect';
 
 const api = axios.create({
   baseURL: "/api",
@@ -23,7 +24,7 @@ api.interceptors.response.use(
     // redirect to server auth route if 401
     if (res.response.status === 401) {
       app.$toasted.success("Logging in");
-      window.location.replace("/api/user/oauth/google");
+      loginRedirect();
     }
     // pass any other errors along
     else if (res.response.data?.message instanceof Array) {
