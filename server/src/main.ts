@@ -9,6 +9,7 @@ import { json } from 'body-parser';
 import * as session from 'express-session';
 import * as passport from 'passport';
 import { ValidationPipe } from '@nestjs/common';
+import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -29,6 +30,9 @@ async function bootstrap() {
 
   // use global validation pipe
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+  
+  // logging
+  app.useGlobalInterceptors(new LoggingInterceptor());
 
   // set up swagger for API documentation
   const options = new DocumentBuilder()

@@ -58,7 +58,9 @@
     "sanitize-html": "^1.22.1",
     "sharp": "^0.25.4",
     "shortid": "^2.2.15",
-    "swagger-ui-express": "^4.1.4"
+    "swagger-ui-express": "^4.1.4",
+    "winston": "^3.3.3",
+    "winston-daily-rotate-file": "^4.5.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.0.0",
