@@ -21,7 +21,7 @@
       <div v-if="post.thumbnail">
         <img
           :src="`/api/file/${post.thumbnail}`"
-          class="thumbnail w-full my-2 mb-3 object-cover"
+          class="thumbnail rounded w-full my-2 mb-3 object-cover"
         />
       </div>
       <div v-else class="my-2"></div>
