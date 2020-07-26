@@ -6,7 +6,7 @@
       </div>
 
       <div v-else>
-        <input v-model="form.name" type="text" class="input-border" />
+        <input v-model="form.name" type="text" class="input" />
       </div>
     </div>
 
