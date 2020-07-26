@@ -1,8 +1,7 @@
 :root {
-  --clr-text: theme("colors.gray.800");
-  --clr-text-dark: theme("colors.gray.900");
-  --clr-text-light: theme("colors.gray.700");
-  --clr-text-lighter: theme("colors.gray.600");
+  --clr-text: theme("colors.gray.700");
+  --clr-text-dark: theme("colors.gray.800");
+  --clr-text-light: theme("colors.gray.600");
 
   --clr-bg: theme("colors.white");
   --clr-bg-secondary: theme("colors.gray.200");
@@ -10,15 +9,24 @@
   --clr-primary: theme("colors.blue.600");
   --clr-primary-lightest: theme("colors.blue.100");
 
-  --clr-input: theme("colors.gray.600");
+  --clr-input: theme("colors.gray.400");
+  --clr-input-hover: theme("colors.gray.600");
   --clr-input-active: theme("colors.gray.700");
+  --clr-input-text: theme("colors.white");
+
+  --clr-input-success: theme("colors.green.500");
+  --clr-input-success-active: theme("colors.green.600");
+
+  --clr-input-danger: theme("colors.red.500");
+  --clr-input-danger-active: theme("colors.red.600");
+
+  --clr-quill-bg: transparent;
 }
 
 .dark {
   --clr-text: theme("colors.gray.300");
   --clr-text-dark: theme("colors.gray.200");
   --clr-text-light: theme("colors.gray.400");
-  --clr-text-lighter: theme("colors.gray.500");
 
   --clr-bg: #222831;
   --clr-bg-secondary: #282f39;
@@ -26,5 +34,10 @@
   --clr-primary: theme("colors.blue.600");
   --clr-primary-lightest: theme("colors.blue.900");
 
-  /* --clr-input */
+  --clr-input: theme("colors.gray.600");
+  --clr-input-hover: theme("colors.gray.400");
+  --clr-input-active: theme("colors.gray.300");
+  --clr-input-text: theme("colors.gray.800");
+
+  --clr-quill-bg: theme("colors.gray.300");
 }

@@ -1,15 +1,13 @@
 <template>
   <div>
-    <div
-      class="p-4 border border-gray-300 text-gray-800 text-center fixed-column"
-    >
+    <div class="p-4 border border-clr-bg-secondary text-center fixed-column">
       <img
         :src="user.picture"
         class="w-20 h-20 rounded-full inline-block my-2"
       />
       <h1 class="text-2xl leading-tight">{{ user.name }}</h1>
       <div>{{ user.email }}</div>
-      <div class="text-xl font-semibold text-gray-600">{{ userLevelName }}</div>
+      <div class="text-xl font-semibold">{{ userLevelName }}</div>
 
       <button v-if="isCurrentUser" @click="logout" class="button text-lg my-2">
         Log Out
@@ -45,13 +43,13 @@
 
     <section class="fixed-column">
       <div v-if="isCurrentUser">
-        <div class="text-3xl my-6 text-gray-800 text-center bg-gray-100 p-2">
+        <div class="text-3xl my-6 text-center bg-clr-bg-secondary p-2">
           Drafts
         </div>
         <post-list v-if="user.id" :userId="user.id" :drafts="true" />
         <hr class="my-6" />
       </div>
-      <div class="text-3xl my-6 text-gray-800 text-center bg-gray-100 p-2">
+      <div class="text-3xl my-6 text-center bg-clr-bg-secondary p-2">
         Posts
       </div>
       <post-list v-if="user.id" :userId="user.id" />

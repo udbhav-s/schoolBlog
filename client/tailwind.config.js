@@ -6,7 +6,6 @@ module.exports = {
         "clr-text": "var(--clr-text)",
         "clr-text-dark": "var(--clr-text-dark)",
         "clr-text-light": "var(--clr-text-light)",
-        "clr-text-lighter": "var(--clr-text-lighter)",
 
         "clr-bg": "var(--clr-bg)",
         "clr-bg-secondary": "var(--clr-bg-secondary)",
@@ -15,7 +14,17 @@ module.exports = {
         "clr-primary-lightest": "var(--clr-primary-lightest)",
 
         "clr-input": "var(--clr-input)",
-        "clr-input-active": "var(--clr-input-active)"
+        "clr-input-hover": "var(--clr-input-hover)",
+        "clr-input-active": "var(--clr-input-active)",
+        "clr-input-text": "var(--clr-input-text)",
+
+        "clr-input-success": "var(--clr-input-success)",
+        "clr-input-success-active": "var(--clr-input-success-active)",
+
+        "clr-input-danger": "var(--clr-input-danger)",
+        "clr-input-danger-active": "var(--clr-input-danger-active)",
+
+        "clr-quill-bg": "var(--clr-quill-bg)"
       }
     },
     typography: {
@@ -26,10 +35,10 @@ module.exports = {
             color: "clr-text"
           },
           a: {
-            color: "clr-text-light"
+            color: "clr-text"
           },
           blockquote: {
-            color: "clr-text-light"
+            color: "clr-text"
           },
           h2: {
             color: "clr-text-dark"

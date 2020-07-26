@@ -1,6 +1,6 @@
 <template>
   <div class="section fixed-column post-page" v-if="post">
-    <h1 class="text-4xl md:text-5xl leading-tight font-bold">
+    <h1 class="text-4xl text-clr-text-dark md:text-5xl leading-tight font-bold">
       {{ post.title }}
     </h1>
     <post-meta

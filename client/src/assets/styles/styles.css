@@ -11,7 +11,7 @@
   transition: 0.1s;
 }
 .button:hover {
-  @apply border-transparent bg-clr-input;
+  @apply border-transparent bg-clr-input-hover text-clr-input-text;
 }
 .button:active {
   @apply bg-clr-input-active;
@@ -21,30 +21,30 @@
 }
 
 .button.button-danger {
-  @apply border-red-500 text-red-500;
+  @apply border-clr-input-danger text-clr-input-danger;
 }
 .button.button-danger:hover {
-  @apply bg-red-500 text-white;
+  @apply bg-clr-input-danger text-clr-input-text;
 }
 .button.button-danger:active {
-  @apply bg-red-600;
+  @apply bg-clr-input-danger-active text-clr-input-text;
 }
 
 .button.button-success {
-  @apply border-green-500 text-green-500;
+  @apply border-clr-input-success text-clr-input-success;
 }
 .button.button-success:hover {
-  @apply bg-green-500 text-white;
+  @apply bg-clr-input-success text-clr-input-text;
 }
 .button.button-success:active {
-  @apply bg-green-600;
+  @apply bg-clr-input-success-active text-clr-input-text;
 }
 
 .input {
   @apply border bg-clr-bg border-clr-input p-1;
 }
 .input:hover {
-  @apply border-clr-input-active;
+  @apply border-clr-input-hover;
 }
 .input:focus {
   @apply border-blue-300;
@@ -69,6 +69,11 @@ hr {
 }
 
 /* quill editor overrides */
+
+#editor .ql-snow.ql-toolbar {
+  background: var(--clr-quill-bg);
+  width: 100%;
+}
 
 #editor .ql-snow.ql-toolbar, #editor .ql-snow.ql-container {
   border: none;

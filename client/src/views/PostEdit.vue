@@ -25,9 +25,9 @@
         />
       </div>
 
-      <div class="bg-gray-100 p-2">
+      <div class="bg-clr-bg-secondary p-2">
         <div class="my-4" v-if="categories">
-          <select v-model="post.categoryId" class="input-border">
+          <select v-model="post.categoryId" class="input">
             <option :value="null" selected>Category</option>
             <option
               v-for="category in categories"

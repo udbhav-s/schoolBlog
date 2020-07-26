@@ -11,7 +11,7 @@
     <section v-if="isModOrAbove" class="fixed-column">
       <div class="flex justify-center">
         <div
-          class="text-clr-text-light text-xs md:text-base mx-auto inline-flex flex-wrap justify-center rounded mb-6"
+          class="text-xs md:text-base mx-auto inline-flex flex-wrap justify-center rounded mb-6"
         >
           <router-link
             :to="tab.route"

@@ -17,7 +17,7 @@
         <span v-if="user.level == 3">[M]</span>
         <span v-if="user.level == 4">[A]</span>
       </div>
-      <div class="text-xs text-clr-text-lighter">
+      <div class="text-xs text-clr-text-light">
         <slot></slot>
       </div>
     </div>
