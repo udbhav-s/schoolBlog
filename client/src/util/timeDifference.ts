@@ -5,7 +5,7 @@ export default function timeDifference(current: Date, previous: Date) {
   const msPerMonth = msPerDay * 30;
   const msPerYear = msPerDay * 365;
 
-  const elapsed = current.getTime() - previous.getTime();
+  const elapsed = Math.max(0, current.getTime() - previous.getTime());
 
   if (elapsed < msPerMinute) {
     const diff = Math.round(elapsed / 1000);
