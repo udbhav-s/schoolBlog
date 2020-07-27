@@ -22,6 +22,13 @@ export const postService = {
     return api.delete<ApiResponse<number>>(`/post/${id}`);
   },
 
+  like(id: number) {
+    return api.post<ApiResponse<any>>(`/post/like/${id}`);
+  },
+  unlike(id: number) {
+    return api.post<ApiResponse<any>>(`/post/unlike/${id}`);
+  },
+
   verify(id: number) {
     return api.post<ApiResponse<Post>>(`/post/verify/${id}`);
   },

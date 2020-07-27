@@ -10,7 +10,7 @@
   @apply border border-clr-input text-sm px-2 py-1 rounded-sm;
   transition: 0.1s;
 }
-.button:hover {
+.button:hover, .button.active {
   @apply border-transparent bg-clr-input-hover text-clr-input-text;
 }
 .button:active {

@@ -10,6 +10,7 @@ import { PostGetOptionsDto } from '../../post/dto/postGetOptions.dto';
 import { GET_OPTIONS, SEARCH } from '../modifiers';
 
 import { raw } from 'objection';
+import { PostLikeModel } from './postLike.model';
 
 export class PostModel extends BaseModel {
   static tableName = 'posts';
@@ -26,6 +27,10 @@ export class PostModel extends BaseModel {
   comments?: CommentModel[];
   files?: FileModel[];
   category?: CategoryModel;
+  likes?: PostLikeModel[];
+  // calculated for user in attachLikes
+  isLiked?: boolean;
+  numberOfLikes?: number;
 
   // checks whether a user can access the post or not
   canAccess(user: UserModel): boolean {
@@ -89,6 +94,22 @@ export class PostModel extends BaseModel {
       // query.debug();
     },
 
+    attachLikes(query: QueryBuilder<PostModel>, userId: number) {
+      query.select(
+        // make sure all the other properties are selected too
+        'posts.*',
+        // number of likes
+        PostModel.relatedQuery('likes')
+          .count()
+          .as('numberOfLikes'),
+        // whether the user liked the post or not
+        PostModel.relatedQuery('likes')
+          .where({ userId })
+          .count()
+          .as('isLiked')
+      );
+    },
+
     ...BaseModel.modifiers,
   };
 
@@ -105,6 +126,11 @@ export class PostModel extends BaseModel {
         ?.filter(f => f.type === 'attachment')
         ?.map(a => a.filename);
       
+      // (returns count as string for some reason)
+      // cast user like count string to boolean
+      post.isLiked = !!parseInt(post.isLiked as any);
+      // cast number of likes to int
+      post.numberOfLikes = parseInt(post.numberOfLikes as any);
       return post;
     });
   }
@@ -145,5 +171,14 @@ export class PostModel extends BaseModel {
         to: 'categories.id',
       },
     },
+
+    likes: {
+      modelClass: PostLikeModel,
+      relation: Model.HasManyRelation,
+      join: {
+        from: 'posts.id',
+        to: 'postsLikes.postId'
+      }
+    }
   });
 }

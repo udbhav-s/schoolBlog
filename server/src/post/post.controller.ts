@@ -14,6 +14,7 @@ import {
   UseInterceptors,
   Query,
   Delete,
+  BadRequestException,
 } from '@nestjs/common';
 import { ApiTags, ApiBasicAuth, ApiOperation } from '@nestjs/swagger';
 import { PostService } from './post.service';
@@ -162,11 +163,39 @@ export class PostController {
     return post;
   }
 
+  @ApiOperation({ summary: 'Like a post' })
+  @UsePipes(ParseIntPipe)
+  @UseGuards(LevelGuard)
+  @Level(Levels.Reader)
+  @Post('/like/:id')
+  async like(@Param('id') id: number, @Request() req) {
+    const post = await this.postService.getById(id, req.user.id);
+    // check if user can access
+    if (!post || !post.canAccess(req.user)) throw new ForbiddenException();
+    if (post.isLiked) throw new BadRequestException();
+    // return the post
+    return await this.postService.like(id, req.user.id);
+  }
+
+  @ApiOperation({ summary: 'Unlike a post' })
+  @UsePipes(ParseIntPipe)
+  @UseGuards(LevelGuard)
+  @Level(Levels.Reader)
+  @Post('/unlike/:id')
+  async unlike(@Param('id') id: number, @Request() req) {
+    const post = await this.postService.getById(id, req.user.id);
+    // check if user can access
+    if (!post || !post.canAccess(req.user)) throw new ForbiddenException();
+    if (!post.isLiked) throw new BadRequestException();
+    // return the post
+    return await this.postService.unlike(id, req.user.id);
+  }
+
   @ApiOperation({ summary: 'Get a post by id' })
   @UsePipes(ParseIntPipe)
   @Get('/:id')
   async getById(@Param('id') id: number, @Request() req): Promise<PostModel> {
-    const post = await this.postService.getById(id);
+    const post = await this.postService.getById(id, req.user.id);
     // check if user can access
     if (!post || !post.canAccess(req.user)) throw new ForbiddenException();
     // return the post

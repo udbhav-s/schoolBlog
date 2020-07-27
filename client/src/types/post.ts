@@ -10,6 +10,8 @@ export interface Post {
   userId: number;
   categoryId: number;
   createdAt: string;
+  numberOfLikes: number;
+  isLiked: boolean;
 
   thumbnail?: string;
   attachments?: string[];

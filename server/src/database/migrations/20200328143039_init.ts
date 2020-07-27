@@ -60,6 +60,29 @@ export async function up(knex: Knex): Promise<any> {
           .onDelete('SET NULL');
         table.timestamps(true, true);
       })
+      // post likes
+      .createTable('posts_likes', table => {
+        table.increments();
+        table
+          .integer('user_id')
+          .unsigned()
+          .notNullable();
+        table
+          .foreign('user_id')
+          .references('id')
+          .inTable('users')
+          .onDelete('CASCADE');
+        table
+          .integer('post_id')
+          .unsigned()
+          .notNullable();
+        table
+          .foreign('post_id')
+          .references('id')
+          .inTable('posts')
+          .onDelete('CASCADE');
+        table.timestamps(true, true);
+      })
       // comments table
       .createTable('comments', table => {
         table.increments();

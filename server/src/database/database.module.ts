@@ -10,6 +10,7 @@ import { ReplyModel } from './models/reply.model';
 import { CategoryModel } from './models/category.model';
 
 import * as KnexConfig from '../../knexfile';
+import { PostLikeModel } from './models/postLike.model';
 
 const models = [
   UserModel,
@@ -18,6 +19,7 @@ const models = [
   CommentModel,
   ReplyModel,
   CategoryModel,
+  PostLikeModel,
 ];
 
 const modelProviders = models.map(model => {

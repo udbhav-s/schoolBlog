@@ -8,6 +8,8 @@
       @postDeleted="postDeleted"
       @post-verified="postVerified"
       @post-unverified="postUnverified"
+      @post-liked="postLiked"
+      @post-unliked="postUnliked"
       :showOptions="true"
       class="my-4"
     />
@@ -86,13 +88,29 @@ export default defineComponent({
       if (post.value) post.value.verified = false;
     };
 
+    const postLiked = () => {
+      if (post.value) {
+        post.value.isLiked = true;
+        post.value.numberOfLikes++;
+      }
+    };
+
+    const postUnliked = () => {
+      if (post.value) {
+        post.value.isLiked = false;
+        post.value.numberOfLikes--;
+      }
+    };
+
     return {
       isMemberOrAbove,
       post,
       loadPost,
       postDeleted,
       postVerified,
-      postUnverified
+      postUnverified,
+      postLiked,
+      postUnliked
     };
   }
 });

@@ -11,7 +11,7 @@
         </span>
       </username>
 
-      <div v-if="showOptions" class="flex flex-row align-middle mt-2">
+      <div v-if="showOptions" class="flex flex-row align-middle mt-2 space-x-2">
         <router-link
           class="button"
           v-if="byCurrentUser"
@@ -29,7 +29,7 @@
         <button
           v-if="byCurrentUser || isModOrAbove"
           @click="deletePost"
-          class="button button-danger ml-2"
+          class="button button-danger"
         >
           <font-awesome-icon icon="trash" />
           <!-- Delete -->
@@ -39,18 +39,29 @@
           <button
             v-if="!post.verified"
             @click="verifyPost"
-            class="button button-success ml-2"
+            class="button button-success"
           >
             Verify
           </button>
           <button
             v-if="post.verified"
             @click="unverifyPost"
-            class="button button-danger ml-2"
+            class="button button-danger"
           >
             Unverify
           </button>
         </template>
+
+        <button
+          @click="toggleLike"
+          :class="{ active: post.isLiked }"
+          class="button"
+        >
+          <font-awesome-icon icon="thumbs-up" />
+          <template v-if="post.numberOfLikes">
+            {{ post.numberOfLikes }}
+          </template>
+        </button>
       </div>
     </div>
   </div>
@@ -127,6 +138,28 @@ export default defineComponent({
       }
     };
 
+    const toggleLike = async () => {
+      if (props.post.isLiked) {
+        // optimistic update
+        emit("post-unliked");
+        // like
+        const result = await postService.unlike(props.post.id);
+        if (!("success" in result)) {
+          root.$toasted.error("An error occured");
+          emit("post-liked");
+        }
+      } else {
+        // optimistic update
+        emit("post-liked");
+        // like
+        const result = await postService.like(props.post.id);
+        if (!("success" in result)) {
+          root.$toasted.error("An error occured");
+          emit("post-unliked");
+        }
+      }
+    };
+
     return {
       date,
       byCurrentUser,
@@ -134,7 +167,8 @@ export default defineComponent({
       isModOrAbove,
       deletePost,
       verifyPost,
-      unverifyPost
+      unverifyPost,
+      toggleLike
     };
   }
 });
