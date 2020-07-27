@@ -91,4 +91,9 @@ hr {
   opacity: 0.5;
   font-style: normal;
   margin-left: -15px;
+  color: var(--clr-text-light);
+}
+
+#editor .ql-editor > :first-child {
+  margin-top: 0;
 }
