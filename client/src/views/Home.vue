@@ -28,15 +28,11 @@
           </router-link>
         </div>
       </div>
-
-      <transition name="fade" mode="out-in">
-        <router-view />
-      </transition>
     </section>
 
-    <section v-else class="fixed-column">
-      <post-list-tabs />
-    </section>
+    <transition name="fade" mode="out-in">
+      <router-view class="fixed-column" />
+    </transition>
   </div>
 </template>
 
