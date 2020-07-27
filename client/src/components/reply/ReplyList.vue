@@ -48,6 +48,9 @@ export default defineComponent({
     },
     adminView: {
       type: Boolean as () => boolean
+    },
+    sortNewest: {
+      type: Boolean as () => boolean
     }
   },
   components: {
@@ -59,7 +62,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const sortOptions = ref<QueryOptions>({
       orderBy: "createdAt",
-      order: "desc"
+      order: props.sortNewest ? "desc" : "asc"
     });
     const options = computed<ReplyQueryOptions>(() => {
       return {

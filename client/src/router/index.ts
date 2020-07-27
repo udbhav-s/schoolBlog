@@ -65,7 +65,8 @@ const routes: Array<RouteConfig> = [
         name: "comments",
         component: () => import("@/components/comment/CommentList.vue"),
         props: {
-          adminView: true
+          adminView: true,
+          sortNewest: true
         }
       },
       {
