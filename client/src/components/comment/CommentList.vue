@@ -76,7 +76,7 @@ export default defineComponent({
     } = useList<PostComment>(commentService.getAll, 20, options);
 
     const commentAdded = async (comment: PostComment) => {
-      comments.value.push(comment);
+      comments.value.unshift(comment);
     };
 
     const commentEdited = async (comment: PostComment) => {
