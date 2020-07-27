@@ -38,8 +38,6 @@ export class ReplyController {
   ) {}
 
   @ApiOperation({ summary: 'Get all replies' })
-  @UseGuards(LevelGuard)
-  @Level(Levels.Moderator)
   @Get('/all')
   async getAll(
     @Query(new ValidationPipe({ transform: true })) options: ReplyGetOptionsDto,
