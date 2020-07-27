@@ -6,7 +6,7 @@
         <span v-if="post.category" class="font-bold">
           {{ post.category.name }}
         </span>
-        <span v-if="!post.verified" class="text-red-500">
+        <span v-if="!post.verified" class="text-clr-input-danger">
           Unverified
         </span>
       </username>
