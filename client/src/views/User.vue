@@ -9,8 +9,8 @@
       <div>{{ user.email }}</div>
       <div class="text-xl font-semibold">{{ userLevelName }}</div>
 
-      <div class="flex my-2 justify-center space-x-1">
-        <button v-if="isCurrentUser" @click="logout" class="button text-lg">
+      <div v-if="isCurrentUser" class="flex my-2 justify-center space-x-1">
+        <button @click="logout" class="button text-lg">
           Log Out
         </button>
         <button @click="toggleDarkMode" class="button text-lg">
