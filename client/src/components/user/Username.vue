@@ -43,6 +43,6 @@ export default defineComponent({
 
 <style lang="postcss">
 .username:hover img {
-  @apply border-blue-300;
+  @apply border-clr-primary-lightest;
 }
 </style>
