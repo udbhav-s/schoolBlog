@@ -23,6 +23,9 @@ const routes: Array<RouteConfig> = [
             props: {
               searchable: true,
               verified: true
+            },
+            meta: {
+              postListTabs: true
             }
           },
           {
@@ -32,6 +35,9 @@ const routes: Array<RouteConfig> = [
             props: {
               searchable: true,
               verified: false
+            },
+            meta: {
+              postListTabs: true
             }
           },
           {
@@ -42,7 +48,10 @@ const routes: Array<RouteConfig> = [
               searchable: true,
               verified: true,
               categoryId: parseInt(route.params.categoryId)
-            })
+            }),
+            meta: {
+              postListTabs: true
+            }
           },
         ]
       },

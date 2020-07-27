@@ -20,7 +20,7 @@
             :class="{
               'is-active':
                 $route.path === tab.route ||
-                ($route.path === '/' && tab.name === 'Posts')
+                ($route.meta.postListTabs && tab.name === 'Posts')
             }"
             class="tab"
           >
