@@ -9,7 +9,6 @@ import {
   Param,
   ParseIntPipe,
   Post,
-  ForbiddenException,
   NotFoundException,
   UseInterceptors,
   Query,
@@ -27,6 +26,7 @@ import { FormatResponseInterceptor } from '../common/interceptors/formatResponse
 import { FileService } from '../file/file.service';
 import { PostGetOptionsDto } from './dto/postGetOptions.dto';
 import { PostCreateDto } from './dto/postCreate.dto';
+import { PermissionLevels } from 'src/common/util/permissionLevels.enum';
 
 @ApiTags('post')
 @ApiBasicAuth()
@@ -45,31 +45,13 @@ export class PostController {
     @Query(new ValidationPipe({ transform: true })) options: PostGetOptionsDto,
     @Request() req,
   ): Promise<PostModel[]> {
-    // set restrictions for < mod
-    if (req.user.level < Levels.Moderator) {
-      // if user wants to get posts by another user
-      // get only verified posts by that user
-      if (options.userId && options.userId !== req.user.id) {
-        options.verified = true;
-      }
-      // if user wants all posts
-      // get posts which are either verified or by the user themself
-      else if (!options.userId) {
-        options.verifiedOrUser = true;
-        options.userId = req.user.id;
-      }
-    }
-    // if user wants unpublished posts show only theirs
-    if (options.published === false) {
-      options.userId = req.user.id;
-    } else options.published = true;
     // default order newest first
     if (!options.orderBy) {
       options.orderBy = 'createdAt';
       options.order = 'desc';
     }
     // return result
-    return await this.postService.getAll(options);
+    return await this.postService.getAll(options, req.user);
   }
 
   @ApiOperation({ summary: 'Create a blank post draft' })
@@ -99,13 +81,8 @@ export class PostController {
     @Request() req,
   ): Promise<PostModel> {
     // get post to be updated
-    const post = await this.postService.getById(id);
+    const post = await this.postService.getById(id, req.user, PermissionLevels.Edit);
     if (!post) throw new NotFoundException();
-
-    // check if post is by user
-    if (post.userId !== req.user.id) {
-      throw new ForbiddenException();
-    }
 
     // sanitize
     data.body = this.postService.sanitizeBody(data.body);
@@ -130,13 +107,8 @@ export class PostController {
     @Request() req,
   ): Promise<PostModel> {
     // get post to be published
-    const post = await this.postService.getById(id);
+    const post = await this.postService.getById(id, req.user, PermissionLevels.Edit);
     if (!post) throw new NotFoundException();
-
-    // check if post is by user
-    if (post.userId !== req.user.id) {
-      throw new ForbiddenException();
-    }
 
     return await this.postService.publish(id);
   }
@@ -169,9 +141,9 @@ export class PostController {
   @Level(Levels.Reader)
   @Post('/like/:id')
   async like(@Param('id') id: number, @Request() req) {
-    const post = await this.postService.getById(id, req.user.id);
+    const post = await this.postService.getById(id, req.user, PermissionLevels.Access);
     // check if user can access
-    if (!post || !post.canAccess(req.user)) throw new ForbiddenException();
+    if (!post) throw new NotFoundException();
     if (post.isLiked) throw new BadRequestException();
     // return the post
     return await this.postService.like(id, req.user.id);
@@ -183,9 +155,9 @@ export class PostController {
   @Level(Levels.Reader)
   @Post('/unlike/:id')
   async unlike(@Param('id') id: number, @Request() req) {
-    const post = await this.postService.getById(id, req.user.id);
+    const post = await this.postService.getById(id, req.user, PermissionLevels.Access);
     // check if user can access
-    if (!post || !post.canAccess(req.user)) throw new ForbiddenException();
+    if (!post) throw new NotFoundException();
     if (!post.isLiked) throw new BadRequestException();
     // return the post
     return await this.postService.unlike(id, req.user.id);
@@ -195,9 +167,9 @@ export class PostController {
   @UsePipes(ParseIntPipe)
   @Get('/:id')
   async getById(@Param('id') id: number, @Request() req): Promise<PostModel> {
-    const post = await this.postService.getById(id, req.user.id);
+    const post = await this.postService.getById(id, req.user, PermissionLevels.Access);
     // check if user can access
-    if (!post || !post.canAccess(req.user)) throw new ForbiddenException();
+    if (!post) throw new NotFoundException();
     // return the post
     return post;
   }
@@ -206,9 +178,9 @@ export class PostController {
   @UsePipes(ParseIntPipe)
   @Delete('/:id')
   async del(@Param('id') id: number, @Request() req): Promise<PostModel> {
-    const post = await this.postService.getById(id);
+    const post = await this.postService.getById(id, req.user, PermissionLevels.Delete);
     // check if user can access
-    if (!post || !post.canDelete(req.user)) throw new ForbiddenException();
+    if (!post) throw new NotFoundException();
     // remove thumbnail and images
     this.fileService.removePostFiles(post.id);
     // delete and return the post

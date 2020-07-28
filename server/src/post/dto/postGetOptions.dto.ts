@@ -26,7 +26,4 @@ export class PostGetOptionsDto extends GetOptionsDto {
   @IsOptional()
   @IsString()
   search?: string;
-
-  // provided by controller to service
-  verifiedOrUser?: boolean;
 }

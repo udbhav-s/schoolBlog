@@ -43,13 +43,6 @@ export class CommentService {
     return await query;
   }
 
-  async getPost(id: number): Promise<PostModel> {
-    return await this.commentModel
-      .relatedQuery('post')
-      .for(id)
-      .first();
-  }
-
   async create(data: CommentCreateDto): Promise<CommentModel> {
     return await this.commentModel
       .query()

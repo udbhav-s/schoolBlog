@@ -25,6 +25,7 @@ import { CommentCreateDto } from './dto/commentCreate.dto';
 import { LevelGuard } from 'src/common/guards/level.guard';
 import { Level } from 'src/common/decorators/level.decorator';
 import { CommentGetOptionsDto } from './dto/commentGetOptions.dto';
+import { PermissionLevels } from 'src/common/util/permissionLevels.enum';
 
 @ApiTags('comment')
 @ApiBasicAuth()
@@ -45,11 +46,10 @@ export class CommentController {
   ): Promise<CommentModel[]> {
     if (options.postId) {
       // get the post
-      const post = await this.postService.getById(options.postId);
+      const post = await this.postService.getById(options.postId, req.user, PermissionLevels.Access);
       if (!post) throw new NotFoundException();
-      // check if user can access
-      if (!post.canAccess(req.user)) throw new ForbiddenException();
     }
+    else if (req.user.level < Levels.Moderator) throw new ForbiddenException();
     return await this.commentService.getAll(options);
   }
 
@@ -62,9 +62,9 @@ export class CommentController {
     // get comment and post
     const comment = await this.commentService.getById(id);
     if (!comment) throw new NotFoundException();
-    const post = await this.postService.getById(comment.postId);
+    const post = await this.postService.getById(comment.postId, req.user, PermissionLevels.Access);
     // check if user can access post
-    if (!post.canAccess(req.user)) throw new ForbiddenException();
+    if (!post) throw new NotFoundException();
     // return the comment
     return comment;
   }
@@ -77,10 +77,9 @@ export class CommentController {
     @Body(ValidationPipe) data: CommentCreateDto,
     @Request() req,
   ): Promise<CommentModel> {
-    const post = await this.postService.getById(data.postId);
+    const post = await this.postService.getById(data.postId, req.user, PermissionLevels.Access);
+    // check if user can access
     if (!post) throw new NotFoundException();
-    // check if user can comment on post
-    if (!post.canAccess(req.user)) throw new ForbiddenException();
     // create the comment
     data.userId = req.user.id;
     return await this.commentService.create(data);
@@ -116,7 +115,8 @@ export class CommentController {
     // check if comment exists and is by user
     const comment = await this.commentService.getById(id);
     if (!comment) throw new NotFoundException();
-    if (!comment.canDelete(req.user)) throw new ForbiddenException();
+    if (comment.userId !== req.user.id && req.user.level < Levels.Moderator)
+      throw new ForbiddenException();
     // delete comment
     return await this.commentService.del(id);
   }

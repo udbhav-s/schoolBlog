@@ -11,6 +11,7 @@ import { GET_OPTIONS, SEARCH } from '../modifiers';
 
 import { raw } from 'objection';
 import { PostLikeModel } from './postLike.model';
+import { PermissionLevels } from 'src/common/util/permissionLevels.enum';
 
 export class PostModel extends BaseModel {
   static tableName = 'posts';
@@ -32,30 +33,39 @@ export class PostModel extends BaseModel {
   isLiked?: boolean;
   numberOfLikes?: number;
 
-  // checks whether a user can access the post or not
-  canAccess(user: UserModel): boolean {
-    return (
-      (this.verified && this.published) ||
-      this.userId == user.id ||
-      (user.level >= Levels.Moderator && this.published)
-    );
-  }
-
-  canDelete(user: UserModel): boolean {
-    return this.userId == user.id ||
-    (user.level >= Levels.Moderator && this.published);
-  }
-
   static modifiers = {
+    accessFilter(query: QueryBuilder<PostModel>, user: UserModel, level: PermissionLevels) {
+      query.where(function() {
+        // Permissions
+        // Post is by user - edit, delete, access
+        this.orWhere({
+          userId: user.id
+        });
+        // User is moderator and post is published - delete, access
+        if (level === PermissionLevels.Delete || level === PermissionLevels.Access) {
+          if (user.level >= Levels.Moderator) {
+            this.orWhere({
+              published: true
+            });
+          }
+        }
+        // Post is verified and published - access
+        if (level === PermissionLevels.Access) {
+          this.orWhere({
+            verified: true,
+            published: true
+          });
+        }    
+      });
+    },
+
     postGetOptions(query: QueryBuilder<PostModel>, options: PostGetOptionsDto) {
       query.modify(GET_OPTIONS, options);
 
-      if (options.verifiedOrUser && options.userId) {
-        query.where(function() {
-          this.where({ verified: true }).orWhere({ userId: options.userId });
+      if (options.userId) {
+        query.where({
+          userId: options.userId
         });
-      } else if (options.userId) {
-        query.where({ userId: options.userId });
       }
 
       if (options.published === false) {

@@ -25,6 +25,8 @@ import { ReplyCreateDto } from './dto/replyCreate.dto';
 import { LevelGuard } from 'src/common/guards/level.guard';
 import { Level } from 'src/common/decorators/level.decorator';
 import { ReplyGetOptionsDto } from './dto/replyGetOptions.dto';
+import { PostService } from 'src/post/post.service';
+import { PermissionLevels } from 'src/common/util/permissionLevels.enum';
 
 @ApiTags('reply')
 @ApiBasicAuth()
@@ -35,6 +37,7 @@ export class ReplyController {
   constructor(
     private replyService: ReplyService,
     private commentService: CommentService,
+    private postService: PostService
   ) {}
 
   @ApiOperation({ summary: 'Get all replies' })
@@ -48,9 +51,10 @@ export class ReplyController {
       const comment = await this.commentService.getById(options.commentId);
       if (!comment) throw new NotFoundException();
       // check if user can access post
-      const post = await this.commentService.getPost(comment.id);
-      if (!post.canAccess(req.user)) throw new ForbiddenException();
+      const post = await this.postService.getById(comment.postId, req.user, PermissionLevels.Access);
+      if (!post) throw new NotFoundException();
     }
+    else if (req.user.level < Levels.Moderator) throw new ForbiddenException();
     return await this.replyService.getAll(options);
   }
 
@@ -63,9 +67,10 @@ export class ReplyController {
     // get reply, comment & post
     const reply = await this.replyService.getById(id);
     if (!reply) throw new NotFoundException();
-    // get post and check if user can access
-    const post = await this.commentService.getPost(reply.commentId);
-    if (!post.canAccess(req.user)) throw new ForbiddenException();
+    const comment = await this.commentService.getById(reply.commentId);
+    const post = await this.postService.getById(comment.postId, req.user, PermissionLevels.Access);
+    // check if user can acccess
+    if (!post) throw new NotFoundException();
     // return the reply
     return reply;
   }
@@ -82,8 +87,8 @@ export class ReplyController {
     const comment = await this.commentService.getById(data.commentId);
     if (!comment) throw new NotFoundException();
     // check if user can comment on post
-    const post = await this.commentService.getPost(data.commentId);
-    if (!post.canAccess(req.user)) throw new ForbiddenException();
+    const post = await this.postService.getById(comment.postId, req.user, PermissionLevels.Access);
+    if (!post) throw new NotFoundException();
     // create the comment
     data.userId = req.user.id;
     return await this.replyService.create(data);
@@ -119,7 +124,8 @@ export class ReplyController {
     // check if reply exists and is by user
     const reply = await this.replyService.getById(id);
     if (!reply) throw new NotFoundException();
-    if (!reply.canDelete(req.user)) throw new ForbiddenException();
+    if (reply.userId !== req.user.id && req.user.level < Levels.Moderator)
+      throw new ForbiddenException();
     // delete reply
     return await this.replyService.del(id);
   }

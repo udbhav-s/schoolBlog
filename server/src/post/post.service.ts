@@ -5,34 +5,42 @@ import sanitizeHtmlOptions from '../common/util/sanitizeHtmlOptions';
 import { PostModel } from '../database/models/post.model';
 import { PostGetOptionsDto } from './dto/postGetOptions.dto';
 import { PostCreateDto } from './dto/postCreate.dto';
-import { POST_GET_OPTIONS, ATTACH_LIKES } from '../database/modifiers';
+import { POST_GET_OPTIONS, ATTACH_LIKES, ACCESS_FILTER } from '../database/modifiers';
 import { PostLikeModel } from 'src/database/models/postLike.model';
+import { UserModel } from 'src/database/models/user.model';
+import { PermissionLevels } from 'src/common/util/permissionLevels.enum';
 
 @Injectable()
 export class PostService {
   constructor(
     @Inject('PostModel') private postModel: ModelClass<PostModel>,
+    @Inject('UserModel') private userModel: ModelClass<UserModel>,
     @Inject('PostLikeModel') private postLikeModel: ModelClass<PostLikeModel>
   ) {}
 
-  async getById(id: number, userId?: number): Promise<PostModel> {
+  async getById(id: number, user?: UserModel, level?: PermissionLevels): Promise<PostModel> {
     const query = this.postModel
       .query()
       .findById(id)
       .withGraphFetched('[user, category, files]');
     
-    if (userId) query.modify(ATTACH_LIKES, userId);
+    if (user && level) {
+      query.modify(ATTACH_LIKES, user.id);
+      query.modify(ACCESS_FILTER, user, level);
+    }
 
     return await query;
   }
 
-  async getAll(options?: PostGetOptionsDto): Promise<PostModel[]> {
+  async getAll(options?: PostGetOptionsDto, user?: UserModel): Promise<PostModel[]> {
     const query = this.postModel.query();
     // apply options if any
     if (options) {
       query.modify(POST_GET_OPTIONS, options);
     }
-    // add user
+    if (user) {
+      query.modify(ACCESS_FILTER, user, PermissionLevels.Access);
+    }
     query.withGraphFetched('[user, category, files]');
     return await query;
   }

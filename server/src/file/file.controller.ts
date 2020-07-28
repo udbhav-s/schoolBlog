@@ -27,6 +27,7 @@ import * as shortid from 'shortid';
 import { FileModel } from 'src/database/models/file.model';
 import { FormatResponseInterceptor } from 'src/common/interceptors/formatResponse.interceptor';
 import { s3, bucketName } from './s3';
+import { PermissionLevels } from 'src/common/util/permissionLevels.enum';
 
 @ApiTags('file')
 @UseGuards(AuthenticatedGuard)
@@ -47,7 +48,8 @@ export class FileController {
     const file = await this.fileService.getByFilename(filename);
     if (!file) throw new NotFoundException();
     // check if user can access
-    if (!file.post.canAccess(req.user)) throw new ForbiddenException();
+    if (!(await this.postService.getById(file.postId, req.user, PermissionLevels.Access)))
+      throw new ForbiddenException();
 
     if (process.env.STORAGE === 's3') {
       // redirect to a pre signed url to access the file
@@ -78,9 +80,8 @@ export class FileController {
     @Request() req,
   ): Promise<string> {
     // get post
-    const post = await this.postService.getById(body.postId);
+    const post = await this.postService.getById(body.postId, req.user, PermissionLevels.Edit);
     if (!post) throw new NotFoundException();
-    if (!post.canAccess(req.user)) throw new ForbiddenException();
 
     // validate if image
     if (body.type === "image" || body.type === "thumbnail") {
@@ -133,7 +134,8 @@ export class FileController {
     const file = await this.fileService.getByFilename(filename);
     if (!file) throw new NotFoundException();
     // check if user can modify
-    if (!file.post.canDelete(req.user)) throw new ForbiddenException();
+    if (!(await this.postService.getById(file.postId, req.user, PermissionLevels.Edit)))
+      throw new ForbiddenException();
     // delete file from s3
     await this.fileService.deleteFile(filename);
     // delete from database
