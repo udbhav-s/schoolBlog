@@ -40,6 +40,7 @@ export class PostService {
     }
     if (user) {
       query.modify(ACCESS_FILTER, user, PermissionLevels.Access);
+      query.modify(ATTACH_LIKES, user.id);
     }
     query.withGraphFetched('[user, category, files]');
     return await query;
