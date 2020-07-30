@@ -2,7 +2,7 @@ import Vue from "vue";
 import { userService, categoryService } from "@/services";
 import { User, Category } from "@/types";
 
-const store = Vue.observable({
+export const store = Vue.observable({
   user: {} as User,
   categories: [] as Category[],
   darkMode: localStorage.getItem("theme") === "dark"
@@ -64,9 +64,3 @@ export const themeStore = {
     }
   }
 }
-
-export default {
-  store,
-  userStore,
-  categoryStore
-};

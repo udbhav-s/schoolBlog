@@ -5,5 +5,7 @@
 @import "./themes.css";
 @import "./styles.css";
 @import "./animations.css";
+@import "./quill-overrides.css";
+@import "./toasts.css";
 
 @tailwind utilities;

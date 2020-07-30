@@ -1,5 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
+
+:root {
+  --prose-font: 'Bitter'
+}
+
 #main {
-  @apply pt-20;
+  @apply pt-16 min-h-screen;
+}
+
+.prose {
+  font-family: var(--prose-font);
 }
 
 .fixed-column {
@@ -66,34 +76,4 @@
 
 hr {
   @apply border-clr-bg-secondary;
-}
-
-/* quill editor overrides */
-
-#editor .ql-snow.ql-toolbar {
-  background: var(--clr-quill-bg);
-  width: 100%;
-}
-
-#editor .ql-snow.ql-toolbar, #editor .ql-snow.ql-container {
-  border: none;
-}
-
-#editor .ql-toolbar.ql-snow, #editor .ql-header.ql-picker .ql-picker-label, #editor .ql-container .ql-editor {
-  padding-left: 0;
-}
-
-#editor .ql-editor {
-  @apply text-base;
-}
-
-#editor .ql-editor.ql-blank::before {
-  opacity: 0.5;
-  font-style: normal;
-  margin-left: -15px;
-  color: var(--clr-text-light);
-}
-
-#editor .ql-editor > :first-child {
-  margin-top: 0;
 }

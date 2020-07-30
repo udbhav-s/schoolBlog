@@ -1,0 +1,7 @@
+.app-toast-container .toasted.toasted-primary.success {
+  background-color: var(--clr-input-success);
+}
+
+.app-toast-container .toasted.toasted-primary.error {
+  background-color: var(--clr-input-danger);
+}

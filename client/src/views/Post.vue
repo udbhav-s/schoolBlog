@@ -70,8 +70,9 @@ export default defineComponent({
       if ("success" in result) {
         post.value = result.data;
       } else {
-        if (result.status === 403) root.$router.push("/");
-        else root.$toasted.error("Couldn't load post data");
+        if (result.status === 403 || result.status === 404) {
+          root.$router.push({ name: "NotFound" });
+        } else root.$toasted.error("Couldn't load post data");
       }
     };
     loadPost();

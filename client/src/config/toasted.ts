@@ -3,5 +3,6 @@ import Toasted from "vue-toasted";
 
 Vue.use(Toasted, {
   duration: 1500,
-  position: "top-center"
+  position: "top-center",
+  containerClass: "app-toast-container"
 });

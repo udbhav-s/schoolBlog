@@ -203,8 +203,12 @@ export default defineComponent({
         // set post
         post.value = result.data;
       } else {
-        root.$toasted.error("Error loading post");
-        throw result.message;
+        if (result.status === 403 || result.status === 404) {
+          root.$router.push({ name: "NotFound" });
+        } else {
+          root.$toasted.error("Error loading post");
+          throw result.message;
+        }
       }
     };
     watch(

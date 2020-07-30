@@ -56,6 +56,14 @@
           >
             <username :user="currentUser" smallPicture />
           </router-link>
+
+          <div
+            v-if="isActive"
+            @click="isActive = !isActive"
+            class="navbar-item text-clr-input-danger cursor-pointer"
+          >
+            Close
+          </div>
         </ul>
       </nav>
     </div>
@@ -120,7 +128,7 @@ export default defineComponent({
   @apply p-3 block border-b-2 border-transparent;
 }
 .navbar-item:hover {
-  @apply bg-clr-primary-lightest border-clr-primary;
+  @apply border-clr-primary;
 }
 
 #menu {

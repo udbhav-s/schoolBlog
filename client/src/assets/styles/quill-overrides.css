@@ -1,0 +1,31 @@
+#editor .ql-snow.ql-toolbar {
+  background: var(--clr-quill-bg);
+  width: 100%;
+}
+
+#editor .ql-container {
+  font-family: var(--prose-font);
+}
+
+#editor .ql-snow.ql-toolbar, #editor .ql-snow.ql-container {
+  border: none;
+}
+
+#editor .ql-toolbar.ql-snow, #editor .ql-header.ql-picker .ql-picker-label, #editor .ql-container .ql-editor {
+  padding-left: 0;
+}
+
+#editor .ql-editor {
+  @apply text-base;
+}
+
+#editor .ql-editor.ql-blank::before {
+  opacity: 0.5;
+  font-style: normal;
+  margin-left: -15px;
+  color: var(--clr-text-light);
+}
+
+#editor .ql-editor > :first-child {
+  margin-top: 0;
+}

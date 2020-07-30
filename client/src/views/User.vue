@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="user && user.id">
     <div class="p-4 border border-clr-bg-secondary text-center fixed-column">
       <img
         :src="user.picture"

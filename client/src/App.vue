@@ -5,19 +5,23 @@
     <app-header />
 
     <router-view id="main" />
+
+    <app-footer />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
 import AppHeader from "@/components/AppHeader.vue";
+import AppFooter from "@/components/AppFooter.vue";
 import "@/assets/styles/index.css";
 import { categoryStore, themeStore } from "./store";
 
 export default defineComponent({
   name: "App",
   components: {
-    AppHeader
+    AppHeader,
+    AppFooter
   },
 
   setup() {
