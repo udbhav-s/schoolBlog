@@ -18,5 +18,9 @@ module.exports = {
   },
   chainWebpack(config) {
     config.plugin("CompressionPlugin").use(CompressionPlugin);
+    config.plugin("html").tap(args => {
+      args[0].title = "The HPS Blog";
+      return args;
+    });
   }
 };
