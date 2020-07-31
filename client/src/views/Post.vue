@@ -1,5 +1,13 @@
 <template>
   <div class="section fixed-column post-page" v-if="post">
+    <div
+      v-if="post.user.id === currentUser.id && !post.verified && !isModOrAbove"
+      class="text-clr-text-light my-2"
+    >
+      <font-awesome-icon icon="info-circle" />
+      This post has been submitted for verification. Once a moderator approves
+      it, it will be visible to all other users in their feed.
+    </div>
     <h1 class="text-4xl text-clr-text-dark md:text-5xl leading-tight font-bold">
       {{ post.title }}
     </h1>
@@ -18,7 +26,10 @@
       <img :src="`/api/file/${post.thumbnail}`" class="w-full" />
     </div>
 
-    <div class="prose prose-lg max-w-full mt-4" v-html="post.body"></div>
+    <div
+      class="prose prose-lg font-serif max-w-full mt-4"
+      v-html="post.body"
+    ></div>
 
     <div v-if="post.attachments && post.attachments.length > 0">
       <h2 class="text-3xl my-6 font-bold">Attachments</h2>
@@ -62,6 +73,8 @@ export default defineComponent({
 
   setup(props, { root }) {
     const isMemberOrAbove = computed(userStore.getters.isMemberOrAbove);
+    const isModOrAbove = computed(userStore.getters.isModOrAbove);
+    const currentUser = computed(userStore.getters.user);
     const post = ref<Post>(null);
 
     const loadPost = async () => {
@@ -105,13 +118,15 @@ export default defineComponent({
 
     return {
       isMemberOrAbove,
+      isModOrAbove,
       post,
       loadPost,
       postDeleted,
       postVerified,
       postUnverified,
       postLiked,
-      postUnliked
+      postUnliked,
+      currentUser
     };
   },
 

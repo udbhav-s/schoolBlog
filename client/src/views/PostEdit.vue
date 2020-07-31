@@ -102,6 +102,12 @@
           </button>
         </div>
       </div>
+
+      <div v-if="!isModOrAbove" class="text-clr-text-light">
+        <font-awesome-icon icon="info-circle" />
+        Once you publish the post, it will be submitted for verification. It
+        will be visible to other users when a moderator approves it.
+      </div>
     </div>
   </div>
 </template>
@@ -113,7 +119,7 @@ import Spinner from "@/components/Spinner.vue";
 import { postService, fileService } from "@/services";
 import { defineComponent, ref, computed, watch } from "@vue/composition-api";
 import { PostCreate, Category, ImageDropData } from "@/types";
-import { categoryStore } from "@/store";
+import { categoryStore, userStore } from "@/store";
 
 // quill
 import Quill from "quill";
@@ -150,6 +156,7 @@ export default defineComponent({
     const quillOptions = ref(quillConfig);
     const thumbnail = ref<HTMLInputElement>(null);
     const imageUploading = ref<boolean>(false);
+    const isModOrAbove = ref<boolean>(userStore.getters.isModOrAbove);
 
     // reload categories
     categoryStore.mutations.loadCategories();
@@ -382,7 +389,8 @@ export default defineComponent({
       removeThumbnail,
       filePondOptions,
       attachedFiles,
-      imageUploading
+      imageUploading,
+      isModOrAbove
     };
   }
 });

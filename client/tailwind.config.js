@@ -25,6 +25,9 @@ module.exports = {
         "clr-input-danger-active": "var(--clr-input-danger-active)",
 
         "clr-quill-bg": "var(--clr-quill-bg)"
+      },
+      fontFamily: {
+        serif: ["var(--font-serif)", "Georgia", "Cambria", "Times", "serif"]
       }
     },
     typography: {

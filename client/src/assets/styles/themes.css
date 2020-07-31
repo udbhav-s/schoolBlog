@@ -1,4 +1,6 @@
 :root {
+  --font-serif: 'Bitter';
+
   --clr-text: theme("colors.gray.700");
   --clr-text-dark: theme("colors.gray.800");
   --clr-text-light: theme("colors.gray.600");

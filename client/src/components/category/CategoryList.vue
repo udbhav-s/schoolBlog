@@ -19,7 +19,7 @@
     </div>
     <div v-else class="flex items-center justify-center space-x-2">
       <div>
-        <input v-model="form.name" type="text" class="input-border" />
+        <input v-model="form.name" type="text" class="input" />
       </div>
       <div>
         <button @click="addCategory" class="button">
