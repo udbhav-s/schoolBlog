@@ -10,6 +10,7 @@
         <div
           class="border border-solid border-gray-300 text-gray-600 font-bold rounded p-2"
         >
+          <font-awesome-icon icon="download" />
           {{ attachment }}
         </div>
       </a>

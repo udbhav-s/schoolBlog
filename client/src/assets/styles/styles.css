@@ -5,7 +5,7 @@
 }
 
 #main {
-  @apply pt-16 min-h-screen;
+  @apply pt-16;
 }
 
 .prose {
@@ -76,4 +76,10 @@
 
 hr {
   @apply border-clr-bg-secondary;
+}
+
+/* filepond override - dont show size */
+
+#app .filepond--file-info-sub {
+  display: none;
 }

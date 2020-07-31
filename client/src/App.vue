@@ -4,7 +4,9 @@
 
     <app-header />
 
-    <router-view id="main" />
+    <div class="min-h-screen">
+      <router-view id="main" />
+    </div>
 
     <app-footer />
   </div>
