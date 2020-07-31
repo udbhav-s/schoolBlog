@@ -25,9 +25,9 @@ import { ApiTags, ApiOperation, ApiBasicAuth } from '@nestjs/swagger';
 import { LevelGuard } from 'src/common/guards/level.guard';
 import { Level } from 'src/common/decorators/level.decorator';
 import { Levels } from 'src/common/util/level.enum';
-import { GetOptionsDto } from 'src/common/dto/getOptions.dto';
 // import { GoogleSamlGuard } from 'src/common/guards/saml.guard';
 import { GoogleOAuthGuard } from 'src/common/guards/oauth.guard';
+import { UserGetOptionsDto } from './dto/userGetOptions.dto';
 
 @ApiTags('user')
 @UseInterceptors(FormatResponseInterceptor)
@@ -81,11 +81,10 @@ export class UserController {
 
   @ApiOperation({ summary: 'Get all users' })
   @ApiBasicAuth()
-  @UseGuards(AuthenticatedGuard, LevelGuard)
-  @Level(Levels.Moderator)
+  @UseGuards(AuthenticatedGuard)
   @Get('/all')
   async getAll(
-    @Query(new ValidationPipe({ transform: true })) options: GetOptionsDto,
+    @Query(new ValidationPipe({ transform: true })) options: UserGetOptionsDto
   ): Promise<UserModel[]> {
     return await this.userService.getAll(options);
   }

@@ -36,7 +36,7 @@ import Username from "@/components/user/Username.vue";
 import Spinner from "@/components/Spinner.vue";
 import ListQueryOptions from "@/components/ListQueryOptions.vue";
 import { userService } from "@/services";
-import { defineComponent, ref } from "@vue/composition-api";
+import { defineComponent, ref, computed } from "@vue/composition-api";
 import { User, QueryOptions } from "@/types";
 import useList from "@/composables/use-list";
 
@@ -51,13 +51,23 @@ export default defineComponent({
     showListOptions: {
       type: Boolean as () => boolean,
       default: true
+    },
+    minLevel: {
+      type: Number as () => number
     }
   },
 
-  setup() {
+  setup(props) {
     const sortOptions = ref<Partial<QueryOptions>>({
       orderBy: "createdAt",
       order: "desc"
+    });
+
+    const options = computed(() => {
+      return {
+        ...sortOptions.value,
+        minLevel: props.minLevel
+      };
     });
 
     const {
@@ -65,7 +75,7 @@ export default defineComponent({
       hasMoreItems: hasMoreUsers,
       loading,
       loadItems: loadUsers
-    } = useList<User>(userService.getAll, 20, sortOptions);
+    } = useList<User>(userService.getAll, 20, options);
 
     return {
       users,

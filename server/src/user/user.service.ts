@@ -1,9 +1,9 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { ModelClass } from 'objection';
 import { UserModel } from '../database/models/user.model';
-import { GetOptionsDto } from 'src/common/dto/getOptions.dto';
 import { GET_OPTIONS } from 'src/database/modifiers';
 import { CreateProfileData } from 'src/auth/dto/createProfileData.dto';
+import { UserGetOptionsDto } from './dto/userGetOptions.dto';
 
 @Injectable()
 export class UserService {
@@ -20,9 +20,14 @@ export class UserService {
       .first();
   }
 
-  async getAll(options?: GetOptionsDto): Promise<UserModel[]> {
+  async getAll(options?: UserGetOptionsDto): Promise<UserModel[]> {
     const query = this.userModel.query();
-    if (options) query.modify(GET_OPTIONS, options);
+    if (options) {
+      query.modify(GET_OPTIONS, options);
+      if (options.minLevel) {
+        query.where("level", ">=", options.minLevel);
+      }
+    }
     return await query;
   }
 
