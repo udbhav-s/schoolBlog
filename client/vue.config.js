@@ -18,6 +18,7 @@ module.exports = {
   },
   chainWebpack(config) {
     config.plugin("CompressionPlugin").use(CompressionPlugin);
+    config.plugins.delete("prefetch");
     config.plugin("html").tap(args => {
       args[0].title = "The HPS Blog";
       return args;
