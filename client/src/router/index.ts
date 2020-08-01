@@ -14,13 +14,21 @@ const routes: Array<RouteConfig> = [
     children: [
       {
         path: "/",
-        component: () => import(/* webpackChunkName: "postListTabs" */ "@/components/post/PostListTabs.vue"),
+        component: () => import(
+          /* webpackChunkName: "postListTabs" */
+          /* webpackPrefetch: true */
+          "@/components/post/PostListTabs.vue"
+        ),
         children: [
           {
             path: "/",
             alias: "all",
             name: "all",
-            component: () => import(/* webpackChunkName: "postList" */ "@/components/post/PostList.vue"),
+            component: () => import(
+              /* webpackChunkName: "postList" */
+              /* webpackPrefetch: true */
+              "@/components/post/PostList.vue"
+            ),
             props: {
               searchable: true,
               verified: true
@@ -81,7 +89,7 @@ const routes: Array<RouteConfig> = [
       {
         path: "categories",
         name: "categories",
-        component: () => import(/* webpackChunkName: "categryList" */ "@/components/category/CategoryList.vue")
+        component: () => import(/* webpackChunkName: "categoryList" */ "@/components/category/CategoryList.vue")
       }
     ]
   },
@@ -95,7 +103,6 @@ const routes: Array<RouteConfig> = [
     name: "EditPost",
     component: () => import(
       /* webpackChunkName: "postEdit" */
-      /* webpackPrefetch: false */ 
       "@/views/PostEdit.vue"
     ),
     props: route => ({
