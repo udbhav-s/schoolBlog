@@ -3,6 +3,7 @@ import VueRouter, { RouteConfig } from "vue-router";
 import Home from "@/views/Home.vue";
 import { userStore } from "@/store";
 import { userService } from "@/services";
+import loginRedirect from "@/util/loginRedirect";
 
 Vue.use(VueRouter);
 
@@ -13,13 +14,13 @@ const routes: Array<RouteConfig> = [
     children: [
       {
         path: "/",
-        component: () => import("@/components/post/PostListTabs.vue"),
+        component: () => import(/* webpackChunkName: "postListTabs" */ "@/components/post/PostListTabs.vue"),
         children: [
           {
             path: "/",
             alias: "all",
             name: "all",
-            component: () => import("@/components/post/PostList.vue"),
+            component: () => import(/* webpackChunkName: "postList" */ "@/components/post/PostList.vue"),
             props: {
               searchable: true,
               verified: true
@@ -31,7 +32,7 @@ const routes: Array<RouteConfig> = [
           {
             path: "/unverified",
             name: "unverified",
-            component: () => import("@/components/post/PostList.vue"),
+            component: () => import(/* webpackChunkName: "postList" */ "@/components/post/PostList.vue"),
             props: {
               searchable: true,
               verified: false
@@ -43,7 +44,7 @@ const routes: Array<RouteConfig> = [
           {
             path: "/category/:categoryId",
             name: "category",
-            component: () => import("@/components/post/PostList.vue"),
+            component: () => import(/* webpackChunkName: "postList" */ "@/components/post/PostList.vue"),
             props: route => ({
               searchable: true,
               verified: true,
@@ -58,12 +59,12 @@ const routes: Array<RouteConfig> = [
       {
         path: "users",
         name: "users",
-        component: () => import("@/components/user/UserList.vue")
+        component: () => import(/* webpackChunkName: "userList" */ "@/components/user/UserList.vue")
       },
       {
         path: "comments",
         name: "comments",
-        component: () => import("@/components/comment/CommentList.vue"),
+        component: () => import(/* webpackChunkName: "commentList" */ "@/components/comment/CommentList.vue"),
         props: {
           adminView: true,
           sortNewest: true
@@ -72,7 +73,7 @@ const routes: Array<RouteConfig> = [
       {
         path: "replies",
         name: "replies",
-        component: () => import("@/components/reply/ReplyList.vue"),
+        component: () => import(/* webpackChunkName: "replyList" */ "@/components/reply/ReplyList.vue"),
         props: {
           adminView: true
         }
@@ -80,19 +81,23 @@ const routes: Array<RouteConfig> = [
       {
         path: "categories",
         name: "categories",
-        component: () => import("@/components/category/CategoryList.vue")
+        component: () => import(/* webpackChunkName: "categryList" */ "@/components/category/CategoryList.vue")
       }
     ]
   },
   {
     path: "/about",
     name: "About",
-    component: () => import("@/views/About.vue")
+    component: () => import(/* webpackChunkName: "about" */ "@/views/About.vue")
   },
   {
     path: "/post/edit/:id",
     name: "EditPost",
-    component: () => import("@/views/PostEdit.vue"),
+    component: () => import(
+      /* webpackChunkName: "postEdit" */
+      /* webpackPrefetch: false */ 
+      "@/views/PostEdit.vue"
+    ),
     props: route => ({
       postId: parseInt(route.params.id)
     })
@@ -100,7 +105,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/post/:id",
     name: "Post",
-    component: () => import("@/views/Post.vue"),
+    component: () => import(/* webpackChunkName: "post" */ "@/views/Post.vue"),
     props: route => ({
       id: parseInt(route.params.id)
     })
@@ -108,7 +113,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/user/:id",
     name: "User",
-    component: () => import("@/views/User.vue"),
+    component: () => import(/* webpackChunkName: "user" */ "@/views/User.vue"),
     props: route => ({
       userId: parseInt(route.params.id)
     })
@@ -116,7 +121,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/user/",
     name: "CurrentUser",
-    component: () => import("@/views/User.vue"),
+    component: () => import(/* webpackChunkName: "user" */ "@/views/User.vue"),
     props: () => ({
       userId: userStore.getters.user().id
     })
@@ -124,12 +129,12 @@ const routes: Array<RouteConfig> = [
   {
     path: "/login",
     name: "Login",
-    component: () => import("@/views/Login.vue")
+    component: () => import(/* webpackChunkName: "login" */ "@/views/Login.vue")
   },
   {
     path: "*",
     name: "NotFound",
-    component: () => import("@/views/NotFound.vue")
+    component: () => import(/* webpackChunkName: "notFound" */ "@/views/NotFound.vue")
   }
 ];
 
@@ -148,10 +153,10 @@ router.beforeEach(async (to, _from, next) => {
       if ("success" in result) {
         // set the user in store
         userStore.mutations.setUser(result.data);
-      } else return window.location.replace("/api/user/oauth/google") // next({ name: "Login" });
+      } else return loginRedirect(); // next({ name: "Login" });
     } catch (error) {
       // if not authenticated redirect to login
-      return window.location.replace("api/user/oauth/google") // next({ name: "Login" });
+      return loginRedirect(); // next({ name: "Login" });
     }
   } else return next();
   // continute to route
