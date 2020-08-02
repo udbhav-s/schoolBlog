@@ -53,11 +53,11 @@ export default defineComponent({
 
     const setReply = async (id: number) => {
       // get reply
-      const result = await replyService.getById(id);
-      if ("success" in result) form.body = result.data.body;
-      else {
+      try {
+        const result = await replyService.getById(id);
+        form.body = result.body;
+      } catch {
         root.$toasted.error("Couldn't get reply data");
-        throw result.message;
       }
     };
     if (props.editMode && props.editId) setReply(props.editId);
@@ -66,22 +66,20 @@ export default defineComponent({
       // set postId prop to form data
       form.commentId = props.commentId;
       // post comment
-      let result;
-      if (props.editMode && props.editId) {
-        result = await replyService.update(props.editId, form);
-      } else {
-        result = await replyService.create(form);
-      }
-
-      if ("success" in result) {
+      try {
+        let result;
+        if (props.editMode && props.editId) {
+          result = await replyService.update(props.editId, form);
+        } else {
+          result = await replyService.create(form);
+        }
         // clear input
         form.body = "";
         // emit event
-        if (props.editMode) emit("replyEdited", result.data);
-        else emit("replyAdded", result.data);
-      } else {
+        if (props.editMode) emit("replyEdited", result);
+        else emit("replyAdded", result);
+      } catch {
         root.$toasted.error("Error while submitting reply");
-        throw result.error;
       }
     };
 

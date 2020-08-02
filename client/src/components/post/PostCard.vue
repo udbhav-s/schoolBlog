@@ -26,7 +26,7 @@
       </div>
       <div v-else class="my-2"></div>
 
-      <div v-html="postPreview" class="prose max-w-full"></div>
+      <div v-html="postPreview" class="prose font-serif max-w-full"></div>
 
       <router-link
         :to="{

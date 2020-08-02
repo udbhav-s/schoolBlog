@@ -113,7 +113,6 @@
 </template>
 
 <script lang="ts">
-import HeroSection from "@/components/HeroSection.vue";
 import Modal from "@/components/Modal.vue";
 import Spinner from "@/components/Spinner.vue";
 import { postService, fileService } from "@/services";
@@ -138,7 +137,6 @@ const FilePond = vueFilePond();
 export default defineComponent({
   name: "PostEdit",
   components: {
-    HeroSection,
     quillEditor,
     FilePond,
     Modal,
@@ -205,16 +203,15 @@ export default defineComponent({
 
     // load the post
     const loadPost = async (id: number) => {
-      const result = await postService.getById(id);
-      if ("success" in result) {
+      try {
+        const result = await postService.getById(id);
         // set post
-        post.value = result.data;
-      } else {
-        if (result.status === 403 || result.status === 404) {
+        post.value = result;
+      } catch (err) {
+        if (err.statusCode === 403 || err.statusCode === 404) {
           root.$router.push({ name: "NotFound" });
         } else {
           root.$toasted.error("Error loading post");
-          throw result.message;
         }
       }
     };
@@ -230,19 +227,19 @@ export default defineComponent({
 
       imageUploading.value = true;
 
-      const result = await fileService.uploadFile(post.value.id, file, "image");
-
-      imageUploading.value = false;
-
-      if (!("success" in result)) {
+      let filename;
+      try {
+        filename = await fileService.uploadFile(post.value.id, file, "image");
+      } catch (err) {
         root.$toasted.error("Error uploading file");
-        if (result.status === 413) {
+        if (err.status === 413) {
           // 413 request entitiy too large
           root.$toasted.error("File too large\nLimit is 100MB");
         }
-        throw result.message;
+        throw err.message;
       }
-      const filename = result.data;
+
+      imageUploading.value = false;
 
       // insert the image in the editor
       const range = editor.getSelection();
@@ -291,27 +288,27 @@ export default defineComponent({
 
         imageUploading.value = true;
 
-        const result = await fileService.uploadFile(
-          post.value.id,
-          file,
-          "thumbnail"
-        );
+        try {
+          const result = await fileService.uploadFile(
+            post.value.id,
+            file,
+            "thumbnail"
+          );
+          // assign thumbnail
+          post.value = Object.assign({}, post.value, {
+            thumbnail: result
+          });
+        } catch (err) {
+          if (err.status === 413) {
+            // 413 request entitiy too large
+            root.$toasted.error("File too large\nLimit is 100MB");
+          } else {
+            root.$toasted.error("Error uploading thumbnail");
+            throw err.message;
+          }
+        }
 
         imageUploading.value = false;
-
-        if ("success" in result) {
-          // since thumbnail might not exist
-          // and new properties do not trigger reactivity
-          post.value = Object.assign({}, post.value, {
-            thumbnail: result.data
-          });
-        } else if (result.status === 413) {
-          // 413 request entitiy too large
-          root.$toasted.error("File too large\nLimit is 100MB");
-        } else {
-          root.$toasted.error("Error uploading thumbnail");
-          throw result.message;
-        }
       }
     };
 
@@ -330,22 +327,20 @@ export default defineComponent({
     const savePost = async () => {
       if (!post.value?.id) return;
 
-      const result = await postService.update(post.value.id, post.value);
-      if ("success" in result) {
+      try {
+        await postService.update(post.value.id, post.value);
         root.$toasted.success("Saved!");
-      } else {
+      } catch {
         root.$toasted.error("Error saving result");
-        throw result.message;
       }
     };
 
     const publishPost = async () => {
       if (!post.value?.id) return;
 
-      await savePost();
-
-      const result = await postService.publish(post.value.id);
-      if ("success" in result) {
+      try {
+        await savePost();
+        await postService.publish(post.value.id);
         root.$toasted.success("Post published!");
         root.$router.push({
           name: "Post",
@@ -353,9 +348,8 @@ export default defineComponent({
             id: post.value.id.toString()
           }
         });
-      } else {
+      } catch {
         root.$toasted.error("Error publishing post");
-        throw result.message;
       }
     };
 
@@ -364,15 +358,14 @@ export default defineComponent({
       if (!confirm("Are you sure you want to permanently delete this post?"))
         return;
 
-      const result = await postService.delete(post.value.id);
-      if ("success" in result) {
+      try {
+        await postService.delete(post.value.id);
         root.$toasted.success("Post deleted");
         // redirect
         if (post.value.published) root.$router.push("/");
         else root.$router.push({ name: "CurrentUser" });
-      } else {
+      } catch {
         root.$toasted.error("Error deleting post");
-        throw result.message;
       }
     };
 

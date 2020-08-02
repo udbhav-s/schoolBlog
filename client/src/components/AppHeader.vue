@@ -90,17 +90,16 @@ export default defineComponent({
     const createPost = async () => {
       isActive.value = false;
 
-      const result = await postService.create();
-      if ("success" in result) {
+      try {
+        const result = await postService.create();
         root.$router.push({
           name: "EditPost",
           params: {
-            id: result.data.id.toString()
+            id: result.id.toString()
           }
         });
-      } else {
+      } catch {
         root.$toasted.error("Error creating post");
-        throw result.message;
       }
     };
 

@@ -99,9 +99,12 @@ export default defineComponent({
     const isDarkMode = computed(themeStore.getters.darkMode);
 
     const loadUser = async () => {
-      const result = await userService.getById(props.userId);
-      if ("success" in result) user.value = result.data;
-      else throw result.error;
+      try {
+        const result = await userService.getById(props.userId);
+        user.value = result;
+      } catch {
+        root.$toasted.error("Error loading user");
+      }
     };
     watch(
       () => props.userId,
@@ -123,10 +126,8 @@ export default defineComponent({
           user.value.id,
           user.value.level
         );
-        if ("success" in result) {
-          user.value = result.data;
-          root.$toasted.success("User level changed");
-        } else throw result.message;
+        user.value = result;
+        root.$toasted.success("User level changed");
       } catch (err) {
         root.$toasted.error("An error occured");
       }

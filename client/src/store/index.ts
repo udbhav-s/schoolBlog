@@ -38,10 +38,7 @@ export const categoryStore = {
   mutations: {
     loadCategories: async () => {
       const result = await categoryService.getAll();
-      if ("error" in result) throw result;
-      else {
-        store.categories = result.data;
-      }
+      store.categories = result;
     }
   }
 }

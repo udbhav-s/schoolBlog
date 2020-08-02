@@ -109,32 +109,32 @@ export default defineComponent({
       if (!confirm("Are you sure you want to permanently delete this post?"))
         return;
 
-      const result = await postService.delete(props.post.id);
-      if ("success" in result) {
+      try {
+        await postService.delete(props.post.id);
         root.$toasted.success("Post deleted");
         emit("postDeleted");
-      } else {
-        root.$toasted.error(result.message);
+      } catch {
+        root.$toasted.error("Error deleting post");
       }
     };
 
     const verifyPost = async () => {
-      const result = await postService.verify(props.post.id);
-      if ("success" in result) {
+      try {
+        await postService.verify(props.post.id);
         root.$toasted.success("Post verified!");
         emit("post-verified");
-      } else {
-        root.$toasted.error(result.message);
+      } catch {
+        root.$toasted.error("An error occured");
       }
     };
 
     const unverifyPost = async () => {
-      const result = await postService.unverify(props.post.id);
-      if ("success" in result) {
+      try {
+        await postService.unverify(props.post.id);
         root.$toasted.success("Post unverified");
         emit("post-unverified");
-      } else {
-        root.$toasted.error(result.message);
+      } catch {
+        root.$toasted.error("An error occured");
       }
     };
 
@@ -143,8 +143,9 @@ export default defineComponent({
         // optimistic update
         emit("post-unliked");
         // like
-        const result = await postService.unlike(props.post.id);
-        if (!("success" in result)) {
+        try {
+          await postService.unlike(props.post.id);
+        } catch {
           root.$toasted.error("An error occured");
           emit("post-liked");
         }
@@ -152,8 +153,9 @@ export default defineComponent({
         // optimistic update
         emit("post-liked");
         // like
-        const result = await postService.like(props.post.id);
-        if (!("success" in result)) {
+        try {
+          await postService.like(props.post.id);
+        } catch {
           root.$toasted.error("An error occured");
           emit("post-unliked");
         }

@@ -139,6 +139,15 @@ const routes: Array<RouteConfig> = [
     component: () => import(/* webpackChunkName: "login" */ "@/views/Login.vue")
   },
   {
+    path: "/offline",
+    name: "Offline",
+    component: () => import(
+      /* webpackChunkName: "offline" */
+      /* webpackPrefetch: true */
+      "@/views/Offline.vue"
+    )
+  },
+  {
     path: "*",
     name: "NotFound",
     component: () => import(/* webpackChunkName: "notFound" */ "@/views/NotFound.vue")
@@ -156,15 +165,9 @@ router.beforeEach(async (to, _from, next) => {
     // the user still might be authenticated
     // since the store is reset on page refresh
     try {
-      const result = await userService.getCurrent();
-      if ("success" in result) {
-        // set the user in store
-        userStore.mutations.setUser(result.data);
-      } else return loginRedirect(); // next({ name: "Login" });
-    } catch (error) {
-      // if not authenticated redirect to login
-      return loginRedirect(); // next({ name: "Login" });
-    }
+      const user = await userService.getCurrent();
+      userStore.mutations.setUser(user);
+    } catch {};
   } else return next();
   // continute to route
   return next();

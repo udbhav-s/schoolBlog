@@ -1,20 +1,20 @@
 import api from "./apiService";
-import { User, ApiResponse, QueryOptions } from "@/types";
+import { User, QueryOptions } from "@/types";
 
 export const userService = {
   getCurrent() {
-    return api.get<ApiResponse<User>>("/user/current");
+    return api.get<User>("/user/current");
   },
   getById(id: number) {
-    return api.get<ApiResponse<User>>(`/user/${id}`);
+    return api.get<User>(`/user/${id}`);
   },
   getAll(options?: QueryOptions) {
-    return api.get<ApiResponse<User[]>>(`/user/all`, { params: options });
+    return api.get<User[]>(`/user/all`, { params: options });
   },
   logout() {
     return api.get("/user/logout");
   },
   setLevel(id: number, level: number) {
-    return api.post<ApiResponse<User>>(`/user/level/${id}`, { level });
+    return api.post<User>(`/user/level/${id}`, { level });
   }
 };

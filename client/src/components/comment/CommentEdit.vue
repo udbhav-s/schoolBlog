@@ -52,11 +52,10 @@ export default defineComponent({
     });
 
     const setComment = async (id: number) => {
-      const result = await commentService.getById(id);
-      if ("success" in result) form.body = result.data.body;
-      else {
+      try {
+        form.body = (await commentService.getById(id)).body;
+      } catch {
         root.$toasted.error("Error while getting comment data");
-        throw result.message;
       }
     };
     if (props.editMode && props.editId) setComment(props.editId);
@@ -66,22 +65,20 @@ export default defineComponent({
       form.postId = props.postId;
 
       // post comment
-      let result;
-      if (props.editMode && props.editId) {
-        result = await commentService.update(props.editId, form);
-      } else {
-        result = await commentService.create(form);
-      }
-
-      if ("success" in result) {
+      try {
+        let updated;
+        if (props.editMode && props.editId) {
+          updated = await commentService.update(props.editId, form);
+        } else {
+          updated = await commentService.create(form);
+        }
         // clear input
         form.body = "";
         // emit event
-        if (props.editMode) emit("commentEdited", result.data);
-        else emit("commentAdded", result.data);
-      } else {
-        root.$toasted.error(result.message);
-        throw result;
+        if (props.editMode) emit("commentEdited", updated);
+        else emit("commentAdded", updated);
+      } catch {
+        root.$toasted.error("Error posting comment");
       }
     };
 

@@ -1,8 +1,8 @@
 import { watch, ref, Ref } from "@vue/composition-api";
-import { QueryOptions, ApiResponse } from '@/types';
+import { QueryOptions } from '@/types';
 
 export default function useList<T>(
-  loadFunction: (opts: QueryOptions) => Promise<ApiResponse<T[]>>,
+  loadFunction: (opts: QueryOptions) => Promise<T[]>,
   limit: number = 20,
   queryOptions?: Ref<Partial<QueryOptions>>
 ) {
@@ -26,19 +26,21 @@ export default function useList<T>(
       ...options
     };
 
-    // if (props.userId) opts.userId = props.userId;
-    // if (props.drafts) opts.published = false;
-
     loading.value = true;
-    const result = await loadFunction(opts);
-    loading.value = false;
-    if (!("success" in result)) throw result.message;
 
-    if (result.data.length > 0) {
-      items.value.push(...result.data);
-      options.offset += options.limit;
+    try {
+      const result = await loadFunction(opts);
+      if (result.length > 0) {
+        items.value.push(...result);
+        options.offset += options.limit;
+      }
+      if (result.length < options.limit) hasMoreItems.value = false;
+    } catch (err) {
+      loading.value = false;
+      throw err;
     }
-    if (result.data.length < options.limit) hasMoreItems.value = false;
+
+    loading.value = false;
   };
 
   if (queryOptions && queryOptions.value) {

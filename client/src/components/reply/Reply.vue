@@ -94,13 +94,12 @@ export default defineComponent({
         return;
 
       // delete the reply
-      const result = await replyService.delete(props.reply.id);
-      if ("success" in result) {
+      try {
+        const deletedId = await replyService.delete(props.reply.id);
         root.$toasted.success("Reply deleted");
-        emit("replyDeleted", result.data);
-      } else {
+        emit("replyDeleted", deletedId);
+      } catch {
         root.$toasted.error("Error deleting reply");
-        throw result;
       }
     };
 
