@@ -21,7 +21,7 @@
           v-model="post.body"
           :options="quillOptions"
           @ready="editorReady"
-          class="prose prose-lg"
+          class="prose prose-lg font-serif"
         />
       </div>
 
