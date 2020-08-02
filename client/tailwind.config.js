@@ -44,6 +44,9 @@ module.exports = {
           blockquote: {
             color: "clr-text"
           },
+          h1: {
+            color: "clr-text-dark"
+          },
           h2: {
             color: "clr-text-dark"
           },
