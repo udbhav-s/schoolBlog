@@ -124,10 +124,10 @@ export default defineComponent({
 }
 
 .navbar-item {
-  @apply p-3 block border-b-2 border-transparent;
+  @apply p-3 block;
 }
 .navbar-item:hover {
-  @apply border-clr-primary;
+  @apply bg-clr-bg-tertiary;
 }
 
 #menu {

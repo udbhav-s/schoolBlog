@@ -117,7 +117,7 @@ export default defineComponent({
 
     const logout = async () => {
       await userStore.mutations.logout();
-      root.$router.push("/login");
+      root.$router.push({ name: "Login" });
     };
 
     const setUserLevel = async () => {

@@ -9,6 +9,7 @@ module.exports = {
 
         "clr-bg": "var(--clr-bg)",
         "clr-bg-secondary": "var(--clr-bg-secondary)",
+        "clr-bg-tertiary": "var(--clr-bg-tertiary)",
 
         "clr-primary": "var(--clr-primary)",
         "clr-primary-lightest": "var(--clr-primary-lightest)",

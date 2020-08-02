@@ -32,9 +32,8 @@ api.interceptors.response.use(
     }
     // redirect to server auth route if 401
     else if (res.response.status === 401) {
-      app.$toasted.success("Logging in");
-      loginRedirect();
-      return;
+      app.$router.push({ name: "Login" });
+      throw new Error();
     }
     // pass any other errors along
     else if (res.response.data?.message instanceof Array) {

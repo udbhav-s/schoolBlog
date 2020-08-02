@@ -7,6 +7,7 @@
 
   --clr-bg: theme("colors.white");
   --clr-bg-secondary: theme("colors.gray.200");
+  --clr-bg-tertiary: theme("colors.gray.300");
 
   --clr-primary: theme("colors.blue.600");
   --clr-primary-lightest: theme("colors.blue.100");
@@ -32,6 +33,7 @@
 
   --clr-bg: #222831;
   --clr-bg-secondary: #282f39;
+  --clr-bg-tertiary: theme("colors.gray.800");
 
   --clr-primary: theme("colors.blue.600");
   --clr-primary-lightest: theme("colors.blue.900");

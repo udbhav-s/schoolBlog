@@ -23,8 +23,7 @@ export const userStore = {
     },
 
     async logout() {
-      const result = await userService.logout();
-      if (!result.success) throw result;
+      await userService.logout();
       store.user = {} as User;
     }
   }
