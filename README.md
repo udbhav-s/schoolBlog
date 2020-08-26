@@ -43,11 +43,6 @@ npm install
 npm run start:dev
 ```
 
-## Doc
-This project is written written in [TypeScript](https://www.typescriptlang.org/), a superset of JavaScript which adds support for types and additional features. This helps keep the codebase maintainable, easy to understand, and self-documenting. It also makes errors much easier to catch and helps web developers hold on to the last few strands of sanity they have left.
-
-The backend is a Node.js server built on NestJS, a framework written for TypeScript.
-
 ## Detailed setup
 Install [Node.js](https://nodejs.org/en/), and [PostgreSQL](https://www.postgresql.org/). Create a new database in postgres and make sure postgres is running by connecting to it using pgAdmin.
 Also make sure [git](https://git-scm.com/) is installed.
