@@ -40,7 +40,7 @@
             id: post.id
           }
         }"
-        class="block text-center text-blue-600 my-2"
+        class="block text-center text-clr-primary my-2"
       >
         Read Full
       </router-link>
