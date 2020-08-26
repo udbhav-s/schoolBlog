@@ -26,12 +26,13 @@
     />
 
     <div
-      v-if="post.category && post.category.name"
+      v-if="(post.category && post.category.name) || isModOrAbove"
       class="my-3 leading-tight flex items-center justify-between flex-wrap"
     >
       <template v-if="!categoryChange">
         <div class="text-clr-text-light font-bold">
-          {{ post.category.name }}
+          <template v-if="post.category">{{ post.category.name }}</template>
+          <template v-else>No category</template>
         </div>
 
         <button
