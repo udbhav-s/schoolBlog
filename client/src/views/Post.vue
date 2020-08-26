@@ -8,9 +8,11 @@
       This post has been submitted for verification. Once a moderator approves
       it, it will be visible to all other users in their feed.
     </div>
-    <h1 class="text-4xl text-clr-text-dark md:text-5xl leading-tight font-bold">
+
+    <h1 class="text-4xl md:text-5xl text-clr-text-dark leading-tight font-bold">
       {{ post.title }}
     </h1>
+
     <post-meta
       :post="post"
       @postDeleted="postDeleted"
@@ -19,8 +21,54 @@
       @post-liked="postLiked"
       @post-unliked="postUnliked"
       :showOptions="true"
-      class="my-4"
+      :showCategory="false"
+      class="mt-4"
     />
+
+    <div
+      v-if="post.category && post.category.name"
+      class="my-3 leading-tight flex items-center justify-between flex-wrap"
+    >
+      <template v-if="!categoryChange">
+        <div class="text-clr-text-light font-bold">
+          {{ post.category.name }}
+        </div>
+
+        <button
+          v-if="isModOrAbove"
+          @click="categoryChange = true"
+          class="button"
+        >
+          Change category
+        </button>
+      </template>
+
+      <template v-else>
+        <select v-model="selectedCategory" class="input">
+          <option :value="null" selected>Category</option>
+          <option
+            v-for="category in categories"
+            :key="category.id"
+            :value="category.id"
+          >
+            {{ category.name }}
+          </option>
+        </select>
+
+        <div class="space-x-1">
+          <button
+            v-if="isModOrAbove"
+            @click="setCategory"
+            class="button button-success"
+          >
+            Update
+          </button>
+          <button @click="categoryChange = false" class="button button-danger">
+            Cancel
+          </button>
+        </div>
+      </template>
+    </div>
 
     <div v-if="post.thumbnail" class="mt-2">
       <img :src="`/api/file/${post.thumbnail}`" class="w-full" />
@@ -53,9 +101,9 @@ import { postService } from "@/services";
 import PostMeta from "@/components/post/PostMeta.vue";
 import CommentList from "@/components/comment/CommentList.vue";
 import Attachments from "@/components/post/Attachments.vue";
-import { userStore } from "@/store";
+import { userStore, categoryStore } from "@/store";
 import { defineComponent, computed, ref } from "@vue/composition-api";
-import { Post } from "@/types";
+import { Post, Category } from "@/types";
 
 export default defineComponent({
   name: "Post",
@@ -76,6 +124,10 @@ export default defineComponent({
     const isModOrAbove = computed(userStore.getters.isModOrAbove);
     const currentUser = computed(userStore.getters.user);
     const post = ref<Post>(null);
+
+    const selectedCategory = ref<number>(null);
+    const categories = computed(categoryStore.getters.categories);
+    const categoryChange = ref(false);
 
     const loadPost = async () => {
       // get post
@@ -117,6 +169,23 @@ export default defineComponent({
       }
     };
 
+    const setCategory = async () => {
+      if (selectedCategory.value && post.value) {
+        try {
+          await postService.setCategory(post.value.id, selectedCategory.value);
+
+          post.value.category = categories.value.find(
+            c => c.id === selectedCategory.value
+          );
+
+          categoryChange.value = false;
+          root.$toasted.success("Category changed");
+        } catch {
+          root.$toasted.error("An error occured");
+        }
+      }
+    };
+
     return {
       isMemberOrAbove,
       isModOrAbove,
@@ -127,7 +196,11 @@ export default defineComponent({
       postUnverified,
       postLiked,
       postUnliked,
-      currentUser
+      currentUser,
+      categories,
+      categoryChange,
+      selectedCategory,
+      setCategory
     };
   }
 });

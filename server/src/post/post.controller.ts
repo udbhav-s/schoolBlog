@@ -71,8 +71,6 @@ export class PostController {
     return await this.postService.create(post);
   }
 
-  // the update method in the post service uses upsertGraph
-  // any properties which are not specified in the update request will be DELETED
   @ApiOperation({ summary: 'Update a post' })
   @Post('/update/:id')
   async update(
@@ -111,6 +109,21 @@ export class PostController {
     if (!post) throw new NotFoundException();
 
     return await this.postService.publish(id);
+  }
+
+  @ApiOperation({ summary: "Change post category" })
+  @UseGuards(LevelGuard)
+  @Level(Levels.Moderator)
+  @Post('/category/:id')
+  async setCategory(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() data: { categoryId: number },
+  ): Promise<PostModel> {
+    // get post to be published
+    const post = await this.postService.getById(id);
+    if (!post) throw new NotFoundException();
+
+    return await this.postService.update(id, data);
   }
 
   @ApiOperation({ summary: 'Verify a post' })

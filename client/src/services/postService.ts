@@ -22,6 +22,12 @@ export const postService = {
     return api.delete<number>(`/post/${id}`);
   },
 
+  setCategory(id: number, categoryId: number) {
+    return api.post<Post>(`/post/category/${id}`, {
+      categoryId
+    });
+  },
+
   like(id: number) {
     return api.post<any>(`/post/like/${id}`);
   },

@@ -3,7 +3,7 @@
     <div class="flex flex-row flex-wrap items-center justify-between">
       <username :user="post.user">
         <span>{{ date }}</span>
-        <span v-if="post.category" class="font-bold">
+        <span v-if="post.category && showCategory" class="font-bold">
           {{ post.category.name }}
         </span>
         <span v-if="!post.verified" class="text-clr-input-danger">
@@ -83,6 +83,9 @@ export default defineComponent({
       required: true
     },
     showOptions: {
+      type: Boolean as () => boolean
+    },
+    showCategory: {
       type: Boolean as () => boolean
     },
     dateType: {

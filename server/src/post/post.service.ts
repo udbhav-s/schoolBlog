@@ -59,7 +59,7 @@ export class PostService {
       .withGraphFetched('[user, category]');
   }
 
-  async update(id: number, data: PostCreateDto): Promise<PostModel> {
+  async update(id: number, data: Partial<PostCreateDto>): Promise<PostModel> {
     return await this.postModel
       .query()
       .where({ id })

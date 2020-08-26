@@ -15,7 +15,12 @@
       </h1>
     </router-link>
 
-    <post-meta :post="post" :showOptions="false" dateType="relative" />
+    <post-meta
+      :post="post"
+      :showOptions="false"
+      :showCategory="true"
+      dateType="relative"
+    />
 
     <template v-if="post.published">
       <div v-if="post.thumbnail">
