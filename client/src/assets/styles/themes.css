@@ -6,8 +6,8 @@
   --clr-text-light: theme("colors.gray.600");
 
   --clr-bg: theme("colors.white");
-  --clr-bg-secondary: theme("colors.gray.200");
-  --clr-bg-tertiary: theme("colors.gray.300");
+  --clr-bg-secondary: #f5f5f5;
+  --clr-bg-tertiary: #ddd;
 
   --clr-primary: theme("colors.blue.600");
   --clr-primary-lightest: theme("colors.blue.100");
