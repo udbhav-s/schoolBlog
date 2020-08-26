@@ -8,7 +8,7 @@
       <router-view id="main" />
     </div>
 
-    <app-footer />
+    <app-footer v-if="isAuthenticated" />
   </div>
 </template>
 
