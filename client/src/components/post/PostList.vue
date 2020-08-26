@@ -28,7 +28,11 @@
     </div>
 
     <div v-if="posts.length == 0 && !loading" class="text-center my-6">
-      <div v-if="drafts">No Drafts</div>
+      <div v-if="drafts">
+        <a @click="createPost" class="text-clr-primary text-lg cursor-pointer">
+          Create a new draft
+        </a>
+      </div>
       <div v-else>No Posts</div>
     </div>
 
@@ -71,7 +75,7 @@ export default defineComponent({
     Spinner
   },
 
-  setup(props) {
+  setup(props, { root }) {
     const searchOptions = ref<Partial<PostQueryOptions>>({});
     const options = computed<Partial<PostQueryOptions>>(() => {
       const opts = {
@@ -103,6 +107,20 @@ export default defineComponent({
       showOptions.value = false;
     };
 
+    const createPost = async () => {
+      try {
+        const result = await postService.create();
+        root.$router.push({
+          name: "EditPost",
+          params: {
+            id: result.id.toString()
+          }
+        });
+      } catch {
+        root.$toasted.error("Error creating post");
+      }
+    }
+
     return {
       posts,
       hasMorePosts,
@@ -110,7 +128,8 @@ export default defineComponent({
       loadPosts,
       search,
       cancelSearch,
-      loading
+      loading,
+      createPost
     };
   }
 });
