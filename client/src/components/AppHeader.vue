@@ -49,7 +49,6 @@
           </template>
 
           <router-link
-            v-if="isAuthenticated"
             class="navbar-item"
             :to="{ name: 'CurrentUser' }"
             @click.native="isActive = false"
