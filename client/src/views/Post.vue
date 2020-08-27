@@ -104,7 +104,10 @@ import CommentList from "@/components/comment/CommentList.vue";
 import Attachments from "@/components/post/Attachments.vue";
 import { userStore, categoryStore } from "@/store";
 import { defineComponent, computed, ref } from "@vue/composition-api";
-import { Post, Category } from "@/types";
+import { Post } from "@/types";
+
+// make ref external to load date in beforeRouteEnter
+const post = ref<Post>(null);
 
 export default defineComponent({
   name: "Post",
@@ -124,25 +127,10 @@ export default defineComponent({
     const isMemberOrAbove = computed(userStore.getters.isMemberOrAbove);
     const isModOrAbove = computed(userStore.getters.isModOrAbove);
     const currentUser = computed(userStore.getters.user);
-    const post = ref<Post>(null);
 
     const selectedCategory = ref<number>(null);
     const categories = computed(categoryStore.getters.categories);
     const categoryChange = ref(false);
-
-    const loadPost = async () => {
-      // get post
-      try {
-        const result = await postService.getById(props.id);
-        post.value = result;
-      } catch (err) {
-        console.log({ ...err });
-        if (err.statusCode === 403 || err.statusCode === 404) {
-          root.$router.push({ name: "NotFound" });
-        } else root.$toasted.error("Couldn't load post data");
-      }
-    };
-    loadPost();
 
     const postDeleted = async () => {
       root.$router.push("/");
@@ -191,7 +179,6 @@ export default defineComponent({
       isMemberOrAbove,
       isModOrAbove,
       post,
-      loadPost,
       postDeleted,
       postVerified,
       postUnverified,
@@ -203,6 +190,18 @@ export default defineComponent({
       selectedCategory,
       setCategory
     };
+  },
+
+  async beforeRouteEnter(to, from, next) {
+    try {
+      post.value = await postService.getById(parseInt(to.params.id));
+      next();
+    } catch (err) {
+      console.log({ ...err });
+      if (err.statusCode === 403 || err.statusCode === 404) {
+        next({ name: "NotFound" });
+      } //else root.$toasted.error("Couldn't load post data");
+    }
   }
 });
 </script>
