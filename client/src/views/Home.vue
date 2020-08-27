@@ -35,7 +35,7 @@
     </section>
 
     <transition name="fade" mode="out-in">
-      <router-view class="fixed-column flex-grow" />
+      <router-view class="fixed-column" />
     </transition>
   </div>
 </template>
