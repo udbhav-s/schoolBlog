@@ -31,7 +31,17 @@
     >
       <template v-if="!categoryChange">
         <div class="text-clr-text-light font-bold">
-          <template v-if="post.category">{{ post.category.name }}</template>
+          <template v-if="post.category">
+            <router-link
+              :to="{
+                name: 'category',
+                params: { categoryId: post.category.id }
+              }"
+              class="underline"
+            >
+              {{ post.category.name }}
+            </router-link>
+          </template>
           <template v-else>No category</template>
         </div>
 
