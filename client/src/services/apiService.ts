@@ -1,6 +1,5 @@
 import axios from "axios";
 import app from "@/main";
-import loginRedirect from '@/util/loginRedirect';
 
 const api = axios.create({
   baseURL: "/api",
@@ -8,22 +7,22 @@ const api = axios.create({
 });
 
 api.interceptors.request.use(config => {
-  app.$Progress.start();
+  // app.$Progress.start();
   return config;
 });
 
 api.interceptors.response.use(
   res => {
     if (!("success" in res.data)) {
-      app.$Progress.fail();
+      // app.$Progress.fail();
       throw new Error(res.data.message);
     }
-    app.$Progress.finish();
+    // app.$Progress.finish();
     return res.data.data;
   },
   // error
   res => {
-    app.$Progress.fail();
+    // app.$Progress.fail();
     console.log({ ...res });
     // offline
     if (res.response === undefined) {

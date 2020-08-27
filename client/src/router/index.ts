@@ -3,7 +3,6 @@ import VueRouter, { RouteConfig } from "vue-router";
 import Home from "@/views/Home.vue";
 import { userStore } from "@/store";
 import { userService } from "@/services";
-import loginRedirect from "@/util/loginRedirect";
 
 Vue.use(VueRouter);
 
@@ -168,6 +167,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach(async (to, _from, next) => {
+  router.app.$Progress.start();
   if (!userStore.getters.isAuthenticated() && to.name !== "Login") {
     // the user still might be authenticated
     // since the store is reset on page refresh
@@ -178,6 +178,10 @@ router.beforeEach(async (to, _from, next) => {
   } else return next();
   // continute to route
   return next();
+});
+
+router.afterEach(() => {
+  router.app.$Progress.finish();
 });
 
 export default router;
