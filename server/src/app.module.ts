@@ -14,6 +14,7 @@ import { MulterModule } from '@nestjs/platform-express';
 
 import { join } from 'path';
 import { CategoryModule } from './category/category.module';
+import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
@@ -33,7 +34,8 @@ import { CategoryModule } from './category/category.module';
     }),
     MulterModule.register({
       dest: process.env.IMAGES_PATH
-    })
+    }),
+    NotificationModule
   ],
   controllers: [AppController],
   providers: [AppService],

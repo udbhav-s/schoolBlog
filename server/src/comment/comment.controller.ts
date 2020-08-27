@@ -26,6 +26,7 @@ import { LevelGuard } from 'src/common/guards/level.guard';
 import { Level } from 'src/common/decorators/level.decorator';
 import { CommentGetOptionsDto } from './dto/commentGetOptions.dto';
 import { PermissionLevels } from 'src/common/util/permissionLevels.enum';
+import { NotificationService } from 'src/notification/notification.service';
 
 @ApiTags('comment')
 @ApiBasicAuth()
@@ -36,6 +37,7 @@ export class CommentController {
   constructor(
     private commentService: CommentService,
     private postService: PostService,
+    private notificationService: NotificationService
   ) {}
 
   @ApiOperation({ summary: 'Get all comments' })
@@ -80,9 +82,20 @@ export class CommentController {
     const post = await this.postService.getById(data.postId, req.user, PermissionLevels.Access);
     // check if user can access
     if (!post) throw new NotFoundException();
+
     // create the comment
     data.userId = req.user.id;
-    return await this.commentService.create(data);
+    const comment = await this.commentService.create(data);
+
+    // send notification to post author
+    this.notificationService.send({
+      recipientId: post.userId,
+      senderId: req.user.id,
+      action: 'comment',
+      objectId: comment.id
+    });
+
+    return comment;
   }
 
   @ApiOperation({ summary: 'Update a comment' })

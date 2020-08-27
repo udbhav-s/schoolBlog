@@ -11,6 +11,7 @@ import { CategoryModel } from './models/category.model';
 
 import * as KnexConfig from '../../knexfile';
 import { PostLikeModel } from './models/postLike.model';
+import { NotificationModel } from './models/notification.model';
 
 const models = [
   UserModel,
@@ -20,6 +21,7 @@ const models = [
   ReplyModel,
   CategoryModel,
   PostLikeModel,
+  NotificationModel,
 ];
 
 const modelProviders = models.map(model => {

@@ -27,6 +27,7 @@ import { Level } from 'src/common/decorators/level.decorator';
 import { ReplyGetOptionsDto } from './dto/replyGetOptions.dto';
 import { PostService } from 'src/post/post.service';
 import { PermissionLevels } from 'src/common/util/permissionLevels.enum';
+import { NotificationService } from 'src/notification/notification.service';
 
 @ApiTags('reply')
 @ApiBasicAuth()
@@ -37,7 +38,8 @@ export class ReplyController {
   constructor(
     private replyService: ReplyService,
     private commentService: CommentService,
-    private postService: PostService
+    private postService: PostService,
+    private notificationService: NotificationService
   ) {}
 
   @ApiOperation({ summary: 'Get all replies' })
@@ -89,9 +91,20 @@ export class ReplyController {
     // check if user can comment on post
     const post = await this.postService.getById(comment.postId, req.user, PermissionLevels.Access);
     if (!post) throw new NotFoundException();
+
     // create the comment
     data.userId = req.user.id;
-    return await this.replyService.create(data);
+    const reply = await this.replyService.create(data);
+
+    // send notification to comment author
+    this.notificationService.send({
+      recipientId: comment.userId,
+      senderId: req.user.id,
+      action: 'reply',
+      objectId: reply.id
+    });
+
+    return reply;
   }
 
   @ApiOperation({ summary: 'Update reply' })
