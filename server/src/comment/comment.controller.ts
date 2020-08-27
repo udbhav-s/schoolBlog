@@ -92,7 +92,7 @@ export class CommentController {
       recipientId: post.userId,
       senderId: req.user.id,
       action: 'comment',
-      objectId: comment.id
+      objectId: post.id
     });
 
     return comment;

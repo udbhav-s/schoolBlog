@@ -20,6 +20,10 @@
       </div>
     </div>
 
+    <div class="fixed-column bg-clr-bg-secondary">
+      <notifications />
+    </div>
+
     <section
       v-if="isAdminOrAbove && !isCurrentUser && user.level !== 4"
       class="bg-clr-bg-secondary my-10 py-6"
@@ -67,6 +71,7 @@
 import { defineComponent, ref, computed, watch } from "@vue/composition-api";
 import { userService } from "@/services";
 import PostList from "@/components/post/PostList.vue";
+import Notifications from "@/components/notification/Notifications.vue";
 import { User } from "@/types";
 import levelDescriptionsArray from "@/config/levelDescriptions";
 import { userStore, themeStore } from "@/store";
@@ -80,7 +85,8 @@ export default defineComponent({
     }
   },
   components: {
-    PostList
+    PostList,
+    Notifications
   },
 
   setup(props, { root }) {

@@ -17,7 +17,12 @@ import { defineComponent, computed } from "@vue/composition-api";
 import AppHeader from "@/components/AppHeader.vue";
 import AppFooter from "@/components/AppFooter.vue";
 import "@/assets/styles/index.css";
-import { categoryStore, themeStore, userStore } from "./store";
+import {
+  categoryStore,
+  themeStore,
+  userStore,
+  notificationStore
+} from "./store";
 
 export default defineComponent({
   name: "App",
@@ -30,6 +35,8 @@ export default defineComponent({
     const isAuthenticated = computed(userStore.getters.isAuthenticated);
     // load categories into store
     categoryStore.mutations.loadCategories();
+    // load notifications
+    notificationStore.mutations.loadNotifications();
     // set title
     document.title = "The HPS Blog";
     // load theme

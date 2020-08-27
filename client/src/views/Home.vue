@@ -8,6 +8,10 @@
       </h1>
     </div>
 
+    <div class="fixed-column">
+      <notifications />
+    </div>
+
     <section v-if="isModOrAbove" class="fixed-column">
       <div class="flex justify-center">
         <div
@@ -31,7 +35,7 @@
     </section>
 
     <transition name="fade" mode="out-in">
-      <router-view class="fixed-column" />
+      <router-view class="fixed-column flex-grow" />
     </transition>
   </div>
 </template>
@@ -40,11 +44,13 @@
 import { defineComponent, reactive, computed } from "@vue/composition-api";
 import PostListTabs from "@/components/post/PostListTabs.vue";
 import { userStore } from "@/store";
+import Notifications from "@/components/notification/Notifications.vue";
 
 export default defineComponent({
   name: "Home",
   components: {
-    PostListTabs
+    PostListTabs,
+    Notifications
   },
 
   setup() {

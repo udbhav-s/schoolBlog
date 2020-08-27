@@ -10,7 +10,10 @@ export class NotificationService {
   ) {}
 
   async getByRecipient(recipientId: number): Promise<NotificationModel[]> {
-    return await this.notificationModel.query().where({ recipientId });
+    return await this.notificationModel
+      .query()
+      .where({ recipientId })
+      .withGraphFetched('[sender]');
   }
 
   async send(body: NotificationCreateDto): Promise<NotificationModel> {

@@ -21,6 +21,14 @@ export class NotificationController {
     return await this.notificationService.getByRecipient(req.user.id);
   }
 
+  @ApiOperation({ summary: "Delete all notifications for user" })
+  @Delete('/all')
+  async deleteAll(
+    @Req() req
+  ) {
+    return await this.notificationService.deleteAllForRecipient(req.user.id);
+  }
+
   @ApiOperation({ summary: "Delete a notification" })
   @Delete('/:id')
   async del(
@@ -28,13 +36,5 @@ export class NotificationController {
     @Req() req
   ) {
     return await this.notificationService.del(id, req.user.id);
-  }
-
-  @ApiOperation({ summary: "Delete all notifications for user" })
-  @Delete('/all')
-  async deleteAll(
-    @Req() req
-  ) {
-    return await this.notificationService.deleteAllForRecipient(req.user.id);
   }
 }

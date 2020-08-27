@@ -1,10 +1,12 @@
 import Vue from "vue";
 import { userService, categoryService } from "@/services";
-import { User, Category } from "@/types";
+import { User, Category, AppNotification } from "@/types";
+import { notificationService } from '@/services/notificationService';
 
 export const store = Vue.observable({
   user: {} as User,
   categories: [] as Category[],
+  notifications: [] as AppNotification[],
   darkMode: localStorage.getItem("theme") === "dark"
 });
 
@@ -38,6 +40,19 @@ export const categoryStore = {
     loadCategories: async () => {
       const result = await categoryService.getAll();
       store.categories = result;
+    }
+  }
+}
+
+export const notificationStore = {
+  getters: {
+    notifications: () => store.notifications
+  },
+
+  mutations: {
+    loadNotifications: async () => {
+      const result = await notificationService.getAll();
+      store.notifications = result;
     }
   }
 }

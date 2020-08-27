@@ -96,13 +96,15 @@ export class ReplyController {
     data.userId = req.user.id;
     const reply = await this.replyService.create(data);
 
-    // send notification to comment author
-    this.notificationService.send({
-      recipientId: comment.userId,
-      senderId: req.user.id,
-      action: 'reply',
-      objectId: reply.id
-    });
+    if (comment.userId !== req.user.id) {
+      // send notification to comment author
+      this.notificationService.send({
+        recipientId: comment.userId,
+        senderId: req.user.id,
+        action: 'reply',
+        objectId: post.id
+      });
+    }
 
     return reply;
   }
