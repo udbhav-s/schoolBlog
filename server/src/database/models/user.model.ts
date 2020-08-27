@@ -12,6 +12,8 @@ export class UserModel extends BaseModel {
   level!: number;
   picture: string;
 
+  count?: string;
+
   posts?: PostModel[];
   comments?: CommentModel[];
   replies?: ReplyModel[];

@@ -31,11 +31,13 @@ export class UserService {
     return await query;
   }
 
+  async getCount(): Promise<number> {
+    return parseInt((await this.userModel.query().count('id', { as: 'count' }))[0].count);
+  }
+
   async createFromProfileData(profile: CreateProfileData): Promise<UserModel> {
     return await this.userModel.query().insert({
-      name: profile.name,
-      email: profile.email,
-      picture: profile.picture
+      ...profile
     });
   }
 
