@@ -74,6 +74,11 @@ Go to the extensions tab and install these extensions:
 ![List of extensions - Veture, Prettier, ESLint, and Tailwind CSS Intellisense](images/extensions.jpg)
 
 ### Running the development servers
+Run the database migrations to populate the database with the project's tables:
+```
+cd server
+npm run migrate
+```
 #### Frontend
 ```
 cd client
