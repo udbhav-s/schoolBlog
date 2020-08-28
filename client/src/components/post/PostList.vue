@@ -119,7 +119,7 @@ export default defineComponent({
       } catch {
         root.$toasted.error("Error creating post");
       }
-    }
+    };
 
     return {
       posts,
