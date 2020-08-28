@@ -4,7 +4,7 @@
       name: 'User',
       params: { id: user.id }
     }"
-    class="username flex flex-row items-center"
+    class="username inline-flex flex-row items-center"
   >
     <img
       :src="user.picture"
