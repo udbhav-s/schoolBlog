@@ -8,10 +8,6 @@
       </h1>
     </div>
 
-    <div class="fixed-column">
-      <notifications />
-    </div>
-
     <section v-if="isModOrAbove" class="fixed-column">
       <div class="flex justify-center">
         <div
@@ -44,13 +40,11 @@
 import { defineComponent, reactive, computed } from "@vue/composition-api";
 import PostListTabs from "@/components/post/PostListTabs.vue";
 import { userStore } from "@/store";
-import Notifications from "@/components/notification/Notifications.vue";
 
 export default defineComponent({
   name: "Home",
   components: {
-    PostListTabs,
-    Notifications
+    PostListTabs
   },
 
   setup() {
