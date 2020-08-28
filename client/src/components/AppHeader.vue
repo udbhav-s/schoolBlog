@@ -1,6 +1,6 @@
 <template>
   <header
-    class="fixed top-0 left-0 w-full bg-clr-bg-secondary flex flex-wrap items-center justify-between px-4 py-2 lg:px-16 lg:py-0 select-none z-40"
+    class="w-full bg-clr-bg-secondary flex flex-wrap items-center justify-between px-4 py-2 lg:px-16 lg:py-0 select-none z-40"
   >
     <router-link
       to="/"
@@ -49,11 +49,17 @@
           </template>
 
           <router-link
-            class="navbar-item"
+            class="navbar-item flex items-center"
             :to="{ name: 'CurrentUser' }"
             @click.native="isActive = false"
           >
             <username :user="currentUser" smallPicture />
+            <span
+              v-if="numOfNotifications > 0"
+              class="rounded ml-2 px-1 text-clr-input-text bg-clr-input-success"
+            >
+              {{ numOfNotifications }}
+            </span>
           </router-link>
 
           <div
@@ -72,7 +78,7 @@
 <script lang="ts">
 import { defineComponent, computed, ref } from "@vue/composition-api";
 import Username from "@/components/user/Username.vue";
-import { userStore } from "@/store";
+import { userStore, notificationStore } from "@/store";
 import { postService } from "@/services";
 
 export default defineComponent({
@@ -85,6 +91,9 @@ export default defineComponent({
     const currentUser = computed(userStore.getters.user);
     const isAuthenticated = computed(userStore.getters.isAuthenticated);
     const isActive = ref<boolean>(false);
+    const numOfNotifications = computed(
+      () => notificationStore.getters.notifications().length
+    );
 
     const createPost = async () => {
       isActive.value = false;
@@ -106,7 +115,8 @@ export default defineComponent({
       isActive,
       currentUser,
       createPost,
-      isAuthenticated
+      isAuthenticated,
+      numOfNotifications
     };
   }
 });
