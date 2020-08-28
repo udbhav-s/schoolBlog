@@ -2,13 +2,17 @@
   <div id="app">
     <vue-progress-bar></vue-progress-bar>
 
-    <app-header v-if="isAuthenticated" />
+    <div class="flex flex-col h-screen">
+      <app-header v-if="isAuthenticated" />
 
-    <div class="min-h-screen">
-      <router-view id="main" />
+      <div class="flex-grow flex flex-col overflow-y-scroll">
+        <div class="flex-grow">
+          <router-view id="main" />
+        </div>
+
+        <app-footer v-if="isAuthenticated" />
+      </div>
     </div>
-
-    <app-footer v-if="isAuthenticated" />
   </div>
 </template>
 
