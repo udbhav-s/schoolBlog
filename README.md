@@ -69,7 +69,7 @@ Follow [this guide](https://support.google.com/googleapi/answer/6158849?hl=en) t
 
 ### Editor
 This example will be using [VS Code](https://code.visualstudio.com/) as the editor. After downloading and installing it, create a new workspace and add the `client` and `server` folders (in that order) to the workspaces using the add folder to workspace option. This makes sure all the extensions work properly. 
-Go to the extensions tab and install these extensions:
+These extensions are recommended for working on the project:
 
 ![List of extensions - Veture, Prettier, ESLint, and Tailwind CSS Intellisense](images/extensions.jpg)
 
@@ -94,3 +94,6 @@ npm run start:dev
 
 ## Running in production
 For production, using an [Nginx](https://www.nginx.com/resources/wiki/) server with https support and gzip enabled for serving static assets is recommended, along with [pm2](https://pm2.keymetrics.io/docs/usage/quick-start/) for managing the node server.
+
+## Author
+Made by [Udbhav Saxena](https://github.com/udbhav-s)
