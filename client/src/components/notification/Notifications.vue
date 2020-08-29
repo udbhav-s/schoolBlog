@@ -27,6 +27,7 @@
       >
         <div class="flex items-center justify-between">
           <router-link
+            @click.native="deleteNotification(notification.id)"
             :to="{ name: 'Post', params: { id: notification.objectId } }"
             class="hover:bg-clr-bg-secondary pr-2"
           >
