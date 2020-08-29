@@ -39,7 +39,7 @@
     "@types/jsdom": "^16.2.3",
     "@types/multer": "^1.4.4",
     "aws-sdk": "^2.740.0",
-    "class-transformer": "^0.2.3",
+    "class-transformer": "^0.3.1",
     "class-validator": "^0.12.2",
     "domhandler": "^3.0.0",
     "dotenv": "^8.2.0",
