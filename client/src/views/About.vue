@@ -25,7 +25,7 @@
     <p>
       This project is completely open source to encourage learning and
       contribution. The code is hosted
-      <a href="https://github.com/udbhav-s/schoolBlog">here on GitHub</a>, along
+      <a href="https://github.com/hpsb/schoolBlog">here on GitHub</a>, along
       with documentation on how to get started.
     </p>
   </div>
