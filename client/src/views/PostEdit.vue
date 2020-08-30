@@ -236,6 +236,8 @@ export default defineComponent({
           // 413 request entitiy too large
           root.$toasted.error("File too large\nLimit is 100MB");
         }
+        imageUploading.value = false;
+
         throw err.message;
       }
 
@@ -304,6 +306,8 @@ export default defineComponent({
             root.$toasted.error("File too large\nLimit is 100MB");
           } else {
             root.$toasted.error("Error uploading thumbnail");
+            imageUploading.value = false;
+
             throw err.message;
           }
         }
