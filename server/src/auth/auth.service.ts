@@ -4,6 +4,13 @@ import { UserModel } from '../database/models/user.model';
 import { CreateProfileData } from './dto/createProfileData.dto';
 import { Levels } from 'src/common/util/level.enum';
 
+import * as fs from 'fs';
+
+let whitelist: string[];
+if (process.env.WHITELIST_PATH) {
+  whitelist = JSON.parse(fs.readFileSync(process.env.WHITELIST_PATH, 'utf8')).whitelist;
+}
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -11,6 +18,10 @@ export class AuthService {
   ) {}
 
   async findOrCreateUser(profile: CreateProfileData): Promise<UserModel> {
+    if (whitelist && !whitelist.includes(profile.email)) {
+      throw new Error("User not whitelisted");
+    }
+
     let user = await this.userService.getByEmail(profile.email);
   
     if (!user) {

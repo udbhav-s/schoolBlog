@@ -4,3 +4,4 @@
 /server/public
 /logs
 *.code-workspace
+/whitelist.json

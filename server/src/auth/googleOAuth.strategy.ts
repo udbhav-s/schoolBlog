@@ -25,8 +25,13 @@ export class GoogleOAuthStrategy extends PassportStrategy(Strategy, 'google-oaut
       picture: photos[0].value
     }
 
-    const user = await this.authService.findOrCreateUser(profileData);
-    done(null, user);
+    let user;
+    try {
+      user = await this.authService.findOrCreateUser(profileData);
+      done(null, user);
+    } catch (err) {
+      // Unauthorized
+    }
   }
 
   // for passport.authenticate() params
