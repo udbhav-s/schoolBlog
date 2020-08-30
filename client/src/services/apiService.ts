@@ -29,6 +29,10 @@ api.interceptors.response.use(
       app.$toasted.error("No connection");
       throw new Error("Offline");
     }
+    else if (res.response.status === 502) {
+      app.$toasted.error("Could not connect to server");
+      throw new Error();
+    }
     // redirect to server auth route if 401
     else if (res.response.status === 401) {
       app.$router.push({ name: "Login" });
