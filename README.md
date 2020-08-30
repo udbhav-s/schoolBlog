@@ -95,5 +95,41 @@ npm run start:dev
 ## Running in production
 For production, using an [Nginx](https://www.nginx.com/resources/wiki/) server with https support and gzip enabled for serving static assets is recommended, along with [pm2](https://pm2.keymetrics.io/docs/usage/quick-start/) for managing the node server.
 
+Example nginx configuration:
+```
+server {
+    listen         443 ssl http2 default_server;
+    listen         [::]:443 ssl http2 default_server;
+    server_name    localhost;
+
+    include snippets/self-signed.conf;
+
+    location / {
+        root /home/udbhav/code/schoolBlog/server/public;
+        index index.html;
+        gzip_static on;    
+        gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript;
+        try_files $uri $uri/ @nodejs;
+    }
+
+    location @nodejs {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name localhost;
+
+    return 301 https://$server_name$request_uri;
+}
+```
+
 ## Author
 Made by [Udbhav Saxena](https://github.com/udbhav-s)
