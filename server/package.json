@@ -56,7 +56,7 @@
     "rimraf": "^3.0.2",
     "rxjs": "^6.6.2",
     "sanitize-html": "^1.27.4",
-    "sharp": "^0.25.4",
+    "sharp": "^0.30.5",
     "shortid": "^2.2.15",
     "swagger-ui-express": "^4.1.4",
     "winston": "^3.3.3",
